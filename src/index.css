@@ -1,0 +1,90 @@
+@import url('https://api.fontshare.com/v2/css?f[]=franie@400,500,600,700,800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Franie', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-logo: 'Archivo Black', 'Franie', system-ui, sans-serif;
+
+  /* Paleta grayscale escura + acentos sofisticados (SEM AZUL) */
+  --color-brand-50: #f8fafc;
+  --color-brand-100: #f1f5f9;
+  --color-brand-200: #e2e8f0;
+  --color-brand-300: #cbd5e1;
+  --color-brand-400: #94a3b8;
+  --color-brand-500: #64748b;
+  --color-brand-600: #475569;
+  --color-brand-700: #334155;
+  --color-brand-800: #1e293b;
+  --color-brand-900: #0f172a;
+
+  /* Acentos sofisticados (sem azul) */
+  --color-primary-500: #a855f7;
+  --color-primary-600: #9333ea;
+  --color-secondary-500: #ec4899;
+  --color-secondary-600: #db2777;
+  --color-accent-green: #10b981;
+  --color-accent-cyan: #06b6d4;
+  --color-warning-500: #f59e0b;
+  --color-danger-500: #ef4444;
+}
+
+:root {
+  color-scheme: light;
+
+  /* Light mode colors */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-tertiary: #94a3b8;
+  --border-color: #e2e8f0;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    /* Dark mode colors */
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --text-tertiary: #94a3b8;
+    --border-color: #334155;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  }
+}
+
+html.dark {
+  color-scheme: dark;
+
+  /* Forçar dark mode quando classe 'dark' está presente */
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #94a3b8;
+  --border-color: #334155;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
+
+body {
+  margin: 0;
+  font-family: 'Franie', system-ui, 'Segoe UI', Roboto, sans-serif;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+#root {
+  min-height: 100svh;
+}
