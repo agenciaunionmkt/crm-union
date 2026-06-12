@@ -1,117 +1,188 @@
-import { useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { Eye, EyeOff, ArrowLeft } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
+import { supabase } from '../lib/supabaseClient'
 import UnionLogo from '../components/UnionLogo'
 
 export default function ResetPassword() {
-  const { session, passwordRecovery, updatePassword } = useAuth()
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const { updatePassword } = useAuth()
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [error, setError] = useState('')
-  const [done, setDone] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [isValid, setIsValid] = useState(false)
 
-  // Sem sessão de recuperação ativa e sem nenhuma sessão: redireciona para o login
-  if (!session && !passwordRecovery) {
-    return <Navigate to="/login" replace />
-  }
+  useEffect(() => {
+    const token = searchParams.get('token')
+    const type = searchParams.get('type')
+
+    if (!token || type !== 'recovery') {
+      setError('Link inválido ou expirado')
+      return
+    }
+
+    setIsValid(true)
+  }, [searchParams])
 
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
+    setLoading(true)
 
     if (password.length < 6) {
-      setError('A senha deve ter pelo menos 6 caracteres.')
+      setError('Senha deve ter pelo menos 6 caracteres')
+      setLoading(false)
       return
     }
 
     if (password !== confirmPassword) {
-      setError('As senhas não coincidem.')
+      setError('As senhas não coincidem')
+      setLoading(false)
       return
     }
 
-    setSubmitting(true)
     const { error } = await updatePassword(password)
 
     if (error) {
-      setError('Não foi possível redefinir a senha. Tente novamente.')
+      setError(error.message || 'Erro ao atualizar senha')
     } else {
-      setDone(true)
+      setSuccess(true)
+      setPassword('')
+      setConfirmPassword('')
+
+      setTimeout(() => {
+        navigate('/login')
+      }, 2000)
     }
-    setSubmitting(false)
+
+    setLoading(false)
+  }
+
+  if (!isValid) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-neutral-900 px-4">
+        <div className="w-full max-w-sm">
+          <div className="mb-8 flex flex-col items-center text-center">
+            <UnionLogo size="lg" variant="light" />
+            <p className="mt-3 text-sm text-neutral-400">Redefinir senha</p>
+          </div>
+
+          <div className="rounded-xl border border-neutral-700/50 bg-neutral-900/50 backdrop-blur-xl p-6 shadow-lg">
+            <p className="mb-4 text-sm text-red-400">{error}</p>
+            <button
+              onClick={() => navigate('/esqueci-senha')}
+              className="w-full rounded-lg bg-yellow-400 px-4 py-2.5 text-sm font-semibold text-gray-900 hover:bg-yellow-500"
+            >
+              Solicitar novo link
+            </button>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-neutral-900 px-4">
       <div className="w-full max-w-sm">
+        <button
+          onClick={() => navigate('/login')}
+          className="mb-8 flex items-center gap-2 text-sm text-neutral-400 hover:text-neutral-300 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Voltar
+        </button>
+
         <div className="mb-8 flex flex-col items-center text-center">
-          <UnionLogo size="md" />
-          <h1 className="mt-4 text-2xl font-semibold text-gray-900">Redefinir senha</h1>
-          <p className="mt-1 text-sm text-gray-500">Escolha uma nova senha de acesso</p>
+          <UnionLogo size="lg" variant="light" />
+          <p className="mt-3 text-sm text-neutral-400">Defina uma nova senha</p>
         </div>
 
-        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-          {done ? (
-            <div className="text-center">
-              <p className="text-sm text-gray-700">Senha redefinida com sucesso!</p>
-              <a
-                href="/login"
-                className="mt-4 inline-block text-sm font-medium text-gray-900 hover:underline"
-              >
-                Ir para o login
-              </a>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label htmlFor="password" className="mb-1 block text-sm font-medium text-gray-700">
-                  Nova senha
-                </label>
-                <input
-                  id="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-200"
-                  placeholder="••••••••"
-                  autoComplete="new-password"
-                />
-              </div>
-
-              <div className="mb-4">
-                <label
-                  htmlFor="confirmPassword"
-                  className="mb-1 block text-sm font-medium text-gray-700"
-                >
-                  Confirmar nova senha
-                </label>
-                <input
-                  id="confirmPassword"
-                  type="password"
-                  required
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-200"
-                  placeholder="••••••••"
-                  autoComplete="new-password"
-                />
-              </div>
-
-              {error && (
-                <p className="mb-4 rounded-md bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>
-              )}
-
+        <form
+          onSubmit={handleSubmit}
+          className="rounded-xl border border-neutral-700/50 bg-neutral-900/50 backdrop-blur-xl p-6 shadow-lg"
+        >
+          <div className="mb-4">
+            <label htmlFor="password" className="mb-1.5 block text-sm font-normal text-neutral-300">
+              Nova Senha
+            </label>
+            <div className="relative">
+              <input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-lg border border-neutral-600 bg-transparent px-4 py-2.5 pr-10 text-sm font-normal text-white placeholder-neutral-500 focus:border-neutral-500 focus:outline-none"
+                style={{ transition: 'background-color 5000s ease-in-out 0s' }}
+                placeholder="••••••••"
+                autoComplete="off"
+              />
               <button
-                type="submit"
-                disabled={submitting}
-                className="w-full rounded-md bg-brand-500 px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-brand-600 disabled:opacity-60"
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-300"
               >
-                {submitting ? 'Salvando...' : 'Salvar nova senha'}
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
-            </form>
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="confirmPassword" className="mb-1.5 block text-sm font-normal text-neutral-300">
+              Confirmar Senha
+            </label>
+            <div className="relative">
+              <input
+                id="confirmPassword"
+                type={showConfirmPassword ? 'text' : 'password'}
+                required
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full rounded-lg border border-neutral-600 bg-transparent px-4 py-2.5 pr-10 text-sm font-normal text-white placeholder-neutral-500 focus:border-neutral-500 focus:outline-none"
+                style={{ transition: 'background-color 5000s ease-in-out 0s' }}
+                placeholder="••••••••"
+                autoComplete="off"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-300"
+              >
+                {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
+
+          {success && (
+            <p className="mb-4 rounded-lg bg-green-900/20 border border-green-700/50 px-3 py-2 text-sm text-green-400">
+              Senha atualizada com sucesso! Redirecionando...
+            </p>
           )}
-        </div>
+
+          {error && (
+            <p className="mb-4 rounded-lg bg-red-900/20 border border-red-700/50 px-3 py-2 text-sm text-red-400">
+              {error}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading || success}
+            className="w-full rounded-lg bg-yellow-400 px-4 py-2.5 text-sm font-semibold text-gray-900 hover:bg-yellow-500 disabled:opacity-60"
+          >
+            {loading ? 'Atualizando...' : 'Atualizar Senha'}
+          </button>
+        </form>
+
+        <p className="mt-6 text-center text-xs text-neutral-700">
+          Acesso de equipe e clientes da agência
+        </p>
       </div>
     </div>
   )
