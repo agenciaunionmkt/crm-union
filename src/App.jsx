@@ -3,7 +3,6 @@ import ProtectedRoute from './components/ProtectedRoute'
 import AdminLayout from './layouts/AdminLayout'
 import ClientLayout from './layouts/ClientLayout'
 import Login from './pages/Login'
-import Cadastro from './pages/Cadastro'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
 import AuthCallback from './pages/AuthCallback'
@@ -25,7 +24,7 @@ function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
-      <Route path="/cadastro" element={<Cadastro />} />
+      <Route path="/cadastro" element={<Navigate to="/login" replace />} />
       <Route path="/esqueci-senha" element={<ForgotPassword />} />
       <Route path="/redefinir-senha" element={<ResetPassword />} />
       <Route path="/auth/callback" element={<AuthCallback />} />

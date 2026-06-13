@@ -73,9 +73,14 @@ export default function DemandForm({
 
   function handleSubmit(e) {
     e.preventDefault()
+    // Envia apenas colunas válidas da tabela demands — campos derivados do join
+    // (responsavel, tags, id, created_at...) quebrariam o update.
     onSubmit(
       {
-        ...form,
+        cliente_id: form.cliente_id,
+        titulo: form.titulo,
+        descricao: form.descricao || null,
+        status: form.status,
         prazo: form.prazo || null,
         responsavel_id: form.responsavel_id || null,
       },

@@ -37,30 +37,44 @@ export default function AdminDashboard() {
 
   const clientesRecorrentes = clients.filter(c => c.tipo_cliente === 'recorrente').length
 
+  // Demandas atrasadas: prazo já passou e ainda não foram entregues
+  const hojeStr = hoje.toISOString().split('T')[0]
+  const demandasAtrasadas = demands.filter(
+    (d) => d.prazo && d.prazo < hojeStr && d.status !== 'entregue'
+  ).length
+
   const metrics = [
     {
       label: 'Clientes ativos',
       value: clients.length,
       icon: Users,
-      borderColor: 'border-neutral-700/50'
+      iconColor: 'text-blue-400',
+      iconBg: 'bg-blue-500/10',
+      valueColor: 'text-blue-400',
     },
     {
       label: 'Demandas da semana',
       value: demandasSemana,
       icon: Calendar,
-      borderColor: 'border-neutral-700/50'
+      iconColor: 'text-emerald-400',
+      iconBg: 'bg-emerald-500/10',
+      valueColor: 'text-emerald-400',
     },
     {
       label: 'Demandas do dia',
       value: demandasDia,
       icon: Zap,
-      borderColor: 'border-neutral-700/50'
+      iconColor: 'text-orange-400',
+      iconBg: 'bg-orange-500/10',
+      valueColor: 'text-orange-400',
     },
     {
       label: 'Demandas atrasadas',
-      value: 0,
+      value: demandasAtrasadas,
       icon: RotateCw,
-      borderColor: 'border-neutral-700/50'
+      iconColor: 'text-red-400',
+      iconBg: 'bg-red-500/10',
+      valueColor: 'text-red-400',
     },
   ]
 
@@ -83,18 +97,18 @@ export default function AdminDashboard() {
           return (
             <div
               key={metric.label}
-              className={`rounded-2xl border ${metric.borderColor} bg-neutral-900/50 backdrop-blur-xl p-6 hover:border-neutral-600/50 transition-colors`}
+              className="rounded-2xl border border-neutral-700/50 bg-neutral-900/50 backdrop-blur-xl p-6 hover:border-neutral-600/50 transition-colors"
             >
               <div className="flex items-center justify-between mb-4">
-                <div className="p-3 rounded-lg bg-neutral-800">
-                  <Icon className="w-5 h-5 text-white" />
+                <div className={`p-3 rounded-lg ${metric.iconBg}`}>
+                  <Icon className={`w-5 h-5 ${metric.iconColor}`} />
                 </div>
               </div>
 
               <p className="text-neutral-500 text-xs uppercase tracking-widest mb-2">
                 {metric.label}
               </p>
-              <p className="text-3xl font-normal text-white">
+              <p className={`text-3xl font-normal ${metric.valueColor}`}>
                 {metric.value}
               </p>
             </div>

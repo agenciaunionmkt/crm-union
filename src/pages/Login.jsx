@@ -198,10 +198,6 @@ export default function Login() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-xs text-neutral-600">
-          Não tem conta? <a href="/cadastro" className="font-normal text-neutral-400 hover:text-neutral-300">Criar conta aqui</a>
-        </p>
-
         <p className="mt-6 text-center text-xs text-neutral-700">
           Acesso de equipe e clientes da agência
         </p>

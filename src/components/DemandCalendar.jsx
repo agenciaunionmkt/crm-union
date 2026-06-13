@@ -32,6 +32,11 @@ export default function DemandCalendar({
     return demands.filter((d) => d.prazo && isSameDay(new Date(`${d.prazo}T00:00:00`), day))
   }
 
+  const hojeStr = format(new Date(), 'yyyy-MM-dd')
+  function isOverdue(demand) {
+    return demand.prazo && demand.prazo < hojeStr && demand.status !== 'entregue'
+  }
+
   return (
     <div>
       <div className="mb-4 flex items-center justify-center py-4 px-6 relative">
@@ -91,7 +96,9 @@ export default function DemandCalendar({
                   {format(day, 'd')}
                 </p>
                 <div className="space-y-1">
-                  {items.slice(0, 3).map((demand) => (
+                  {items.slice(0, 3).map((demand) => {
+                    const overdue = isOverdue(demand)
+                    return (
                     <div
                       key={demand.id}
                       onClick={
@@ -102,14 +109,23 @@ export default function DemandCalendar({
                             }
                           : undefined
                       }
-                      className={`truncate rounded px-2 py-1 text-[11px] font-normal bg-neutral-200 dark:bg-transparent/40 text-neutral-700 dark:text-neutral-300 ${
-                        onCardClick ? 'hover:bg-neutral-300 dark:hover:bg-neutral-600/50 cursor-pointer transition-colors' : ''
+                      className={`truncate rounded px-2 py-1 text-[11px] font-normal ${
+                        overdue
+                          ? 'bg-red-100 dark:bg-red-500/15 text-red-700 dark:text-red-400 border border-red-300 dark:border-red-500/40'
+                          : 'bg-neutral-200 dark:bg-transparent/40 text-neutral-700 dark:text-neutral-300'
+                      } ${
+                        onCardClick
+                          ? overdue
+                            ? 'hover:bg-red-200 dark:hover:bg-red-500/25 cursor-pointer transition-colors'
+                            : 'hover:bg-neutral-300 dark:hover:bg-neutral-600/50 cursor-pointer transition-colors'
+                          : ''
                       }`}
-                      title={demand.titulo}
+                      title={overdue ? `${demand.titulo} — atrasada` : demand.titulo}
                     >
                       {demand.titulo}
                     </div>
-                  ))}
+                    )
+                  })}
                   {items.length > 3 && (
                     <p className="px-2 text-[11px] text-neutral-500 dark:text-neutral-400">+{items.length - 3} mais</p>
                   )}
