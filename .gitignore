@@ -1,0 +1,26 @@
+# Dependências
+node_modules/
+
+# Build
+dist/
+dist-ssr/
+*.local
+
+# Logs
+*.log
+logs/
+
+# Variáveis de ambiente locais (segredos)
+.env.local
+.env.*.local
+
+# Sistema
+.DS_Store
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Cache de ferramentas
+.vite/
