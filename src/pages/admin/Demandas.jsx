@@ -38,10 +38,16 @@ export default function Demandas() {
       id ? updateDemand(id, payload, tagIds) : createDemand(payload, tagIds),
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['demands'] })
-      closeForm()
-      const message = variables.id ? '✅ Demanda atualizada!' : '✅ Demanda criada!'
-      setSuccessMessage(message)
-      setTimeout(() => setSuccessMessage(''), 3000)
+      if (variables.id) {
+        closeForm()
+        setSuccessMessage('✅ Demanda atualizada!')
+      } else {
+        // Mantém o modal aberto em modo edição para permitir anexar arquivos
+        setEditingDemand(data)
+        setDefaultDate(null)
+        setSuccessMessage('✅ Demanda criada! Agora você pode anexar arquivos abaixo.')
+      }
+      setTimeout(() => setSuccessMessage(''), 4000)
     },
   })
 
@@ -135,7 +141,7 @@ export default function Demandas() {
         )}
 
         {!isLoading && (
-          <div className="rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 shadow-sm overflow-hidden">
+          <div>
             <DemandCalendar
               demands={demandsQuery.data ?? []}
               currentMonth={currentMonth}

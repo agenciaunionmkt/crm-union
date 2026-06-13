@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext'
 import { useTheme } from '../context/ThemeContext'
 import { supabase } from '../lib/supabaseClient'
 import UnionLogo from '../components/UnionLogo'
+import PhotoCropModal from '../components/PhotoCropModal'
 
 const links = [
   { to: '/admin', label: 'Dashboard', Icon: LayoutDashboard, end: true },
@@ -20,6 +21,7 @@ export default function AdminLayout() {
   const { isDark, toggleTheme } = useTheme()
   const [showSettings, setShowSettings] = useState(false)
   const [userPhoto, setUserPhoto] = useState(null)
+  const [cropSrc, setCropSrc] = useState(null)
   const [formData, setFormData] = useState({ nome: '', email: '' })
   const [passwords, setPasswords] = useState({ current: '', new: '', confirm: '' })
   const [saving, setSaving] = useState(false)
@@ -49,17 +51,22 @@ export default function AdminLayout() {
       const reader = new FileReader()
       reader.onload = (event) => {
         const photoData = event.target?.result
-        if (photoData) {
-          localStorage.setItem('userPhoto', photoData)
-          setUserPhoto(photoData)
-          console.log('✅ Foto salva com sucesso!', photoData.substring(0, 50))
-        }
-      }
-      reader.onerror = (error) => {
-        console.error('❌ Erro ao ler arquivo:', error)
+        if (photoData) setCropSrc(photoData) // abre o cropper
       }
       reader.readAsDataURL(file)
+      e.target.value = ''
     }
+  }
+
+  const handleCropApply = (croppedDataUrl) => {
+    try {
+      localStorage.setItem('userPhoto', croppedDataUrl)
+      setUserPhoto(croppedDataUrl)
+      setMessage({ type: 'success', text: '✅ Foto atualizada!' })
+    } catch {
+      setMessage({ type: 'error', text: '❌ Não foi possível salvar a foto (muito grande).' })
+    }
+    setCropSrc(null)
   }
 
   const handleAddPhoto = () => {
@@ -95,11 +102,11 @@ export default function AdminLayout() {
       setSaving(true)
       try {
         const { data: existingUser } = await supabase
-          .from('profiles')
+          .from('users')
           .select('id')
           .eq('email', formData.email)
           .neq('id', profile.id)
-          .single()
+          .maybeSingle()
 
         if (existingUser) {
           setMessage({ type: 'error', text: '❌ Este e-mail já está em uso' })
@@ -114,11 +121,10 @@ export default function AdminLayout() {
     setSaving(true)
     try {
       const { error } = await supabase
-        .from('profiles')
+        .from('users')
         .update({
           nome: formData.nome.trim(),
           email: formData.email.trim(),
-          updated_at: new Date().toISOString()
         })
         .eq('id', profile.id)
 
@@ -273,8 +279,8 @@ export default function AdminLayout() {
 
       {/* Settings Modal */}
       {showSettings && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="w-full max-w-md bg-neutral-900 rounded-2xl border border-neutral-700/50 p-8 shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
+          <div className="w-full max-w-md max-h-[90vh] overflow-y-auto bg-[#13101c]/95 backdrop-blur-2xl rounded-2xl border border-white/10 p-8 shadow-2xl shadow-black/50">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-2xl font-normal text-white">Configurações</h2>
               <button
@@ -450,6 +456,15 @@ export default function AdminLayout() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Cropper de foto */}
+      {cropSrc && (
+        <PhotoCropModal
+          src={cropSrc}
+          onCancel={() => setCropSrc(null)}
+          onApply={handleCropApply}
+        />
       )}
     </div>
   )

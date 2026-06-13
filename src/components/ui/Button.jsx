@@ -2,10 +2,9 @@ import { forwardRef } from 'react'
 
 const variantClasses = {
   primary: `
-    bg-gradient-to-r from-emerald-500 to-green-500 backdrop-blur-sm text-white
-    border border-emerald-400/40
-    hover:from-emerald-600 hover:to-green-600 hover:shadow-xl
-    dark:from-emerald-600 dark:to-green-600 dark:hover:from-emerald-500 dark:hover:to-green-500
+    bg-yellow-400 text-gray-900 font-semibold
+    border border-yellow-300/50
+    hover:bg-yellow-500 hover:shadow-lg hover:shadow-yellow-400/10
     active:scale-95
     transition-all duration-200
   `,
@@ -59,7 +58,7 @@ const Button = forwardRef(
   }, ref) => {
     const baseClasses = `
       inline-flex items-center justify-center gap-2
-      focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500/50
+      focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400/50
       dark:focus:ring-offset-neutral-900
       disabled:opacity-50 disabled:cursor-not-allowed
       transition-all duration-200

@@ -46,20 +46,20 @@ export default function DemandCalendar({
         <div className="flex gap-3 absolute right-6">
           <button
             onClick={() => onMonthChange(subMonths(currentMonth, 1))}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-neutral-400 dark:border-neutral-500 px-3.5 py-2 text-xs font-normal text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/30 active:scale-95 transition-all"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 px-3.5 py-2 text-xs font-normal text-neutral-300 hover:bg-white/5 active:scale-95 transition-all"
           >
             <ChevronLeft className="w-4 h-4" />
             <span>Anterior</span>
           </button>
           <button
             onClick={() => onMonthChange(new Date())}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-neutral-400 dark:border-neutral-500 px-3.5 py-2 text-xs font-normal text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/30 active:scale-95 transition-all"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 px-3.5 py-2 text-xs font-normal text-neutral-300 hover:bg-white/5 active:scale-95 transition-all"
           >
             <span>Hoje</span>
           </button>
           <button
             onClick={() => onMonthChange(addMonths(currentMonth, 1))}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-neutral-400 dark:border-neutral-500 px-3.5 py-2 text-xs font-normal text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/30 active:scale-95 transition-all"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 px-3.5 py-2 text-xs font-normal text-neutral-300 hover:bg-white/5 active:scale-95 transition-all"
           >
             <span>Próximo</span>
             <ChevronRight className="w-4 h-4" />
@@ -67,10 +67,10 @@ export default function DemandCalendar({
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-neutral-300 dark:border-neutral-600/50 bg-transparent dark:bg-neutral-900 backdrop-blur-xl shadow-lg">
-        <div className="grid grid-cols-7 gap-0 bg-neutral-200 dark:bg-transparent">
+      <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] backdrop-blur-xl">
+        <div className="grid grid-cols-7 gap-0">
           {weekDays.map((day) => (
-            <div key={day} className="bg-neutral-150 dark:bg-transparent/80 px-3 py-3 text-center text-xs font-normal text-neutral-700 dark:text-neutral-400 border-b border-neutral-300 dark:border-neutral-700">
+            <div key={day} className="px-3 py-3 text-center text-xs font-normal text-neutral-400 border-b border-white/10">
               {day}
             </div>
           ))}
@@ -84,13 +84,13 @@ export default function DemandCalendar({
               <div
                 key={day.toISOString()}
                 onClick={onDayClick ? () => onDayClick(day) : undefined}
-                className={`min-h-32 border-b border-r border-neutral-300 dark:border-neutral-700 p-3 ${onDayClick ? 'cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-800/80 transition-colors' : ''} ${
-                  inMonth ? 'bg-transparent dark:bg-neutral-900' : 'bg-neutral-100 dark:bg-transparent/50 text-neutral-400'
+                className={`min-h-32 border-b border-r border-white/10 p-3 ${onDayClick ? 'cursor-pointer hover:bg-white/5 transition-colors' : ''} ${
+                  inMonth ? 'bg-transparent' : 'bg-black/20 text-neutral-600'
                 }`}
               >
                 <p
                   className={`mb-2 inline-flex h-6 w-6 items-center justify-center rounded-full text-xs font-normal ${
-                    isToday ? 'border-2 border-emerald-500 dark:border-emerald-400 text-neutral-600 dark:text-neutral-400' : 'text-neutral-600 dark:text-neutral-400'
+                    isToday ? 'bg-yellow-400 text-gray-900 font-semibold' : 'text-neutral-400'
                   }`}
                 >
                   {format(day, 'd')}
