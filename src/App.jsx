@@ -6,6 +6,7 @@ import Login from './pages/Login'
 import Cadastro from './pages/Cadastro'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
+import AuthCallback from './pages/AuthCallback'
 import AdminDashboard from './pages/admin/Dashboard'
 import Clientes from './pages/admin/Clientes'
 import ClienteDetalhe from './pages/admin/ClienteDetalhe'
@@ -27,6 +28,7 @@ function App() {
       <Route path="/cadastro" element={<Cadastro />} />
       <Route path="/esqueci-senha" element={<ForgotPassword />} />
       <Route path="/redefinir-senha" element={<ResetPassword />} />
+      <Route path="/auth/callback" element={<AuthCallback />} />
 
       {/* Área interna: admin e equipe */}
       <Route element={<ProtectedRoute allowedRoles={['admin', 'equipe']} />}>
