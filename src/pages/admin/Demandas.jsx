@@ -17,6 +17,7 @@ import Modal from '../../components/ui/Modal'
 import DemandForm from '../../components/DemandForm'
 import DemandCalendar from '../../components/DemandCalendar'
 import DemandActivity from '../../components/DemandActivity'
+import DemandAttachments from '../../components/DemandAttachments'
 
 export default function Demandas() {
   const { profile } = useAuth()
@@ -170,7 +171,13 @@ export default function Demandas() {
         )}
 
         {editingDemand && (
-          <div className="mt-6 border-t border-gray-200 pt-4">
+          <div className="mt-6 border-t border-gray-200 dark:border-neutral-700 pt-4">
+            <DemandAttachments demandId={editingDemand.id} currentUser={profile} />
+          </div>
+        )}
+
+        {editingDemand && (
+          <div className="mt-6 border-t border-gray-200 dark:border-neutral-700 pt-4">
             <DemandActivity demandId={editingDemand.id} mode="admin" currentUser={profile} />
           </div>
         )}
