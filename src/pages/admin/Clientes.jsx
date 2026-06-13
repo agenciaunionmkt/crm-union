@@ -5,6 +5,7 @@ import { Eye, Trash2, AlertCircle, CheckCircle } from 'lucide-react'
 import { useTheme } from '../../context/ThemeContext'
 import { supabase } from '../../lib/supabaseClient'
 import { createClient, deleteClient, listClients } from '../../lib/api/clients'
+import { inviteClientUser } from '../../lib/api/users'
 import Modal from '../../components/ui/Modal'
 import ClientForm from '../../components/ClientForm'
 import Button from '../../components/ui/Button'
@@ -26,7 +27,7 @@ export default function Clientes() {
   })
 
   const createMutation = useMutation({
-    mutationFn: async (clientData) => {
+    mutationFn: async ({ clientData, access }) => {
       // Criar cliente
       const client = await createClient(clientData)
 
@@ -48,14 +49,25 @@ export default function Clientes() {
         }
       }
 
-      return client
+      // Convite de acesso ao portal (item 4)
+      let acessoEnviado = false
+      if (access?.ativar && access?.email) {
+        await inviteClientUser({ email: access.email, nome: client.nome, clienteId: client.id })
+        acessoEnviado = true
+      }
+
+      return { client, acessoEnviado }
     },
-    onSuccess: () => {
+    onSuccess: ({ acessoEnviado }) => {
       queryClient.invalidateQueries({ queryKey: ['clients'] })
       queryClient.invalidateQueries({ queryKey: ['financial-entries'] })
       setShowForm(false)
-      setSuccessMessage('✅ Cliente criado com sucesso!')
-      setTimeout(() => setSuccessMessage(''), 3000)
+      setSuccessMessage(
+        acessoEnviado
+          ? '✅ Cliente criado! Link de acesso enviado por e-mail.'
+          : '✅ Cliente criado com sucesso!'
+      )
+      setTimeout(() => setSuccessMessage(''), 4000)
     },
     onError: (error) => {
       console.error('Erro ao criar cliente:', error)
@@ -220,7 +232,7 @@ export default function Clientes() {
         <ClientForm
           submitting={createMutation.isPending}
           onCancel={() => setShowForm(false)}
-          onSubmit={(values) => createMutation.mutate(values)}
+          onSubmit={(values, access) => createMutation.mutate({ clientData: values, access })}
         />
         {createMutation.error && (
           <div className="mt-4 flex items-center gap-2 rounded-lg bg-red-900/20 border border-red-700/50 px-3 py-2">

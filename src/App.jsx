@@ -13,7 +13,6 @@ import Demandas from './pages/admin/Demandas'
 import Solicitacoes from './pages/admin/Solicitacoes'
 import Relatorios from './pages/admin/Relatorios'
 import Financeiro from './pages/admin/Financeiro'
-import ClientDashboard from './pages/client/Dashboard'
 import ClientDemandas from './pages/client/Demandas'
 import ClientAprovacoes from './pages/client/Aprovacoes'
 import ClientSolicitacoes from './pages/client/Solicitacoes'
@@ -45,7 +44,7 @@ function App() {
       {/* Portal do cliente */}
       <Route element={<ProtectedRoute allowedRoles={['cliente']} />}>
         <Route path="/portal" element={<ClientLayout />}>
-          <Route index element={<ClientDashboard />} />
+          <Route index element={<Navigate to="/portal/solicitacoes" replace />} />
           <Route path="demandas" element={<ClientDemandas />} />
           <Route path="aprovacoes" element={<ClientAprovacoes />} />
           <Route path="solicitacoes" element={<ClientSolicitacoes />} />

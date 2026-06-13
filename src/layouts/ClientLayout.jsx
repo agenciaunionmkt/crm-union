@@ -3,12 +3,8 @@ import { useAuth } from '../context/AuthContext'
 import UnionLogo from '../components/UnionLogo'
 
 const links = [
-  { to: '/portal', label: 'Cronograma do mês', end: true },
-  { to: '/portal/demandas', label: 'Status das demandas' },
+  { to: '/portal/solicitacoes', label: 'Solicitações' },
   { to: '/portal/aprovacoes', label: 'Aprovar entregas' },
-  { to: '/portal/solicitacoes', label: 'Nova solicitação' },
-  { to: '/portal/historico', label: 'Histórico de entregas' },
-  { to: '/portal/chat', label: 'Chat com a agência' },
 ]
 
 export default function ClientLayout() {

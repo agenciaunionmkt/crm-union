@@ -17,6 +17,9 @@ const emptyForm = {
 export default function ClientForm({ initialValues, onSubmit, onCancel, submitting }) {
   const [form, setForm] = useState({ ...emptyForm, ...initialValues })
   const [showInstaSenha, setShowInstaSenha] = useState(false)
+  const isEdit = Boolean(initialValues?.id)
+  const [acessoAtivar, setAcessoAtivar] = useState(false)
+  const [acessoEmail, setAcessoEmail] = useState('')
 
   function handleChange(field) {
     return (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }))
@@ -37,7 +40,25 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
       return
     }
 
-    onSubmit(form)
+    const acessoEmailFinal = (acessoEmail || form.contato_email || '').trim()
+    if (acessoAtivar && !acessoEmailFinal) {
+      alert('Informe o e-mail de acesso do cliente')
+      return
+    }
+
+    // Payload com apenas colunas válidas da tabela clients
+    const clientData = {
+      nome: form.nome.trim(),
+      segmento: form.segmento || null,
+      tipo_cliente: form.tipo_cliente,
+      contato_email: form.contato_email || null,
+      contato_telefone: form.contato_telefone || null,
+      valor_servico: form.valor_servico ? parseFloat(form.valor_servico) : null,
+      instagram_usuario: form.instagram_usuario || null,
+      instagram_senha: form.instagram_senha || null,
+    }
+
+    onSubmit(clientData, { ativar: acessoAtivar, email: acessoEmailFinal })
   }
 
   return (
@@ -155,6 +176,46 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
           </div>
         </div>
       </div>
+
+      {/* Acesso ao portal */}
+      {!isEdit && (
+        <div className="rounded-lg border border-neutral-300 dark:border-neutral-700/50 bg-neutral-100 dark:bg-neutral-800/20 p-5">
+          <label className="flex items-start gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={acessoAtivar}
+              onChange={(e) => {
+                setAcessoAtivar(e.target.checked)
+                if (e.target.checked && !acessoEmail) setAcessoEmail(form.contato_email ?? '')
+              }}
+              className="mt-0.5 h-4 w-4 rounded border-neutral-400 accent-emerald-500"
+            />
+            <span>
+              <span className="block text-sm font-normal text-neutral-900 dark:text-neutral-300">
+                Dar acesso ao portal do cliente
+              </span>
+              <span className="block text-xs text-neutral-500 dark:text-neutral-400">
+                Enviaremos um e-mail para o cliente criar a própria senha.
+              </span>
+            </span>
+          </label>
+
+          {acessoAtivar && (
+            <div className="mt-4">
+              <label className="mb-1.5 block text-xs font-normal text-neutral-600 dark:text-neutral-400">
+                E-mail de acesso
+              </label>
+              <input
+                type="email"
+                value={acessoEmail}
+                onChange={(e) => setAcessoEmail(e.target.value)}
+                placeholder="cliente@empresa.com"
+                className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none"
+              />
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Actions */}
       <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200 dark:border-neutral-700">
