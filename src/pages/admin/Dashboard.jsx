@@ -97,7 +97,7 @@ export default function AdminDashboard() {
           return (
             <div
               key={metric.label}
-              className="rounded-2xl border border-neutral-700/50 bg-neutral-900/50 backdrop-blur-xl p-6 hover:border-neutral-600/50 transition-colors"
+              className="glass glass-hover rounded-2xl p-6"
             >
               <div className="flex items-center justify-between mb-4">
                 <div className={`p-3 rounded-lg ${metric.iconBg}`}>
@@ -119,7 +119,7 @@ export default function AdminDashboard() {
       {/* Summary Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
         {/* Overview Card */}
-        <div className="lg:col-span-2 border border-neutral-700/50 rounded-2xl bg-neutral-900/50 backdrop-blur-xl p-8 hover:border-neutral-600/50 transition-colors">
+        <div className="glass glass-hover lg:col-span-2 rounded-2xl p-8">
           <div className="flex items-center justify-between mb-8">
             <div>
               <p className="text-neutral-400 text-xs uppercase tracking-widest mb-2">Overview</p>
@@ -154,7 +154,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Performance Card */}
-        <div className="border border-neutral-700/50 rounded-2xl bg-neutral-900/50 backdrop-blur-xl p-8 hover:border-neutral-600/50 transition-colors">
+        <div className="glass glass-hover rounded-2xl p-8">
           <div className="mb-8">
             <p className="text-neutral-400 text-xs uppercase tracking-widest mb-2">Performance</p>
             <h2 className="text-2xl font-normal text-white">Status</h2>

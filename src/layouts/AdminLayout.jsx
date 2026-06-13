@@ -170,23 +170,13 @@ export default function AdminLayout() {
   }
 
   return (
-    <div
-      className="flex min-h-screen"
-      style={{
-        backgroundColor: isDark ? '#111111' : '#ffffff',
-        color: isDark ? '#ffffff' : '#1a1a1a',
-        transition: 'background-color 0.3s, color 0.3s'
-      }}
-    >
+    <div className="flex min-h-screen union-app-bg text-white">
       {/* Sidebar */}
-      <aside
-        className="w-60 border-r border-neutral-200 dark:border-slate-700/20 bg-transparent dark:bg-gradient-to-b dark:from-neutral-900 dark:to-neutral-800 backdrop-blur-lg shadow-sm dark:shadow-2xl flex flex-col"
-        style={!isDark ? { backgroundColor: '#ffffff', backgroundImage: 'none' } : {}}
-      >
+      <aside className="w-60 flex flex-col border-r border-white/10 bg-white/[0.03] backdrop-blur-xl">
         {/* Logo */}
-        <div className="px-5 py-4 border-b border-neutral-200 dark:border-neutral-700/15">
-          <UnionLogo size="sm" variant={isDark ? 'light' : 'dark'} />
-          <p className="mt-2 text-xs font-normal text-neutral-700 dark:text-neutral-400 uppercase tracking-widest opacity-70">
+        <div className="px-5 py-4 border-b border-white/10">
+          <UnionLogo size="sm" variant="light" />
+          <p className="mt-2 text-xs font-normal text-neutral-400 uppercase tracking-widest opacity-70">
             Admin
           </p>
         </div>
@@ -199,34 +189,29 @@ export default function AdminLayout() {
               to={link.to}
               end={link.end}
               className={({ isActive }) =>
-                `flex items-center gap-3 rounded-md px-3 py-2 text-xs font-normal transition-all duration-200 ${
+                `flex items-center gap-3 rounded-lg px-3 py-2.5 text-xs font-normal transition-all duration-200 ${
                   isActive
-                    ? 'bg-neutral-200 dark:bg-neutral-700/50 backdrop-blur-sm text-neutral-900 dark:text-white shadow-md border border-neutral-300 dark:border-neutral-600/50'
-                    : 'text-neutral-700 dark:text-neutral-400 hover:bg-neutral-100/50 dark:hover:bg-neutral-700/40 hover:text-neutral-900 dark:hover:text-neutral-100'
+                    ? 'union-active'
+                    : 'text-neutral-400 hover:bg-white/5 hover:text-white'
                 }`
               }
             >
-              <link.Icon className="w-4 h-4 opacity-70" strokeWidth={2} />
+              <link.Icon className="w-4 h-4" strokeWidth={2} />
               <span className="text-xs">{link.label}</span>
             </NavLink>
           ))}
         </nav>
 
         {/* Footer */}
-        <div className="px-3 py-3 border-t border-neutral-700/15">
-          <p className="text-xs text-neutral-500 dark:text-neutral-500 opacity-50">
-            v1.0
-          </p>
+        <div className="px-3 py-3 border-t border-white/10">
+          <p className="text-xs text-neutral-600">v1.0</p>
         </div>
       </aside>
 
       {/* Main */}
       <main className="flex-1 flex flex-col">
         {/* Header */}
-        <header
-          className="border-b border-neutral-200 dark:border-neutral-700/20 bg-transparent dark:bg-gradient-to-r dark:from-neutral-900 dark:to-neutral-800 backdrop-blur-lg shadow-sm dark:shadow-xl"
-          style={!isDark ? { backgroundColor: '#ffffff !important', borderColor: '#e4e4e7', backgroundImage: 'none' } : {}}
-        >
+        <header className="border-b border-white/10 bg-white/[0.02] backdrop-blur-xl">
           <div className="flex items-center justify-between px-6 py-3.5">
             <div>
               <p className="text-xs font-normal text-neutral-500 dark:text-neutral-400 uppercase tracking-widest opacity-70">
@@ -254,7 +239,7 @@ export default function AdminLayout() {
                   className="w-9 h-9 rounded-full object-cover flex-shrink-0 border-2 border-neutral-700"
                 />
               ) : (
-                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-600 to-blue-400 flex items-center justify-center flex-shrink-0 border-2 border-neutral-700">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center flex-shrink-0 border border-white/10">
                   <Users className="w-4 h-4 text-white" />
                 </div>
               )}
@@ -456,7 +441,7 @@ export default function AdminLayout() {
                     type="button"
                     onClick={handleChangePassword}
                     disabled={saving}
-                    className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50"
+                    className="flex-1 px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50"
                   >
                     {saving ? 'Alterando...' : 'Alterar senha'}
                   </button>

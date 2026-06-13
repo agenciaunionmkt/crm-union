@@ -88,3 +88,47 @@ body {
 #root {
   min-height: 100svh;
 }
+
+/* ============================================================
+   Identidade visual Union — dark premium + atmosfera roxa
+   Ação = amarelo Union. Ambiente = roxo/violeta.
+   ============================================================ */
+
+/* Fundo ambiente: base quase-preta com glows roxos (estilo das referências) */
+.union-app-bg {
+  background-color: #09090f;
+  background-image:
+    radial-gradient(60% 55% at 88% -5%, rgba(124, 58, 237, 0.20), transparent 70%),
+    radial-gradient(55% 50% at -5% 105%, rgba(139, 92, 246, 0.22), transparent 70%),
+    radial-gradient(45% 45% at 105% 110%, rgba(217, 70, 239, 0.10), transparent 70%);
+  background-attachment: fixed;
+}
+
+/* Cartão de vidro (glassmorphism) */
+.glass {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.glass-hover {
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+.glass-hover:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Chip de ícone com leve realce roxo */
+.union-icon-chip {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(217, 70, 239, 0.15));
+  border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+/* Realce de seleção/ação amarelo Union */
+.union-active {
+  background: rgba(250, 204, 21, 0.10);
+  border: 1px solid rgba(250, 204, 21, 0.30);
+  color: #fde047;
+}
