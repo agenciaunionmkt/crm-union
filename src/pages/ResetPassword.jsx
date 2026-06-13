@@ -18,25 +18,37 @@ export default function ResetPassword() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        // Verifica se o usuário está autenticado via magic link
-        const { data } = await supabase.auth.getSession()
+    let resolved = false
 
-        if (!data.session) {
-          // Sem sessão autenticada, redireciona para esqueci-senha
-          navigate('/esqueci-senha', { replace: true })
-          return
-        }
-
-        setIsLoading(false)
-      } catch (error) {
-        console.error('Erro ao verificar autenticação:', error)
-        navigate('/esqueci-senha', { replace: true })
-      }
+    const liberar = () => {
+      if (resolved) return
+      resolved = true
+      setIsLoading(false)
     }
 
-    checkAuth()
+    // O link de recuperação é processado de forma assíncrona pelo supabase-js,
+    // que dispara PASSWORD_RECOVERY (ou SIGNED_IN) quando a sessão é criada.
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'PASSWORD_RECOVERY' || session) {
+        liberar()
+      }
+    })
+
+    // Caso a sessão já exista quando a página monta.
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) liberar()
+    })
+
+    // Fallback: se em alguns segundos nenhuma sessão de recuperação surgir,
+    // o link é inválido/expirado — volta para solicitar um novo.
+    const timeout = setTimeout(() => {
+      if (!resolved) navigate('/esqueci-senha', { replace: true })
+    }, 4000)
+
+    return () => {
+      clearTimeout(timeout)
+      listener.subscription.unsubscribe()
+    }
   }, [navigate])
 
   async function handleSubmit(e) {
