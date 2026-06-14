@@ -56,6 +56,33 @@ export default function Relatorios() {
   })
 
   const report = reportQuery.data
+  const [aiResumo, setAiResumo] = useState('')
+  const [aiLoading, setAiLoading] = useState(false)
+
+  async function gerarResumo() {
+    if (!report || aiLoading) return
+    setAiLoading(true)
+    setAiResumo('')
+    try {
+      const s = report.summary
+      const prompt =
+        `Escreva um resumo executivo mensal, cordial e profissional, em português do Brasil, ` +
+        `para apresentar ao cliente ${report.client.nome} (segmento: ${report.client.segmento || 'n/d'}). ` +
+        `Período: ${format(report.periodo.referenceDate, "MMMM 'de' yyyy", { locale: ptBR })}. ` +
+        `Dados reais: ${s.total} demandas no total, ${s.entregue} entregues, ${s.em_andamento} em andamento, ` +
+        `${s.em_revisao} em revisão, ${s.a_fazer} a fazer. ` +
+        `Destaque os resultados de forma positiva e objetiva (máximo ~120 palavras). Não invente números.`
+      const res = await fetch('/api/assistente', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: [{ role: 'user', content: prompt }] }),
+      })
+      const data = await res.json()
+      if (res.ok) setAiResumo(data.texto || '')
+    } finally {
+      setAiLoading(false)
+    }
+  }
 
   return (
     <div>
@@ -143,6 +170,27 @@ export default function Relatorios() {
                 <p className="text-xs text-neutral-400">Entregues</p>
               </div>
             </div>
+          </div>
+
+          {/* Resumo executivo com IA */}
+          <div className="glass rounded-2xl p-6">
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-base font-normal text-white">Resumo executivo</h3>
+              <button
+                onClick={gerarResumo}
+                disabled={aiLoading}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-yellow-400/40 bg-yellow-400/10 px-3 py-1.5 text-xs font-normal text-yellow-300 hover:bg-yellow-400/20 disabled:opacity-60 transition-colors"
+              >
+                {aiLoading ? 'Gerando...' : 'Gerar com IA'}
+              </button>
+            </div>
+            {aiResumo ? (
+              <p className="mt-3 whitespace-pre-wrap text-sm text-neutral-200">{aiResumo}</p>
+            ) : (
+              <p className="mt-3 text-xs text-neutral-500">
+                Gere um resumo do mês em linguagem natural para apresentar ao cliente.
+              </p>
+            )}
           </div>
 
           <div>

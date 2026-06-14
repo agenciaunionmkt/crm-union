@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Sparkles, Loader2 } from 'lucide-react'
 import { listMessages, sendMessage } from '../lib/api/chat'
 
 function formatDateTime(value) {
@@ -31,6 +32,35 @@ export default function ChatWindow({ clienteId, currentUser }) {
   })
 
   const messages = messagesQuery.data ?? []
+  const isAgency = currentUser?.papel && currentUser.papel !== 'cliente'
+  const [suggesting, setSuggesting] = useState(false)
+
+  async function sugerirResposta() {
+    if (suggesting || messages.length === 0) return
+    setSuggesting(true)
+    try {
+      const conversa = messages
+        .slice(-8)
+        .map((m) => `${m.autor?.papel === 'cliente' ? 'Cliente' : 'Agência'}: ${m.mensagem}`)
+        .join('\n')
+      const prompt =
+        'Você é o atendimento de uma agência de marketing conversando com um cliente. ' +
+        'Com base na conversa abaixo, sugira a próxima resposta da agência: cordial, objetiva e em português do Brasil. ' +
+        'Responda apenas com o texto da mensagem, sem aspas e sem rótulos.\n\n' +
+        conversa
+      const res = await fetch('/api/assistente', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: [{ role: 'user', content: prompt }] }),
+      })
+      const data = await res.json()
+      if (res.ok && data.texto) setMessage(data.texto)
+    } catch {
+      /* ignore */
+    } finally {
+      setSuggesting(false)
+    }
+  }
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -79,6 +109,17 @@ export default function ChatWindow({ clienteId, currentUser }) {
       </div>
 
       <form onSubmit={handleSubmit} className="mt-2 flex items-center gap-2 border-t border-white/10 pt-3">
+        {isAgency && (
+          <button
+            type="button"
+            onClick={sugerirResposta}
+            disabled={suggesting || messages.length === 0}
+            title="Sugerir resposta com IA"
+            className="shrink-0 inline-flex items-center justify-center rounded-lg border border-white/15 px-2.5 py-2.5 text-neutral-300 hover:bg-white/5 disabled:opacity-50 transition-colors"
+          >
+            {suggesting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+          </button>
+        )}
         <input
           type="text"
           value={message}

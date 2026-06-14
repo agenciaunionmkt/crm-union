@@ -107,6 +107,38 @@ export default function ClienteDetalhe() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['plans', id] }),
   })
 
+  const [briefingIA, setBriefingIA] = useState(false)
+
+  async function gerarBriefingIA() {
+    if (briefingIA) return
+    setBriefingIA(true)
+    try {
+      const prompt =
+        `Sugira um briefing de marca para o cliente "${client.nome}" ` +
+        `(segmento: ${client.segmento || 'não informado'}). ` +
+        `Responda em português do Brasil EXATAMENTE neste formato, sem nenhum texto extra:\n` +
+        `TOM: <2 a 3 frases descrevendo o tom de voz>\n` +
+        `REGRAS: <regras de marca em tópicos curtos separados por ponto e vírgula>`
+      const res = await fetch('/api/assistente', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: [{ role: 'user', content: prompt }] }),
+      })
+      const data = await res.json()
+      if (res.ok && data.texto) {
+        const tom = data.texto.match(/TOM:\s*([\s\S]*?)(?:\nREGRAS:|$)/i)
+        const regras = data.texto.match(/REGRAS:\s*([\s\S]*)$/i)
+        setBriefingForm((prev) => ({
+          ...prev,
+          tom_de_voz: tom ? tom[1].trim() : prev.tom_de_voz,
+          regras_marca: regras ? regras[1].trim() : prev.regras_marca,
+        }))
+      }
+    } finally {
+      setBriefingIA(false)
+    }
+  }
+
   function handleBriefingSubmit(e) {
     e.preventDefault()
     briefingMutation.mutate(briefingForm)
@@ -157,10 +189,22 @@ export default function ClienteDetalhe() {
 
       {/* Briefing */}
       <div className="mt-6 glass rounded-2xl p-6">
-        <h2 className="text-base font-normal text-white">Briefing</h2>
-        <p className="mt-1 text-xs text-neutral-400">
-          Tom de voz, referências e regras de marca usadas pelo time na criação de conteúdo
-        </p>
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h2 className="text-base font-normal text-white">Briefing</h2>
+            <p className="mt-1 text-xs text-neutral-400">
+              Tom de voz, referências e regras de marca usadas pelo time na criação de conteúdo
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={gerarBriefingIA}
+            disabled={briefingIA}
+            className="shrink-0 inline-flex items-center gap-1.5 rounded-lg border border-yellow-400/40 bg-yellow-400/10 px-3 py-1.5 text-xs font-normal text-yellow-300 hover:bg-yellow-400/20 disabled:opacity-60 transition-colors"
+          >
+            {briefingIA ? 'Gerando...' : 'Sugerir com IA'}
+          </button>
+        </div>
 
         <form onSubmit={handleBriefingSubmit} className="mt-4 space-y-4">
           <div>
