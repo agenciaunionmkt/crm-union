@@ -26,6 +26,11 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Envie ao menos uma mensagem' })
     }
 
+    const contexto = typeof body.context === 'string' ? body.context.trim() : ''
+    const systemContent = contexto
+      ? `${SYSTEM_PROMPT}\n\nContexto da marca/cliente para personalizar as respostas (use o tom de voz e as regras abaixo):\n${contexto}`
+      : SYSTEM_PROMPT
+
     // Mantém só as últimas 14 mensagens para não estourar o contexto
     const recentes = messages
       .filter((m) => m && (m.role === 'user' || m.role === 'assistant') && m.content)
@@ -39,7 +44,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
-        messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...recentes],
+        messages: [{ role: 'system', content: systemContent }, ...recentes],
         temperature: 0.8,
         max_tokens: 1024,
       }),

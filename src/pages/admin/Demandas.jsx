@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AlertCircle, CheckCircle } from 'lucide-react'
@@ -23,11 +24,25 @@ export default function Demandas() {
   const { profile } = useAuth()
   const { isDark } = useTheme()
   const queryClient = useQueryClient()
+  const location = useLocation()
+  const navigate = useNavigate()
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const [showForm, setShowForm] = useState(false)
   const [editingDemand, setEditingDemand] = useState(null)
   const [defaultDate, setDefaultDate] = useState(null)
+  const [prefillDesc, setPrefillDesc] = useState(null)
   const [successMessage, setSuccessMessage] = useState('')
+
+  // Abre uma nova demanda com a descrição vinda do Assistente IA
+  useEffect(() => {
+    if (location.state?.descricao) {
+      setEditingDemand(null)
+      setDefaultDate(null)
+      setPrefillDesc(location.state.descricao)
+      setShowForm(true)
+      navigate(location.pathname, { replace: true })
+    }
+  }, [location.state, location.pathname, navigate])
 
   const demandsQuery = useQuery({ queryKey: ['demands'], queryFn: () => listDemands() })
   const clientsQuery = useQuery({ queryKey: ['clients'], queryFn: listClients })
@@ -70,17 +85,20 @@ export default function Demandas() {
     setShowForm(false)
     setEditingDemand(null)
     setDefaultDate(null)
+    setPrefillDesc(null)
   }
 
   function openNewDemand(date) {
     setEditingDemand(null)
     setDefaultDate(date ? format(date, 'yyyy-MM-dd') : null)
+    setPrefillDesc(null)
     setShowForm(true)
   }
 
   function openEditDemand(demand) {
     setEditingDemand(demand)
     setDefaultDate(null)
+    setPrefillDesc(null)
     setShowForm(true)
   }
 
@@ -161,7 +179,10 @@ export default function Demandas() {
       >
         <DemandForm
           initialValues={
-            editingDemand ?? (defaultDate ? { prazo: defaultDate } : null)
+            editingDemand ??
+            (defaultDate || prefillDesc
+              ? { ...(defaultDate ? { prazo: defaultDate } : {}), ...(prefillDesc ? { descricao: prefillDesc } : {}) }
+              : null)
           }
           clients={clientsQuery.data}
           teamUsers={teamQuery.data}
