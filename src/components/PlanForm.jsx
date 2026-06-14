@@ -8,6 +8,10 @@ const emptyForm = {
   status: 'ativo',
 }
 
+const fieldClass =
+  'w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20'
+const labelClass = 'mb-1.5 block text-sm font-normal text-neutral-300'
+
 export default function PlanForm({ initialValues, onSubmit, onCancel, submitting }) {
   const [form, setForm] = useState({ ...emptyForm, ...initialValues })
 
@@ -28,36 +32,32 @@ export default function PlanForm({ initialValues, onSubmit, onCancel, submitting
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-4">
-        <label className="mb-1 block text-sm font-normal text-gray-700">Pacote</label>
+        <label className={labelClass}>Pacote</label>
         <input
           required
           value={form.pacote}
           onChange={handleChange('pacote')}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-neutral-600 focus:outline-none focus:ring-brand-200"
+          className={fieldClass}
           placeholder="Ex: Social Media Essencial"
         />
       </div>
 
       <div className="mb-4 grid grid-cols-2 gap-3">
         <div>
-          <label className="mb-1 block text-sm font-normal text-gray-700">Valor mensal (R$)</label>
+          <label className={labelClass}>Valor mensal (R$)</label>
           <input
             type="number"
             step="0.01"
             min="0"
             value={form.valor ?? ''}
             onChange={handleChange('valor')}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-neutral-600 focus:outline-none focus:ring-brand-200"
+            className={fieldClass}
             placeholder="0,00"
           />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-normal text-gray-700">Status</label>
-          <select
-            value={form.status}
-            onChange={handleChange('status')}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-neutral-600 focus:outline-none focus:ring-brand-200"
-          >
+          <label className={labelClass}>Status</label>
+          <select value={form.status} onChange={handleChange('status')} className={fieldClass}>
             <option value="ativo">Ativo</option>
             <option value="pausado">Pausado</option>
             <option value="encerrado">Encerrado</option>
@@ -67,22 +67,12 @@ export default function PlanForm({ initialValues, onSubmit, onCancel, submitting
 
       <div className="mb-4 grid grid-cols-2 gap-3">
         <div>
-          <label className="mb-1 block text-sm font-normal text-gray-700">Início</label>
-          <input
-            type="date"
-            value={form.inicio ?? ''}
-            onChange={handleChange('inicio')}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-neutral-600 focus:outline-none focus:ring-brand-200"
-          />
+          <label className={labelClass}>Início</label>
+          <input type="date" value={form.inicio ?? ''} onChange={handleChange('inicio')} className={fieldClass} />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-normal text-gray-700">Fim</label>
-          <input
-            type="date"
-            value={form.fim ?? ''}
-            onChange={handleChange('fim')}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-neutral-600 focus:outline-none focus:ring-brand-200"
-          />
+          <label className={labelClass}>Fim</label>
+          <input type="date" value={form.fim ?? ''} onChange={handleChange('fim')} className={fieldClass} />
         </div>
       </div>
 
@@ -90,14 +80,14 @@ export default function PlanForm({ initialValues, onSubmit, onCancel, submitting
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-md border border-gray-300 px-4 py-2 text-sm font-normal text-gray-700 hover:bg-gray-50"
+          className="rounded-lg border border-white/15 px-4 py-2 text-sm font-normal text-neutral-300 hover:bg-white/5 transition-colors"
         >
           Cancelar
         </button>
         <button
           type="submit"
           disabled={submitting}
-          className="rounded-md bg-brand-500 px-4 py-2 text-sm font-normal text-gray-900 hover:bg-brand-600 disabled:opacity-60"
+          className="rounded-lg bg-yellow-400 px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-yellow-500 disabled:opacity-60 transition-colors"
         >
           {submitting ? 'Salvando...' : 'Salvar'}
         </button>

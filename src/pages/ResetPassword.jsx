@@ -96,7 +96,7 @@ export default function ResetPassword() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-neutral-900">
+      <div className="flex min-h-screen items-center justify-center union-app-bg">
         <div className="text-center">
           <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-neutral-700 border-t-yellow-400"></div>
           <p className="mt-4 text-sm text-neutral-400">Carregando...</p>
@@ -106,7 +106,7 @@ export default function ResetPassword() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-neutral-900 px-4">
+    <div className="flex min-h-screen items-center justify-center union-app-bg px-4">
       <div className="w-full max-w-sm">
         <button
           onClick={() => navigate('/login')}

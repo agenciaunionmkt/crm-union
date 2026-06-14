@@ -111,7 +111,7 @@ export default function FinancialForm({ initialValues, onSubmit, onCancel, submi
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-normal text-gray-700">
+        <label className="mb-1 block text-sm font-normal text-neutral-300">
           Nome/Descrição *
         </label>
         <input
@@ -125,7 +125,7 @@ export default function FinancialForm({ initialValues, onSubmit, onCancel, submi
           }`}
           placeholder="Ex: Aluguel do escritório"
         />
-        {errors.nome && <p className="mt-1 text-xs text-red-600">{errors.nome}</p>}
+        {errors.nome && <p className="mt-1 text-xs text-red-400">{errors.nome}</p>}
       </div>
 
       <div className="grid grid-cols-2 gap-4">
@@ -139,14 +139,14 @@ export default function FinancialForm({ initialValues, onSubmit, onCancel, submi
             step="0.01"
             value={form.valor}
             onChange={handleChange('valor')}
-            className={`w-full rounded-md border px-3 py-2 text-sm font-normal focus:outline-none ${
+            className={`w-full rounded-lg border bg-white/5 px-3 py-2 text-sm font-normal text-white placeholder-neutral-500 focus:outline-none focus:ring-2 ${
               errors.valor
-                ? 'border-red-300 focus:border-neutral-600 focus:ring-red-200'
-                : 'border-gray-300 focus:border-neutral-600 focus:ring-brand-200'
+                ? 'border-red-400/60 focus:ring-red-500/20'
+                : 'border-white/15 focus:border-yellow-400/50 focus:ring-yellow-400/20'
             }`}
             placeholder="0,00"
           />
-          {errors.valor && <p className="mt-1 text-xs text-red-600">{errors.valor}</p>}
+          {errors.valor && <p className="mt-1 text-xs text-red-400">{errors.valor}</p>}
         </div>
 
         <div>
@@ -158,24 +158,24 @@ export default function FinancialForm({ initialValues, onSubmit, onCancel, submi
             type="date"
             value={form.vencimento}
             onChange={handleChange('vencimento')}
-            className={`w-full rounded-md border px-3 py-2 text-sm font-normal focus:outline-none ${
+            className={`w-full rounded-lg border bg-white/5 px-3 py-2 text-sm font-normal text-white placeholder-neutral-500 focus:outline-none focus:ring-2 ${
               errors.vencimento
-                ? 'border-red-300 focus:border-neutral-600 focus:ring-red-200'
-                : 'border-gray-300 focus:border-neutral-600 focus:ring-brand-200'
+                ? 'border-red-400/60 focus:ring-red-500/20'
+                : 'border-white/15 focus:border-yellow-400/50 focus:ring-yellow-400/20'
             }`}
           />
-          {errors.vencimento && <p className="mt-1 text-xs text-red-600">{errors.vencimento}</p>}
+          {errors.vencimento && <p className="mt-1 text-xs text-red-400">{errors.vencimento}</p>}
         </div>
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-normal text-gray-700">
+        <label className="mb-1 block text-sm font-normal text-neutral-300">
           Forma de Pagamento
         </label>
         <select
           value={form.forma_pagamento}
           onChange={handleChange('forma_pagamento')}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-neutral-600 focus:outline-none focus:ring-brand-200"
+          className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
         >
           <option value="dinheiro">Dinheiro</option>
           <option value="pix">PIX</option>
@@ -188,14 +188,14 @@ export default function FinancialForm({ initialValues, onSubmit, onCancel, submi
       <div className="grid grid-cols-2 gap-4">
         <div>
           <div className="mb-1 flex items-center justify-between">
-            <label className="block text-sm font-normal text-gray-700">
+            <label className="block text-sm font-normal text-neutral-300">
               Categoria
             </label>
             <button
               type="button"
               onClick={suggestCategoryWithAI}
               disabled={!form.nome}
-              className="text-xs font-normal text-blue-600 hover:text-blue-700 disabled:text-gray-400"
+              className="text-xs font-normal text-yellow-300 hover:text-yellow-200 disabled:text-neutral-500"
             >
               Sugerir
             </button>
@@ -210,7 +210,7 @@ export default function FinancialForm({ initialValues, onSubmit, onCancel, submi
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-normal text-gray-700">
+        <label className="mb-1 block text-sm font-normal text-neutral-300">
           Notas
         </label>
         <textarea
@@ -222,7 +222,7 @@ export default function FinancialForm({ initialValues, onSubmit, onCancel, submi
         />
       </div>
 
-      <div className="rounded-lg bg-blue-100 dark:bg-blue-900/20 border border-blue-300 dark:border-blue-700/50 p-4">
+      <div className="rounded-lg bg-white/5 border border-white/10 p-4">
         <label className="flex items-center gap-2">
           <input
             type="checkbox"
@@ -266,7 +266,7 @@ export default function FinancialForm({ initialValues, onSubmit, onCancel, submi
         <button
           type="submit"
           disabled={submitting}
-          className="rounded-lg bg-gradient-to-r from-emerald-500 to-green-500 px-4 py-2 text-sm font-normal text-white hover:from-emerald-600 hover:to-green-600 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="rounded-lg bg-yellow-400 px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-yellow-500 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {submitting ? 'Salvando...' : 'Salvar'}
         </button>

@@ -87,7 +87,7 @@ export default function Login() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-neutral-900 px-4">
+    <div className="flex min-h-screen items-center justify-center union-app-bg px-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 flex flex-col items-center text-center">
           <UnionLogo size="lg" variant="light" />

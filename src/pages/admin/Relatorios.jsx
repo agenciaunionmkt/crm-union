@@ -14,9 +14,9 @@ const approvalStatusLabels = {
 }
 
 const approvalStatusStyles = {
-  pendente: 'bg-yellow-100 text-yellow-700',
-  aprovado: 'bg-green-100 text-green-700',
-  revisao_solicitada: 'bg-orange-100 text-orange-700',
+  pendente: 'bg-yellow-400/15 text-yellow-300 border border-yellow-400/30',
+  aprovado: 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30',
+  revisao_solicitada: 'bg-orange-500/15 text-orange-300 border border-orange-500/30',
 }
 
 function formatDate(value) {
@@ -102,70 +102,70 @@ export default function Relatorios() {
       </div>
 
       {clienteId && reportQuery.isLoading && (
-        <p className="mt-6 text-sm text-gray-400">Carregando...</p>
+        <p className="mt-6 text-sm text-neutral-400">Carregando...</p>
       )}
 
       {clienteId && reportQuery.error && (
-        <p className="mt-6 text-sm text-red-600">Erro ao carregar relatório: {reportQuery.error.message}</p>
+        <p className="mt-6 text-sm text-red-400">Erro ao carregar relatório: {reportQuery.error.message}</p>
       )}
 
       {report && (
         <div className="mt-6 space-y-6">
-          <div className="rounded-xl border border-gray-200 bg-white p-5">
-            <h2 className="text-sm font-semibold text-gray-700">
+          <div className="glass rounded-2xl p-6">
+            <h2 className="text-base font-normal text-white">
               {report.client.nome} — {format(report.periodo.referenceDate, "MMMM 'de' yyyy", { locale: ptBR })}
             </h2>
             {report.plano && (
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 text-sm text-neutral-400">
                 Plano: {report.plano.pacote} · {formatCurrency(report.plano.valor)}/mês
               </p>
             )}
 
             <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-5">
-              <div className="rounded-lg bg-gray-50 p-3 text-center">
-                <p className="text-2xl font-normal text-gray-900">{report.summary.total}</p>
-                <p className="text-xs text-gray-500">Total</p>
+              <div className="rounded-lg bg-white/5 border border-white/10 p-3 text-center">
+                <p className="text-2xl font-normal text-white">{report.summary.total}</p>
+                <p className="text-xs text-neutral-400">Total</p>
               </div>
-              <div className="rounded-lg bg-gray-50 p-3 text-center">
-                <p className="text-2xl font-normal text-gray-900">{report.summary.a_fazer}</p>
-                <p className="text-xs text-gray-500">A fazer</p>
+              <div className="rounded-lg bg-white/5 border border-white/10 p-3 text-center">
+                <p className="text-2xl font-normal text-white">{report.summary.a_fazer}</p>
+                <p className="text-xs text-neutral-400">A fazer</p>
               </div>
-              <div className="rounded-lg bg-gray-50 p-3 text-center">
-                <p className="text-2xl font-normal text-gray-900">{report.summary.em_andamento}</p>
-                <p className="text-xs text-gray-500">Em andamento</p>
+              <div className="rounded-lg bg-white/5 border border-white/10 p-3 text-center">
+                <p className="text-2xl font-normal text-white">{report.summary.em_andamento}</p>
+                <p className="text-xs text-neutral-400">Em andamento</p>
               </div>
-              <div className="rounded-lg bg-gray-50 p-3 text-center">
-                <p className="text-2xl font-normal text-gray-900">{report.summary.em_revisao}</p>
-                <p className="text-xs text-gray-500">Em revisão</p>
+              <div className="rounded-lg bg-white/5 border border-white/10 p-3 text-center">
+                <p className="text-2xl font-normal text-white">{report.summary.em_revisao}</p>
+                <p className="text-xs text-neutral-400">Em revisão</p>
               </div>
-              <div className="rounded-lg bg-gray-50 p-3 text-center">
-                <p className="text-2xl font-normal text-gray-900">{report.summary.entregue}</p>
-                <p className="text-xs text-gray-500">Entregues</p>
+              <div className="rounded-lg bg-white/5 border border-white/10 p-3 text-center">
+                <p className="text-2xl font-normal text-white">{report.summary.entregue}</p>
+                <p className="text-xs text-neutral-400">Entregues</p>
               </div>
             </div>
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold text-gray-700">Demandas do período</h3>
-            <div className="mt-3 overflow-hidden rounded-xl border border-gray-200 bg-white">
+            <h3 className="text-base font-normal text-white">Demandas do período</h3>
+            <div className="mt-3 glass rounded-2xl overflow-hidden">
               {report.demands.length === 0 && (
-                <p className="p-6 text-sm text-gray-400">Nenhuma demanda com prazo neste período.</p>
+                <p className="p-6 text-sm text-neutral-400">Nenhuma demanda com prazo neste período.</p>
               )}
               {report.demands.length > 0 && (
                 <table className="w-full text-left text-sm">
-                  <thead className="border-b border-gray-200 bg-gray-50 text-xs uppercase text-gray-500">
+                  <thead className="border-b border-white/10 bg-white/5 text-xs uppercase text-neutral-400">
                     <tr>
-                      <th className="px-4 py-3 font-medium">Título</th>
-                      <th className="px-4 py-3 font-medium">Tags</th>
-                      <th className="px-4 py-3 font-medium">Responsável</th>
-                      <th className="px-4 py-3 font-medium">Prazo</th>
-                      <th className="px-4 py-3 font-medium">Status</th>
+                      <th className="px-4 py-3 font-normal">Título</th>
+                      <th className="px-4 py-3 font-normal">Tags</th>
+                      <th className="px-4 py-3 font-normal">Responsável</th>
+                      <th className="px-4 py-3 font-normal">Prazo</th>
+                      <th className="px-4 py-3 font-normal">Status</th>
                     </tr>
                   </thead>
                   <tbody>
                     {report.demands.map((demand) => (
-                      <tr key={demand.id} className="border-b border-gray-100 last:border-0">
-                        <td className="px-4 py-3 font-medium text-gray-900">{demand.titulo}</td>
+                      <tr key={demand.id} className="border-b border-white/5 last:border-0">
+                        <td className="px-4 py-3 font-normal text-white">{demand.titulo}</td>
                         <td className="px-4 py-3">
                           <div className="flex flex-wrap gap-1">
                             {(demand.tags ?? []).map((tag) => (
@@ -180,8 +180,8 @@ export default function Relatorios() {
                             {(demand.tags ?? []).length === 0 && '—'}
                           </div>
                         </td>
-                        <td className="px-4 py-3 text-gray-600">{demand.responsavel?.nome ?? '—'}</td>
-                        <td className="px-4 py-3 text-gray-600">{formatDate(demand.prazo)}</td>
+                        <td className="px-4 py-3 text-neutral-300">{demand.responsavel?.nome ?? '—'}</td>
+                        <td className="px-4 py-3 text-neutral-300">{formatDate(demand.prazo)}</td>
                         <td className="px-4 py-3">
                           <span
                             className={`rounded-full px-2 py-1 text-xs font-medium ${demandStatusStyles[demand.status]}`}
@@ -198,25 +198,25 @@ export default function Relatorios() {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold text-gray-700">Aprovações revisadas no período</h3>
-            <div className="mt-3 overflow-hidden rounded-xl border border-gray-200 bg-white">
+            <h3 className="text-base font-normal text-white">Aprovações revisadas no período</h3>
+            <div className="mt-3 glass rounded-2xl overflow-hidden">
               {report.approvals.length === 0 && (
-                <p className="p-6 text-sm text-gray-400">Nenhuma aprovação revisada neste período.</p>
+                <p className="p-6 text-sm text-neutral-400">Nenhuma aprovação revisada neste período.</p>
               )}
               {report.approvals.length > 0 && (
                 <table className="w-full text-left text-sm">
-                  <thead className="border-b border-gray-200 bg-gray-50 text-xs uppercase text-gray-500">
+                  <thead className="border-b border-white/10 bg-white/5 text-xs uppercase text-neutral-400">
                     <tr>
-                      <th className="px-4 py-3 font-medium">Demanda</th>
-                      <th className="px-4 py-3 font-medium">Resultado</th>
-                      <th className="px-4 py-3 font-medium">Avaliado em</th>
-                      <th className="px-4 py-3 font-medium">Comentário</th>
+                      <th className="px-4 py-3 font-normal">Demanda</th>
+                      <th className="px-4 py-3 font-normal">Resultado</th>
+                      <th className="px-4 py-3 font-normal">Avaliado em</th>
+                      <th className="px-4 py-3 font-normal">Comentário</th>
                     </tr>
                   </thead>
                   <tbody>
                     {report.approvals.map((approval) => (
-                      <tr key={approval.id} className="border-b border-gray-100 last:border-0">
-                        <td className="px-4 py-3 font-medium text-gray-900">{approval.demand?.titulo ?? '—'}</td>
+                      <tr key={approval.id} className="border-b border-white/5 last:border-0">
+                        <td className="px-4 py-3 font-normal text-white">{approval.demand?.titulo ?? '—'}</td>
                         <td className="px-4 py-3">
                           <span
                             className={`rounded-full px-2 py-1 text-xs font-medium ${approvalStatusStyles[approval.status]}`}
@@ -224,8 +224,8 @@ export default function Relatorios() {
                             {approvalStatusLabels[approval.status]}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-gray-600">{formatDateTime(approval.reviewed_at)}</td>
-                        <td className="px-4 py-3 text-gray-600">{approval.feedback || '—'}</td>
+                        <td className="px-4 py-3 text-neutral-300">{formatDateTime(approval.reviewed_at)}</td>
+                        <td className="px-4 py-3 text-neutral-300">{approval.feedback || '—'}</td>
                       </tr>
                     ))}
                   </tbody>

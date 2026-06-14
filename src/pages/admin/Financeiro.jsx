@@ -135,40 +135,24 @@ export default function Financeiro() {
       {/* Summary Cards */}
       {summary && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-          <div className="rounded-2xl border border-neutral-700/50 bg-neutral-900/50 backdrop-blur-xl p-6 hover:border-neutral-600/50 transition-colors">
-            <p className="text-xs uppercase tracking-widest text-neutral-500">
-              Saldo
-            </p>
-            <p className=" text-2xl font-normal text-white">
-              R$ {summary.saldo.toFixed(2)}
-            </p>
+          <div className="glass glass-hover rounded-2xl p-6">
+            <p className="text-xs uppercase tracking-widest text-neutral-500">Saldo</p>
+            <p className="text-2xl font-normal text-white">R$ {summary.saldo.toFixed(2)}</p>
           </div>
 
-          <div className="rounded-xl border border-neutral-300 dark:border-green-700/50 bg-white dark:bg-green-900/20 backdrop-blur-sm dark:backdrop-blur-xl p-5 shadow-sm dark:shadow-lg hover:shadow-md dark:hover:shadow-xl transition-all">
-            <p className="text-xs uppercase tracking-widest text-neutral-500">
-              Entradas
-            </p>
-            <p className=" text-2xl font-normal text-white">
-              R$ {summary.totalEntradas.toFixed(2)}
-            </p>
+          <div className="glass glass-hover rounded-2xl p-6">
+            <p className="text-xs uppercase tracking-widest text-neutral-500">Entradas</p>
+            <p className="text-2xl font-normal text-emerald-400">R$ {summary.totalEntradas.toFixed(2)}</p>
           </div>
 
-          <div className="rounded-xl border border-neutral-300 dark:border-red-700/50 bg-white dark:bg-red-900/20 backdrop-blur-sm dark:backdrop-blur-xl p-5 shadow-sm dark:shadow-lg hover:shadow-md dark:hover:shadow-xl transition-all">
-            <p className="text-xs uppercase tracking-widest text-neutral-500">
-              Saídas
-            </p>
-            <p className=" text-2xl font-normal text-white">
-              R$ {summary.totalSaidas.toFixed(2)}
-            </p>
+          <div className="glass glass-hover rounded-2xl p-6">
+            <p className="text-xs uppercase tracking-widest text-neutral-500">Saídas</p>
+            <p className="text-2xl font-normal text-red-400">R$ {summary.totalSaidas.toFixed(2)}</p>
           </div>
 
-          <div className="rounded-xl border border-neutral-300 dark:border-orange-700/50 bg-white dark:bg-orange-900/20 backdrop-blur-sm dark:backdrop-blur-xl p-5 shadow-sm dark:shadow-lg hover:shadow-md dark:hover:shadow-xl transition-all">
-            <p className="text-xs uppercase tracking-widest text-neutral-500">
-              Pendentes
-            </p>
-            <p className=" text-2xl font-normal text-white">
-              R$ {summary.pendentes.toFixed(2)}
-            </p>
+          <div className="glass glass-hover rounded-2xl p-6">
+            <p className="text-xs uppercase tracking-widest text-neutral-500">Pendentes</p>
+            <p className="text-2xl font-normal text-orange-400">R$ {summary.pendentes.toFixed(2)}</p>
           </div>
         </div>
       )}
