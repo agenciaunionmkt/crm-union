@@ -133,16 +133,16 @@ export default function Demandas() {
   const isLoading = demandsQuery.isLoading || clientsQuery.isLoading
 
   // Contagem de demandas por cliente
-  const demandasPorCliente = (() => {
+  const countMap = (() => {
     const counts = {}
     for (const d of demandsQuery.data ?? []) {
       if (d.cliente_id) counts[d.cliente_id] = (counts[d.cliente_id] || 0) + 1
     }
-    return (clientsQuery.data ?? [])
-      .map((c) => ({ id: c.id, nome: c.nome, count: counts[c.id] || 0 }))
-      .filter((x) => x.count > 0)
-      .sort((a, b) => b.count - a.count)
+    return counts
   })()
+  const clientesOrdenados = (clientsQuery.data ?? [])
+    .slice()
+    .sort((a, b) => a.nome.localeCompare(b.nome))
 
   return (
     <div>
@@ -179,48 +179,49 @@ export default function Demandas() {
         </div>
       )}
 
-      {/* Filtro por cliente (cronograma por cliente) */}
-      {demandasPorCliente.length > 0 && (
-        <div className="flex flex-wrap gap-2">
+      <div className="mt-6 grid grid-cols-1 lg:grid-cols-[230px_1fr] gap-4">
+        {/* Lista de cronogramas (clientes) */}
+        <aside className="glass rounded-2xl p-2 h-fit lg:sticky lg:top-4">
+          <p className="px-3 py-2 text-xs uppercase tracking-widest text-neutral-400">Cronogramas</p>
           <button
             type="button"
             onClick={() => setClientFilter(null)}
-            className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs transition-colors ${
-              clientFilter === null ? 'union-active' : 'border-white/10 bg-white/5 text-neutral-300 hover:bg-white/10'
+            className={`flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${
+              clientFilter === null ? 'union-active' : 'text-neutral-300 hover:bg-white/5'
             }`}
           >
-            Todos
+            <span>Todos os clientes</span>
             <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-white/10 px-1.5 text-[11px] font-semibold">
               {(demandsQuery.data ?? []).length}
             </span>
           </button>
-          {demandasPorCliente.map((c) => (
-            <button
-              key={c.id}
-              type="button"
-              onClick={() => setClientFilter(c.id)}
-              className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs transition-colors ${
-                clientFilter === c.id ? 'union-active' : 'border-white/10 bg-white/5 text-neutral-300 hover:bg-white/10'
-              }`}
-            >
-              {c.nome}
-              <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-yellow-400/15 px-1.5 text-[11px] font-semibold text-yellow-300">
-                {c.count}
-              </span>
-            </button>
-          ))}
-        </div>
-      )}
-
-      <div className="mt-6">
-        {isLoading && (
-          <div className="text-center py-12">
-            <p className="text-neutral-500 dark:text-neutral-400">Carregando demandas...</p>
+          <div className="mt-1 max-h-[60vh] overflow-y-auto">
+            {clientesOrdenados.map((c) => (
+              <button
+                key={c.id}
+                type="button"
+                onClick={() => setClientFilter(c.id)}
+                className={`flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${
+                  clientFilter === c.id ? 'union-active' : 'text-neutral-300 hover:bg-white/5'
+                }`}
+              >
+                <span className="truncate">{c.nome}</span>
+                <span className="inline-flex h-5 min-w-5 flex-shrink-0 items-center justify-center rounded-full bg-yellow-400/15 px-1.5 text-[11px] font-semibold text-yellow-300">
+                  {countMap[c.id] || 0}
+                </span>
+              </button>
+            ))}
           </div>
-        )}
+        </aside>
 
-        {!isLoading && (
-          <div>
+        {/* Cronograma do cliente selecionado */}
+        <div>
+          {isLoading && (
+            <div className="text-center py-12">
+              <p className="text-neutral-500 dark:text-neutral-400">Carregando demandas...</p>
+            </div>
+          )}
+          {!isLoading && (
             <DemandCalendar
               demands={
                 clientFilter
@@ -232,8 +233,8 @@ export default function Demandas() {
               onDayClick={openNewDemand}
               onCardClick={openEditDemand}
             />
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       <Modal
@@ -247,8 +248,12 @@ export default function Demandas() {
           hideActions
           initialValues={
             editingDemand ??
-            (defaultDate || prefillDesc
-              ? { ...(defaultDate ? { prazo: defaultDate } : {}), ...(prefillDesc ? { descricao: prefillDesc } : {}) }
+            (defaultDate || prefillDesc || clientFilter
+              ? {
+                  ...(defaultDate ? { prazo: defaultDate } : {}),
+                  ...(prefillDesc ? { descricao: prefillDesc } : {}),
+                  ...(clientFilter ? { cliente_id: clientFilter } : {}),
+                }
               : null)
           }
           clients={clientsQuery.data}
