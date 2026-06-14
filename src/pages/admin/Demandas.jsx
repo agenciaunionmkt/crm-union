@@ -14,6 +14,7 @@ import {
   updateDemand,
   updateDemandStatus,
 } from '../../lib/api/demands'
+import { uploadAttachment } from '../../lib/api/attachments'
 import Modal from '../../components/ui/Modal'
 import DemandForm from '../../components/DemandForm'
 import DemandCalendar from '../../components/DemandCalendar'
@@ -31,6 +32,7 @@ export default function Demandas() {
   const [editingDemand, setEditingDemand] = useState(null)
   const [defaultDate, setDefaultDate] = useState(null)
   const [prefillDesc, setPrefillDesc] = useState(null)
+  const [pendingFiles, setPendingFiles] = useState([])
   const [successMessage, setSuccessMessage] = useState('')
 
   // Abre uma nova demanda com a descrição vinda do Assistente IA
@@ -49,18 +51,31 @@ export default function Demandas() {
   const teamQuery = useQuery({ queryKey: ['team-users'], queryFn: listTeamUsers })
 
   const saveMutation = useMutation({
-    mutationFn: ({ id, payload, tagIds }) =>
-      id ? updateDemand(id, payload, tagIds) : createDemand(payload, tagIds),
+    mutationFn: async ({ id, payload, tagIds }) => {
+      if (id) return await updateDemand(id, payload, tagIds)
+      const created = await createDemand(payload, tagIds)
+      // Envia os anexos selecionados antes de salvar
+      for (const file of pendingFiles) {
+        try {
+          await uploadAttachment(created.id, file, profile?.id)
+        } catch (e) {
+          console.warn('Falha ao enviar anexo:', e)
+        }
+      }
+      return created
+    },
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['demands'] })
       if (variables.id) {
         closeForm()
         setSuccessMessage('Demanda atualizada!')
       } else {
-        // Mantém o modal aberto em modo edição para permitir anexar arquivos
+        const teveAnexos = pendingFiles.length > 0
+        queryClient.invalidateQueries({ queryKey: ['attachments', data.id] })
         setEditingDemand(data)
         setDefaultDate(null)
-        setSuccessMessage('Demanda criada! Agora você pode anexar arquivos abaixo.')
+        setPendingFiles([])
+        setSuccessMessage(teveAnexos ? 'Demanda criada e arquivos enviados!' : 'Demanda criada!')
       }
       setTimeout(() => setSuccessMessage(''), 4000)
     },
@@ -178,6 +193,8 @@ export default function Demandas() {
         maxWidth="max-w-2xl"
       >
         <DemandForm
+          formId="demanda-form"
+          hideActions
           initialValues={
             editingDemand ??
             (defaultDate || prefillDesc
@@ -189,16 +206,14 @@ export default function Demandas() {
           submitting={saveMutation.isPending}
           onCancel={closeForm}
           onSubmit={handleSubmit}
-          onDelete={editingDemand ? handleDelete : null}
         />
-        {(saveMutation.error || deleteMutation.error) && (
-          <p className="mt-3 text-sm text-red-600">
-            {saveMutation.error?.message || deleteMutation.error?.message}
-          </p>
-        )}
 
         <div className="mt-6 border-t border-white/10 pt-4">
-          <DemandAttachments demandId={editingDemand?.id} currentUser={profile} />
+          <DemandAttachments
+            demandId={editingDemand?.id}
+            currentUser={profile}
+            onPendingChange={setPendingFiles}
+          />
         </div>
 
         {editingDemand && (
@@ -206,6 +221,44 @@ export default function Demandas() {
             <DemandActivity demandId={editingDemand.id} mode="admin" currentUser={profile} />
           </div>
         )}
+
+        {(saveMutation.error || deleteMutation.error) && (
+          <p className="mt-4 text-sm text-red-400">
+            {saveMutation.error?.message || deleteMutation.error?.message}
+          </p>
+        )}
+
+        {/* Ações sempre no fim */}
+        <div className="mt-6 flex items-center justify-between gap-3 border-t border-white/10 pt-4">
+          {editingDemand ? (
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="rounded-lg border border-red-500/40 px-3 py-2 text-xs font-normal text-red-400 hover:bg-red-500/10 transition-colors"
+            >
+              Excluir demanda
+            </button>
+          ) : (
+            <span />
+          )}
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={closeForm}
+              className="rounded-lg border border-white/15 px-4 py-2.5 text-sm font-normal text-neutral-300 hover:bg-white/5 transition-colors"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              form="demanda-form"
+              disabled={saveMutation.isPending}
+              className="rounded-lg bg-yellow-400 px-4 py-2.5 text-sm font-semibold text-gray-900 hover:bg-yellow-500 disabled:opacity-60 transition-colors"
+            >
+              {saveMutation.isPending ? 'Salvando...' : 'Salvar demanda'}
+            </button>
+          </div>
+        </div>
       </Modal>
     </div>
   )

@@ -1,11 +1,17 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Paperclip, Trash2, Loader2, ExternalLink } from 'lucide-react'
 import { listAttachments, uploadAttachment, deleteAttachment } from '../lib/api/attachments'
 
-export default function DemandAttachments({ demandId, currentUser }) {
+export default function DemandAttachments({ demandId, currentUser, onPendingChange }) {
   const fileRef = useRef(null)
+  const pendingRef = useRef(null)
+  const [pending, setPending] = useState([])
   const queryClient = useQueryClient()
+
+  useEffect(() => {
+    if (onPendingChange) onPendingChange(pending)
+  }, [pending, onPendingChange])
 
   const { data: items = [], isLoading } = useQuery({
     queryKey: ['attachments', demandId],
@@ -38,15 +44,44 @@ export default function DemandAttachments({ demandId, currentUser }) {
           </h3>
           <button
             type="button"
-            disabled
-            className="inline-flex items-center gap-1.5 rounded-md border border-emerald-500/40 text-emerald-400/60 px-3 py-1.5 text-xs font-normal bg-emerald-900/10 cursor-not-allowed"
+            onClick={() => pendingRef.current?.click()}
+            className="inline-flex items-center gap-1.5 rounded-md border border-emerald-400 dark:border-emerald-500/60 text-emerald-600 dark:text-emerald-400 px-3 py-1.5 text-xs font-normal bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-800/30 transition-colors"
           >
             + Adicionar arquivo
           </button>
+          <input
+            ref={pendingRef}
+            type="file"
+            multiple
+            className="hidden"
+            onChange={(e) => {
+              const novos = Array.from(e.target.files || [])
+              if (novos.length) setPending((p) => [...p, ...novos])
+              e.target.value = ''
+            }}
+          />
         </div>
-        <p className="rounded-lg border border-dashed border-white/15 px-3 py-4 text-center text-xs text-neutral-400">
-          Salve a demanda para liberar o envio de arquivos.
-        </p>
+        {pending.length === 0 ? (
+          <p className="rounded-lg border border-dashed border-white/15 px-3 py-4 text-center text-xs text-neutral-400">
+            Os arquivos serão enviados quando você salvar a demanda.
+          </p>
+        ) : (
+          <ul className="space-y-2">
+            {pending.map((f, i) => (
+              <li key={i} className="flex items-center justify-between gap-3 rounded-lg border border-white/10 px-3 py-2">
+                <span className="truncate text-sm text-neutral-300">{f.name}</span>
+                <button
+                  type="button"
+                  onClick={() => setPending((p) => p.filter((_, idx) => idx !== i))}
+                  className="flex-shrink-0 p-1.5 rounded text-neutral-400 hover:text-red-500 hover:bg-red-900/20 transition-colors"
+                  title="Remover"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     )
   }

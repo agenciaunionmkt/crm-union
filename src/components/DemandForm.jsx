@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Input from './ui/Input'
 import Button from './ui/Button'
 import Badge from './ui/Badge'
+import DatePicker from './DatePicker'
 
 const emptyForm = {
   cliente_id: '',
@@ -28,6 +29,8 @@ export default function DemandForm({
   onCancel,
   onDelete,
   submitting,
+  formId,
+  hideActions = false,
 }) {
   const [form, setForm] = useState({
     ...emptyForm,
@@ -94,7 +97,7 @@ export default function DemandForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form id={formId} onSubmit={handleSubmit} className="space-y-6">
       {/* Título */}
       <Input
         label="Título"
@@ -172,11 +175,10 @@ export default function DemandForm({
         <label className="mb-1.5 block text-sm font-normal text-neutral-700 dark:text-neutral-300">
           Prazo
         </label>
-        <input
-          type="date"
+        <DatePicker
           value={form.prazo ?? ''}
-          onChange={handleChange('prazo')}
-          className="w-full px-3 py-2 rounded-lg border border-white/15 bg-white/5 text-white text-sm focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 [color-scheme:dark]"
+          onChange={(v) => setForm((prev) => ({ ...prev, prazo: v }))}
+          placeholder="Selecione o prazo"
         />
       </div>
 
@@ -211,6 +213,7 @@ export default function DemandForm({
       </div>
 
       {/* Actions */}
+      {!hideActions && (
       <div className="flex items-center justify-between pt-6 border-t border-neutral-200 dark:border-neutral-700">
         {onDelete && (
           <div>
@@ -264,6 +267,7 @@ export default function DemandForm({
           </Button>
         </div>
       </div>
+      )}
     </form>
   )
 }
