@@ -33,6 +33,7 @@ export default function Demandas() {
   const [defaultDate, setDefaultDate] = useState(null)
   const [prefillDesc, setPrefillDesc] = useState(null)
   const [pendingFiles, setPendingFiles] = useState([])
+  const [clientFilter, setClientFilter] = useState(null)
   const [successMessage, setSuccessMessage] = useState('')
 
   // Abre uma nova demanda com a descrição vinda do Assistente IA
@@ -178,19 +179,35 @@ export default function Demandas() {
         </div>
       )}
 
-      {/* Demandas por cliente */}
+      {/* Filtro por cliente (cronograma por cliente) */}
       {demandasPorCliente.length > 0 && (
         <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => setClientFilter(null)}
+            className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs transition-colors ${
+              clientFilter === null ? 'union-active' : 'border-white/10 bg-white/5 text-neutral-300 hover:bg-white/10'
+            }`}
+          >
+            Todos
+            <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-white/10 px-1.5 text-[11px] font-semibold">
+              {(demandsQuery.data ?? []).length}
+            </span>
+          </button>
           {demandasPorCliente.map((c) => (
-            <span
+            <button
               key={c.id}
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-neutral-300"
+              type="button"
+              onClick={() => setClientFilter(c.id)}
+              className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs transition-colors ${
+                clientFilter === c.id ? 'union-active' : 'border-white/10 bg-white/5 text-neutral-300 hover:bg-white/10'
+              }`}
             >
               {c.nome}
               <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-yellow-400/15 px-1.5 text-[11px] font-semibold text-yellow-300">
                 {c.count}
               </span>
-            </span>
+            </button>
           ))}
         </div>
       )}
@@ -205,7 +222,11 @@ export default function Demandas() {
         {!isLoading && (
           <div>
             <DemandCalendar
-              demands={demandsQuery.data ?? []}
+              demands={
+                clientFilter
+                  ? (demandsQuery.data ?? []).filter((d) => d.cliente_id === clientFilter)
+                  : (demandsQuery.data ?? [])
+              }
               currentMonth={currentMonth}
               onMonthChange={setCurrentMonth}
               onDayClick={openNewDemand}

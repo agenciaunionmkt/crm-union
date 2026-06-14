@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   addMonths,
   eachDayOfInterval,
@@ -12,6 +13,7 @@ import {
 } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import Modal from './Modal'
 
 const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
 
@@ -39,6 +41,17 @@ export default function DemandCalendar({
   function isDone(demand) {
     return demand.status === 'entregue'
   }
+  function toneFor(demand) {
+    if (isDone(demand)) return 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40'
+    if (isOverdue(demand)) return 'bg-red-500/15 text-red-300 border-red-500/40'
+    return 'bg-white/5 text-neutral-200 border-white/10'
+  }
+  function iniciaisDe(demand) {
+    const nome = demand.responsavel?.nome
+    return nome ? nome.trim().split(/\s+/).slice(0, 2).map((p) => p[0]).join('').toUpperCase() : null
+  }
+
+  const [dayModal, setDayModal] = useState(null)
 
   return (
     <div>
@@ -149,7 +162,16 @@ export default function DemandCalendar({
                     )
                   })}
                   {items.length > 3 && (
-                    <p className="px-2 text-[11px] text-neutral-500 dark:text-neutral-400">+{items.length - 3} mais</p>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setDayModal(day)
+                      }}
+                      className="w-full rounded-md px-2 py-1 text-left text-[11px] text-neutral-400 hover:bg-white/5 hover:text-white transition-colors"
+                    >
+                      +{items.length - 3} mais
+                    </button>
                   )}
                 </div>
               </div>
@@ -157,6 +179,35 @@ export default function DemandCalendar({
           })}
         </div>
       </div>
+
+      <Modal
+        open={!!dayModal}
+        title={dayModal ? format(dayModal, "dd 'de' MMMM", { locale: ptBR }) : ''}
+        onClose={() => setDayModal(null)}
+        maxWidth="max-w-md"
+      >
+        <div className="space-y-2">
+          {dayModal &&
+            demandsForDay(dayModal).map((demand) => (
+              <button
+                key={demand.id}
+                type="button"
+                onClick={() => {
+                  setDayModal(null)
+                  onCardClick?.(demand)
+                }}
+                className={`flex w-full items-center justify-between gap-3 rounded-lg border px-3 py-2.5 text-left transition-colors ${toneFor(demand)} hover:brightness-110`}
+              >
+                <span className="text-sm font-normal">{demand.titulo}</span>
+                {iniciaisDe(demand) && (
+                  <span className="inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-violet-500 text-[10px] font-semibold text-white">
+                    {iniciaisDe(demand)}
+                  </span>
+                )}
+              </button>
+            ))}
+        </div>
+      </Modal>
     </div>
   )
 }
