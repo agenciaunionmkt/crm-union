@@ -40,6 +40,14 @@ export async function listDemandsByClient(clienteId) {
   return data.map(normalizeDemand)
 }
 
+// Criação em lote (agente de conteúdo) — insere várias demandas de uma vez.
+export async function createDemandsBulk(payloads) {
+  if (!payloads?.length) return []
+  const { data, error } = await supabase.from('demands').insert(payloads).select()
+  if (error) throw error
+  return data
+}
+
 export async function createDemand(payload, tagIds = []) {
   const { data, error } = await supabase.from('demands').insert(payload).select().single()
   if (error) throw error
@@ -48,14 +56,9 @@ export async function createDemand(payload, tagIds = []) {
     await setDemandTags(data.id, tagIds)
   }
 
-  // Toda demanda de um cliente entra na fila de aprovação do portal do cliente
-  if (data.cliente_id) {
-    try {
-      await ensurePendingApproval(data.id)
-    } catch (e) {
-      console.warn('Não foi possível criar aprovação pendente:', e)
-    }
-  }
+  // A aprovação do cliente é criada quando a demanda entra em "Em revisão"
+  // (ver updateDemand/updateDemandStatus), não na criação — assim rascunhos
+  // e conteúdo gerado não inundam a fila de aprovação do cliente.
 
   // Notifica o responsável designado
   if (data.responsavel_id) {

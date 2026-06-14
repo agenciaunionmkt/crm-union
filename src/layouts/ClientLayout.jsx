@@ -1,9 +1,10 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { Mail, CheckSquare, MessageSquare } from 'lucide-react'
+import { Mail, CheckSquare, MessageSquare, CalendarDays } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import UnionLogo from '../components/UnionLogo'
 
 const links = [
+  { to: '/portal/calendario', label: 'Calendário', Icon: CalendarDays },
   { to: '/portal/solicitacoes', label: 'Solicitações', Icon: Mail },
   { to: '/portal/aprovacoes', label: 'Aprovar entregas', Icon: CheckSquare },
   { to: '/portal/chat', label: 'Chat com a agência', Icon: MessageSquare },

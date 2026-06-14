@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Users, ListTodo, Mail, TrendingUp, DollarSign, MessageSquare, Sparkles, Bell, Sun, Moon, Settings, LogOut, X, AlertCircle, CheckCircle } from 'lucide-react'
+import { LayoutDashboard, Users, ListTodo, Mail, TrendingUp, DollarSign, MessageSquare, Sparkles, Wand2, Bell, Sun, Moon, Settings, LogOut, X, AlertCircle, CheckCircle } from 'lucide-react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '../context/AuthContext'
 import { useTheme } from '../context/ThemeContext'
@@ -16,6 +16,7 @@ const links = [
   { to: '/admin/demandas', label: 'Demandas', Icon: ListTodo },
   { to: '/admin/mensagens', label: 'Mensagens', Icon: MessageSquare },
   { to: '/admin/assistente', label: 'Assistente IA', Icon: Sparkles },
+  { to: '/admin/agente-conteudo', label: 'Agente de conteúdo', Icon: Wand2 },
   { to: '/admin/solicitacoes', label: 'Solicitações', Icon: Mail },
   { to: '/admin/relatorios', label: 'Relatórios', Icon: TrendingUp },
   { to: '/admin/financeiro', label: 'Financeiro', Icon: DollarSign },

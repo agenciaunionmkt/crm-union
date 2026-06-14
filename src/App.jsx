@@ -13,9 +13,11 @@ import Demandas from './pages/admin/Demandas'
 import Solicitacoes from './pages/admin/Solicitacoes'
 import AdminChat from './pages/admin/Chat'
 import Assistente from './pages/admin/Assistente'
+import AgenteConteudo from './pages/admin/AgenteConteudo'
 import Relatorios from './pages/admin/Relatorios'
 import Financeiro from './pages/admin/Financeiro'
 import ClientDemandas from './pages/client/Demandas'
+import ClientCalendario from './pages/client/Calendario'
 import ClientAprovacoes from './pages/client/Aprovacoes'
 import ClientSolicitacoes from './pages/client/Solicitacoes'
 import ClientHistorico from './pages/client/Historico'
@@ -39,6 +41,7 @@ function App() {
           <Route path="demandas" element={<Demandas />} />
           <Route path="mensagens" element={<AdminChat />} />
           <Route path="assistente" element={<Assistente />} />
+          <Route path="agente-conteudo" element={<AgenteConteudo />} />
           <Route path="solicitacoes" element={<Solicitacoes />} />
           <Route path="relatorios" element={<Relatorios />} />
           <Route path="financeiro" element={<Financeiro />} />
@@ -49,6 +52,7 @@ function App() {
       <Route element={<ProtectedRoute allowedRoles={['cliente']} />}>
         <Route path="/portal" element={<ClientLayout />}>
           <Route index element={<Navigate to="/portal/solicitacoes" replace />} />
+          <Route path="calendario" element={<ClientCalendario />} />
           <Route path="demandas" element={<ClientDemandas />} />
           <Route path="aprovacoes" element={<ClientAprovacoes />} />
           <Route path="solicitacoes" element={<ClientSolicitacoes />} />

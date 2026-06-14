@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import Input from './ui/Input'
 import Button from './ui/Button'
+import { PLANOS, postsDoPlano } from '../lib/plans'
 
 const emptyForm = {
   nome: '',
@@ -10,6 +11,7 @@ const emptyForm = {
   contato_email: '',
   contato_telefone: '',
   valor_servico: '',
+  plano: '',
   instagram_usuario: '',
   instagram_senha: '',
 }
@@ -55,6 +57,7 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
       contato_email: form.contato_email || null,
       contato_telefone: form.contato_telefone || null,
       valor_servico: form.valor_servico ? parseFloat(form.valor_servico) : null,
+      plano: form.plano || null,
       instagram_usuario: form.instagram_usuario || null,
       instagram_senha: form.instagram_senha || null,
     }
@@ -134,6 +137,28 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
             className="flex-1 px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none dark:focus:ring-emerald-400"
           />
         </div>
+      </div>
+
+      {/* Plano */}
+      <div>
+        <label className="mb-1.5 block text-sm font-normal text-neutral-700 dark:text-neutral-300">
+          Plano de conteúdo
+        </label>
+        <select
+          value={form.plano ?? ''}
+          onChange={handleChange('plano')}
+          className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none"
+        >
+          <option value="">Sem plano</option>
+          {Object.entries(PLANOS).map(([key, p]) => (
+            <option key={key} value={key}>{p.label} — {p.posts} posts/mês</option>
+          ))}
+        </select>
+        {form.plano && (
+          <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+            Gera {postsDoPlano(form.plano)} posts por mês no Agente de conteúdo.
+          </p>
+        )}
       </div>
 
       {/* Vencimento (clientes recorrentes) */}
