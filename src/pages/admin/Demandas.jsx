@@ -131,6 +131,18 @@ export default function Demandas() {
 
   const isLoading = demandsQuery.isLoading || clientsQuery.isLoading
 
+  // Contagem de demandas por cliente
+  const demandasPorCliente = (() => {
+    const counts = {}
+    for (const d of demandsQuery.data ?? []) {
+      if (d.cliente_id) counts[d.cliente_id] = (counts[d.cliente_id] || 0) + 1
+    }
+    return (clientsQuery.data ?? [])
+      .map((c) => ({ id: c.id, nome: c.nome, count: counts[c.id] || 0 }))
+      .filter((x) => x.count > 0)
+      .sort((a, b) => b.count - a.count)
+  })()
+
   return (
     <div>
       {/* Success Message */}
@@ -163,6 +175,23 @@ export default function Demandas() {
       {demandsQuery.error && (
         <div className="rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-4 text-sm text-red-600 dark:text-red-400">
           Erro ao carregar demandas: {demandsQuery.error.message}
+        </div>
+      )}
+
+      {/* Demandas por cliente */}
+      {demandasPorCliente.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {demandasPorCliente.map((c) => (
+            <span
+              key={c.id}
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-neutral-300"
+            >
+              {c.nome}
+              <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-yellow-400/15 px-1.5 text-[11px] font-semibold text-yellow-300">
+                {c.count}
+              </span>
+            </span>
+          ))}
         </div>
       )}
 

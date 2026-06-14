@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '../../context/AuthContext'
 import { listApprovalsByClient, reviewApproval } from '../../lib/api/requests'
 import { demandStatusLabels, demandStatusStyles } from './Demandas'
+import Modal from '../../components/Modal'
 
 function formatDate(value) {
   if (!value) return '—'
@@ -10,17 +11,21 @@ function formatDate(value) {
   return `${day}/${month}/${year}`
 }
 
-function ApprovalCard({ approval, onReview, submitting }) {
+function ApprovalCard({ approval, onReview, onOpen, submitting }) {
   const [feedback, setFeedback] = useState('')
   const [showFeedback, setShowFeedback] = useState(false)
 
   return (
     <div className="glass rounded-2xl p-5">
       <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="font-normal text-white">{approval.demand?.titulo}</p>
+        <button type="button" onClick={onOpen} className="text-left">
+          <p className="font-normal text-white hover:text-yellow-300 transition-colors">{approval.demand?.titulo}</p>
           <p className="mt-1 text-xs text-neutral-400">Prazo: {formatDate(approval.demand?.prazo)}</p>
-        </div>
+          {approval.demand?.descricao && (
+            <p className="mt-1 text-xs text-neutral-500 line-clamp-2 max-w-md">{approval.demand.descricao}</p>
+          )}
+          <span className="mt-1 inline-block text-[11px] text-yellow-300/80">Ver detalhes</span>
+        </button>
         {approval.demand?.status && (
           <span className={`inline-flex flex-shrink-0 rounded-full px-2.5 py-1 text-xs font-normal ${demandStatusStyles[approval.demand.status]}`}>
             {demandStatusLabels[approval.demand.status]}
@@ -70,6 +75,7 @@ function ApprovalCard({ approval, onReview, submitting }) {
 export default function Aprovacoes() {
   const { profile } = useAuth()
   const queryClient = useQueryClient()
+  const [detalhe, setDetalhe] = useState(null)
 
   const approvalsQuery = useQuery({
     queryKey: ['approvals', profile?.cliente_id],
@@ -109,6 +115,7 @@ export default function Aprovacoes() {
               <ApprovalCard
                 key={approval.id}
                 approval={approval}
+                onOpen={() => setDetalhe(approval)}
                 submitting={reviewMutation.isPending}
                 onReview={(id, status, feedback) => reviewMutation.mutate({ id, status, feedback })}
               />
@@ -152,6 +159,30 @@ export default function Aprovacoes() {
           )}
         </>
       )}
+
+      <Modal open={!!detalhe} title="Detalhes da entrega" onClose={() => setDetalhe(null)}>
+        {detalhe && (
+          <div className="space-y-4">
+            <div>
+              <p className="text-lg font-normal text-white">{detalhe.demand?.titulo}</p>
+              <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-neutral-400">
+                {detalhe.demand?.status && (
+                  <span className={`inline-flex rounded-full px-2.5 py-1 ${demandStatusStyles[detalhe.demand.status]}`}>
+                    {demandStatusLabels[detalhe.demand.status]}
+                  </span>
+                )}
+                <span>Prazo: {formatDate(detalhe.demand?.prazo)}</span>
+              </div>
+            </div>
+            <div>
+              <p className="mb-1 text-xs uppercase tracking-widest text-neutral-500">Descrição</p>
+              <p className="whitespace-pre-wrap text-sm text-neutral-200">
+                {detalhe.demand?.descricao || 'Sem descrição.'}
+              </p>
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   )
 }

@@ -59,7 +59,7 @@ export async function updateClientRequestStatus(id, status, demandaGeradaId = nu
 const APPROVAL_SELECT = `
   *,
   demand:demands (
-    id, titulo, prazo, status,
+    id, titulo, descricao, prazo, status, created_at,
     client:clients ( id, nome )
   )
 `
