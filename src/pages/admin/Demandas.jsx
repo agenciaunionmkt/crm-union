@@ -176,14 +176,12 @@ export default function Demandas() {
           </p>
         )}
 
-        {editingDemand && (
-          <div className="mt-6 border-t border-gray-200 dark:border-neutral-700 pt-4">
-            <DemandAttachments demandId={editingDemand.id} currentUser={profile} />
-          </div>
-        )}
+        <div className="mt-6 border-t border-white/10 pt-4">
+          <DemandAttachments demandId={editingDemand?.id} currentUser={profile} />
+        </div>
 
         {editingDemand && (
-          <div className="mt-6 border-t border-gray-200 dark:border-neutral-700 pt-4">
+          <div className="mt-6 border-t border-white/10 pt-4">
             <DemandActivity demandId={editingDemand.id} mode="admin" currentUser={profile} />
           </div>
         )}

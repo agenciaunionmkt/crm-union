@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '../../context/AuthContext'
 import { listApprovalsByClient, reviewApproval } from '../../lib/api/requests'
+import { demandStatusLabels, demandStatusStyles } from './Demandas'
 
 function formatDate(value) {
   if (!value) return '—'
@@ -15,11 +16,16 @@ function ApprovalCard({ approval, onReview, submitting }) {
 
   return (
     <div className="glass rounded-2xl p-5">
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between gap-3">
         <div>
           <p className="font-normal text-white">{approval.demand?.titulo}</p>
           <p className="mt-1 text-xs text-neutral-400">Prazo: {formatDate(approval.demand?.prazo)}</p>
         </div>
+        {approval.demand?.status && (
+          <span className={`inline-flex flex-shrink-0 rounded-full px-2.5 py-1 text-xs font-normal ${demandStatusStyles[approval.demand.status]}`}>
+            {demandStatusLabels[approval.demand.status]}
+          </span>
+        )}
       </div>
 
       {showFeedback && (
@@ -69,6 +75,7 @@ export default function Aprovacoes() {
     queryKey: ['approvals', profile?.cliente_id],
     queryFn: () => listApprovalsByClient(profile.cliente_id),
     enabled: !!profile?.cliente_id,
+    refetchInterval: 10000,
   })
 
   const reviewMutation = useMutation({

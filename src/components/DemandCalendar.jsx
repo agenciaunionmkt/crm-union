@@ -36,6 +36,9 @@ export default function DemandCalendar({
   function isOverdue(demand) {
     return demand.prazo && demand.prazo < hojeStr && demand.status !== 'entregue'
   }
+  function isDone(demand) {
+    return demand.status === 'entregue'
+  }
 
   return (
     <div>
@@ -98,6 +101,17 @@ export default function DemandCalendar({
                 <div className="space-y-1">
                   {items.slice(0, 3).map((demand) => {
                     const overdue = isOverdue(demand)
+                    const done = isDone(demand)
+                    const tone = done
+                      ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40'
+                      : overdue
+                        ? 'bg-red-500/15 text-red-300 border-red-500/40'
+                        : 'bg-white/5 text-neutral-200 border-white/10'
+                    const hover = done
+                      ? 'hover:bg-emerald-500/25'
+                      : overdue
+                        ? 'hover:bg-red-500/25'
+                        : 'hover:bg-white/10 hover:border-white/20'
                     return (
                     <div
                       key={demand.id}
@@ -109,18 +123,10 @@ export default function DemandCalendar({
                             }
                           : undefined
                       }
-                      className={`truncate rounded-md border px-2 py-1.5 text-[11px] font-normal ${
-                        overdue
-                          ? 'bg-red-500/15 text-red-300 border-red-500/40'
-                          : 'bg-white/5 text-neutral-200 border-white/10'
-                      } ${
-                        onCardClick
-                          ? overdue
-                            ? 'hover:bg-red-500/25 cursor-pointer transition-colors'
-                            : 'hover:bg-white/10 hover:border-white/20 cursor-pointer transition-colors'
-                          : ''
+                      className={`truncate rounded-md border px-2 py-1.5 text-[11px] font-normal ${tone} ${
+                        onCardClick ? `${hover} cursor-pointer transition-colors` : ''
                       }`}
-                      title={overdue ? `${demand.titulo} — atrasada` : demand.titulo}
+                      title={done ? `${demand.titulo} — concluída` : overdue ? `${demand.titulo} — atrasada` : demand.titulo}
                     >
                       {demand.titulo}
                     </div>

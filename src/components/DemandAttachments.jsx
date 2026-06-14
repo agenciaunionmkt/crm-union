@@ -29,6 +29,28 @@ export default function DemandAttachments({ demandId, currentUser }) {
     e.target.value = ''
   }
 
+  if (!demandId) {
+    return (
+      <div>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="flex items-center gap-2 text-sm font-normal text-neutral-300">
+            <Paperclip className="w-4 h-4" /> Anexos
+          </h3>
+          <button
+            type="button"
+            disabled
+            className="inline-flex items-center gap-1.5 rounded-md border border-emerald-500/40 text-emerald-400/60 px-3 py-1.5 text-xs font-normal bg-emerald-900/10 cursor-not-allowed"
+          >
+            + Adicionar arquivo
+          </button>
+        </div>
+        <p className="rounded-lg border border-dashed border-white/15 px-3 py-4 text-center text-xs text-neutral-400">
+          Salve a demanda para liberar o envio de arquivos.
+        </p>
+      </div>
+    )
+  }
+
   return (
     <div>
       <div className="flex items-center justify-between mb-3">

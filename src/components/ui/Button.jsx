@@ -17,10 +17,9 @@ const variantClasses = {
     transition-all duration-200
   `,
   outline: `
-    border border-neutral-300 text-neutral-700
-    bg-transparent backdrop-blur-sm
-    hover:bg-neutral-50 hover:border-neutral-400 hover:shadow-md
-    dark:border-neutral-600 dark:text-neutral-400 dark:bg-neutral-900 dark:hover:bg-neutral-800
+    border border-white/15 text-neutral-300
+    bg-transparent
+    hover:bg-white/5 hover:border-white/30
     active:scale-95
     transition-all duration-200
   `,

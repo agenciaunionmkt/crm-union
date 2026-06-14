@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import { LayoutDashboard, Users, ListTodo, Mail, TrendingUp, DollarSign, MessageSquare, Sun, Moon, Settings, LogOut, X, AlertCircle, CheckCircle } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '../context/AuthContext'
 import { useTheme } from '../context/ThemeContext'
 import { supabase } from '../lib/supabaseClient'
+import { listConversations } from '../lib/api/chat'
 import UnionLogo from '../components/UnionLogo'
 import PhotoCropModal from '../components/PhotoCropModal'
 
@@ -23,6 +25,17 @@ export default function AdminLayout() {
   const [showSettings, setShowSettings] = useState(false)
   const [userPhoto, setUserPhoto] = useState(null)
   const [cropSrc, setCropSrc] = useState(null)
+
+  // Notificação de novas mensagens de clientes (atualiza sozinho a cada 20s)
+  const { data: conversas = [] } = useQuery({
+    queryKey: ['chat-conversations'],
+    queryFn: listConversations,
+    refetchInterval: 20000,
+  })
+  const lastSeen = localStorage.getItem('chatLastSeen')
+  const unreadChat = conversas.some(
+    (c) => c.ultimoAutorPapel === 'cliente' && (!lastSeen || c.ultimaData > lastSeen)
+  )
   const [formData, setFormData] = useState({ nome: '', email: '' })
   const [passwords, setPasswords] = useState({ current: '', new: '', confirm: '' })
   const [saving, setSaving] = useState(false)
@@ -205,6 +218,9 @@ export default function AdminLayout() {
             >
               <link.Icon className="w-4 h-4" strokeWidth={2} />
               <span className="text-xs">{link.label}</span>
+              {link.to === '/admin/mensagens' && unreadChat && (
+                <span className="ml-auto h-2 w-2 rounded-full bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.7)]" />
+              )}
             </NavLink>
           ))}
         </nav>

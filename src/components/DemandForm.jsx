@@ -162,51 +162,48 @@ export default function DemandForm({
         </div>
       </div>
 
-      {/* Prazo & Status */}
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="mb-1.5 block text-sm font-normal text-neutral-700 dark:text-neutral-300">
-            Prazo
-          </label>
-          <input
-            type="date"
-            value={form.prazo ?? ''}
-            onChange={handleChange('prazo')}
-            className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none dark:focus:ring-emerald-400"
-          />
-        </div>
-        <div>
-          <label className="mb-1.5 block text-sm font-normal text-neutral-700 dark:text-neutral-300">
-            Status
-          </label>
-          <select
-            value={form.status}
-            onChange={handleChange('status')}
-            className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none dark:focus:ring-emerald-400"
-          >
-            {statusOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
+      {/* Prazo */}
+      <div>
+        <label className="mb-1.5 block text-sm font-normal text-neutral-700 dark:text-neutral-300">
+          Prazo
+        </label>
+        <input
+          type="date"
+          value={form.prazo ?? ''}
+          onChange={handleChange('prazo')}
+          className="w-full px-3 py-2 rounded-lg border border-white/15 bg-white/5 text-white text-sm focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 [color-scheme:dark]"
+        />
       </div>
 
-      {/* Status Badge */}
-      {form.status && (
-        <div className="flex items-center gap-2 pt-2">
-          <span className="text-xs text-slate-600 dark:text-slate-400">Status atual:</span>
-          <Badge variant={
-            form.status === 'a_fazer' ? 'secondary' :
-            form.status === 'em_andamento' ? 'primary' :
-            form.status === 'em_revisao' ? 'warning' :
-            'success'
-          }>
-            {statusOptions.find(o => o.value === form.status)?.label}
-          </Badge>
+      {/* Status (seletor de pílulas) */}
+      <div>
+        <label className="mb-1.5 block text-sm font-normal text-neutral-700 dark:text-neutral-300">
+          Status
+        </label>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          {statusOptions.map((option) => {
+            const active = form.status === option.value
+            const activeTone = {
+              a_fazer: 'bg-white/10 text-white border-white/30',
+              em_andamento: 'bg-violet-500/20 text-violet-200 border-violet-500/50',
+              em_revisao: 'bg-yellow-400/20 text-yellow-200 border-yellow-400/50',
+              entregue: 'bg-emerald-500/20 text-emerald-200 border-emerald-500/50',
+            }[option.value]
+            return (
+              <button
+                type="button"
+                key={option.value}
+                onClick={() => setForm((prev) => ({ ...prev, status: option.value }))}
+                className={`rounded-lg border px-3 py-2 text-xs font-normal transition-colors ${
+                  active ? activeTone : 'border-white/15 text-neutral-300 hover:bg-white/5'
+                }`}
+              >
+                {option.label}
+              </button>
+            )
+          })}
         </div>
-      )}
+      </div>
 
       {/* Actions */}
       <div className="flex items-center justify-between pt-6 border-t border-neutral-200 dark:border-neutral-700">

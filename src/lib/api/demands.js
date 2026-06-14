@@ -47,6 +47,15 @@ export async function createDemand(payload, tagIds = []) {
     await setDemandTags(data.id, tagIds)
   }
 
+  // Toda demanda de um cliente entra na fila de aprovação do portal do cliente
+  if (data.cliente_id) {
+    try {
+      await ensurePendingApproval(data.id)
+    } catch (e) {
+      console.warn('Não foi possível criar aprovação pendente:', e)
+    }
+  }
+
   return data
 }
 
