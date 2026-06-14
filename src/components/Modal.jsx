@@ -9,10 +9,10 @@ export default function Modal({ open, title, onClose, children, maxWidth = 'max-
         role="presentation"
       />
       <div
-        className={`relative w-full ${maxWidth} max-h-[90vh] flex flex-col rounded-2xl border border-white/10 bg-[#13101c]/95 backdrop-blur-2xl shadow-2xl shadow-black/50`}
+        className={`relative w-full ${maxWidth} max-h-[90vh] flex flex-col rounded-2xl border border-white/10 ring-1 ring-inset ring-white/5 bg-[#140f20]/80 backdrop-blur-2xl shadow-2xl shadow-black/60`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/10 bg-[#13101c]/95 backdrop-blur-2xl px-6 py-5 flex-shrink-0">
+        <div className="flex items-center justify-between border-b border-white/10 bg-[#140f20]/70 backdrop-blur-2xl px-6 py-5 flex-shrink-0">
           <h2 className="text-xl font-normal text-white">{title}</h2>
           <button
             onClick={onClose}

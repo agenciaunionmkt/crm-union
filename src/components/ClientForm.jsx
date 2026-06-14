@@ -140,16 +140,20 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
       {form.tipo_cliente === 'recorrente' && (
         <div>
           <label className="mb-1.5 block text-sm font-normal text-neutral-700 dark:text-neutral-300">
-            Data de vencimento
+            Dia do vencimento
           </label>
-          <input
-            type="date"
+          <select
             value={vencimento}
             onChange={(e) => setVencimento(e.target.value)}
             className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none"
-          />
+          >
+            <option value="">Selecione o dia</option>
+            {Array.from({ length: 31 }, (_, i) => i + 1).map((d) => (
+              <option key={d} value={d}>Dia {d}</option>
+            ))}
+          </select>
           <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-            Usada para gerar a cobrança recorrente no Financeiro.
+            Todo mês a cobrança vence neste dia (gerada no Financeiro).
           </p>
         </div>
       )}

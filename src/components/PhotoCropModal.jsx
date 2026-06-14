@@ -65,7 +65,7 @@ export default function PhotoCropModal({ src, onCancel, onApply }) {
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
-      <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#13101c]/95 backdrop-blur-2xl p-6 shadow-2xl shadow-black/50">
+      <div className="w-full max-w-sm rounded-2xl border border-white/10 ring-1 ring-inset ring-white/5 bg-[#140f20]/85 backdrop-blur-2xl p-6 shadow-2xl shadow-black/60">
         <h3 className="mb-4 text-lg font-normal text-white">Ajustar foto</h3>
 
         <div

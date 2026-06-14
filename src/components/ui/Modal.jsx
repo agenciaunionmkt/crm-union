@@ -40,8 +40,9 @@ export default function Modal({
           className={`
             w-full ${maxWidth}
             rounded-2xl
-            bg-[#13101c]/95 backdrop-blur-2xl
-            shadow-2xl shadow-black/50
+            bg-[#140f20]/80 backdrop-blur-2xl
+            shadow-2xl shadow-black/60
+            ring-1 ring-inset ring-white/5
             max-h-[90vh]
             overflow-y-auto
             border border-white/10
@@ -51,7 +52,7 @@ export default function Modal({
         >
           {/* Header */}
           {title && (
-            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/10 bg-[#13101c]/95 backdrop-blur-2xl px-6 py-5">
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/10 bg-[#140f20]/70 backdrop-blur-2xl px-6 py-5">
               <div>
                 <h2 className="text-xl font-normal text-white">
                   {title}

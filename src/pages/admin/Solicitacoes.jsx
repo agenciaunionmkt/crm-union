@@ -15,10 +15,10 @@ const statusLabels = {
 }
 
 const statusStyles = {
-  pendente: 'bg-yellow-100 text-yellow-700',
-  em_analise: 'bg-blue-100 text-blue-700',
-  convertido: 'bg-green-100 text-green-700',
-  recusado: 'bg-gray-100 text-gray-500',
+  pendente: 'bg-yellow-400/15 text-yellow-300 border border-yellow-400/30',
+  em_analise: 'bg-violet-500/15 text-violet-300 border border-violet-500/30',
+  convertido: 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30',
+  recusado: 'bg-white/5 text-neutral-400 border border-white/10',
 }
 
 function formatDate(value) {
@@ -68,49 +68,49 @@ export default function Solicitacoes() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-normal text-neutral-900 dark:text-white">Solicitações</h1>
-        <p className="mt-1 text-xs text-neutral-700 dark:text-neutral-400">
+        <h1 className="text-2xl font-normal text-white">Solicitações</h1>
+        <p className="mt-1 text-sm text-neutral-400">
           Fila de pedidos enviados pelos clientes — triagem e organização em demandas
         </p>
       </div>
 
-      <div className="mt-6 overflow-hidden rounded-xl border border-neutral-300 dark:border-neutral-700/50 bg-neutral-50 dark:bg-neutral-900/40 backdrop-blur-xl shadow-lg">
-        {requestsQuery.isLoading && <p className="p-6 text-sm text-neutral-500">Carregando...</p>}
+      <div className="mt-6 glass rounded-2xl overflow-hidden">
+        {requestsQuery.isLoading && <p className="p-6 text-sm text-neutral-400">Carregando...</p>}
         {requestsQuery.error && (
-          <p className="p-6 text-sm text-red-600">
+          <p className="p-6 text-sm text-red-400">
             Erro ao carregar solicitações: {requestsQuery.error.message}
           </p>
         )}
         {!requestsQuery.isLoading && requests.length === 0 && (
-          <p className="p-6 text-sm text-neutral-500">Nenhuma solicitação enviada ainda.</p>
+          <p className="p-6 text-sm text-neutral-400">Nenhuma solicitação enviada ainda.</p>
         )}
         {requests.length > 0 && (
           <table className="w-full text-left text-sm">
-            <thead className="border-b border-neutral-300 bg-neutral-100 text-xs uppercase text-neutral-600 dark:bg-neutral-800/50 dark:text-neutral-400">
+            <thead className="border-b border-white/10 bg-white/5 text-xs uppercase text-neutral-400">
               <tr>
-                <th className="px-4 py-3 font-medium">Cliente</th>
-                <th className="px-4 py-3 font-medium">Solicitação</th>
-                <th className="px-4 py-3 font-medium">Enviado em</th>
-                <th className="px-4 py-3 font-medium">Status</th>
-                <th className="px-4 py-3 font-medium"></th>
+                <th className="px-4 py-3 font-normal">Cliente</th>
+                <th className="px-4 py-3 font-normal">Solicitação</th>
+                <th className="px-4 py-3 font-normal">Enviado em</th>
+                <th className="px-4 py-3 font-normal">Status</th>
+                <th className="px-4 py-3 font-normal"></th>
               </tr>
             </thead>
             <tbody>
               {requests.map((request) => (
-                <tr key={request.id} className="border-b border-gray-100 align-top last:border-0">
-                  <td className="px-4 py-3 font-medium text-gray-900">
+                <tr key={request.id} className="border-b border-white/5 align-top last:border-0">
+                  <td className="px-4 py-3 font-normal text-white">
                     {request.client?.nome ?? '—'}
                   </td>
-                  <td className="px-4 py-3 text-gray-600">
-                    <p className="font-medium text-gray-800">{request.titulo}</p>
+                  <td className="px-4 py-3 text-neutral-300">
+                    <p className="font-normal text-white">{request.titulo}</p>
                     {request.descricao && (
-                      <p className="mt-1 max-w-md text-xs text-gray-500">{request.descricao}</p>
+                      <p className="mt-1 max-w-md text-xs text-neutral-400">{request.descricao}</p>
                     )}
                   </td>
-                  <td className="px-4 py-3 text-gray-600">{formatDate(request.created_at)}</td>
+                  <td className="px-4 py-3 text-neutral-400">{formatDate(request.created_at)}</td>
                   <td className="px-4 py-3">
                     <span
-                      className={`rounded-full px-2 py-1 text-xs font-medium ${statusStyles[request.status]}`}
+                      className={`inline-flex rounded-full px-2.5 py-1 text-xs font-normal ${statusStyles[request.status]}`}
                     >
                       {statusLabels[request.status]}
                     </span>
@@ -121,20 +121,20 @@ export default function Solicitacoes() {
                         {request.status === 'pendente' && (
                           <button
                             onClick={() => handleEmAnalise(request)}
-                            className="text-xs font-medium text-gray-600 hover:text-gray-900"
+                            className="text-xs font-normal text-neutral-300 hover:text-white"
                           >
                             Em análise
                           </button>
                         )}
                         <button
                           onClick={() => setConvertingRequest(request)}
-                          className="text-xs font-medium text-gray-900 hover:underline"
+                          className="text-xs font-normal text-yellow-300 hover:text-yellow-200"
                         >
                           Converter em demanda
                         </button>
                         <button
                           onClick={() => handleRecusar(request)}
-                          className="text-xs font-medium text-red-500 hover:text-red-700"
+                          className="text-xs font-normal text-red-400 hover:text-red-300"
                         >
                           Recusar
                         </button>
@@ -173,7 +173,7 @@ export default function Solicitacoes() {
           />
         )}
         {convertMutation.error && (
-          <p className="mt-3 text-sm text-red-600">{convertMutation.error.message}</p>
+          <p className="mt-3 text-sm text-red-400">{convertMutation.error.message}</p>
         )}
       </Modal>
     </div>

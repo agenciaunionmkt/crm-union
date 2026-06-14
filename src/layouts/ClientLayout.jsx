@@ -1,11 +1,12 @@
 import { NavLink, Outlet } from 'react-router-dom'
+import { Mail, CheckSquare, MessageSquare } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import UnionLogo from '../components/UnionLogo'
 
 const links = [
-  { to: '/portal/solicitacoes', label: 'Solicitações' },
-  { to: '/portal/aprovacoes', label: 'Aprovar entregas' },
-  { to: '/portal/chat', label: 'Chat com a agência' },
+  { to: '/portal/solicitacoes', label: 'Solicitações', Icon: Mail },
+  { to: '/portal/aprovacoes', label: 'Aprovar entregas', Icon: CheckSquare },
+  { to: '/portal/chat', label: 'Chat com a agência', Icon: MessageSquare },
 ]
 
 export default function ClientLayout() {
@@ -27,14 +28,15 @@ export default function ClientLayout() {
               to={link.to}
               end={link.end}
               className={({ isActive }) =>
-                `block rounded-lg px-3 py-2.5 text-sm font-normal transition-all duration-200 ${
+                `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-normal transition-all duration-200 ${
                   isActive
                     ? 'union-active'
                     : 'text-neutral-400 hover:bg-white/5 hover:text-white'
                 }`
               }
             >
-              {link.label}
+              <link.Icon className="w-4 h-4" strokeWidth={2} />
+              <span>{link.label}</span>
             </NavLink>
           ))}
         </nav>

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
-import { LayoutDashboard, Users, ListTodo, Mail, TrendingUp, DollarSign, Sun, Moon, Settings, LogOut, X, AlertCircle, CheckCircle } from 'lucide-react'
+import { LayoutDashboard, Users, ListTodo, Mail, TrendingUp, DollarSign, MessageSquare, Sun, Moon, Settings, LogOut, X, AlertCircle, CheckCircle } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useTheme } from '../context/ThemeContext'
 import { supabase } from '../lib/supabaseClient'
@@ -11,6 +11,7 @@ const links = [
   { to: '/admin', label: 'Dashboard', Icon: LayoutDashboard, end: true },
   { to: '/admin/clientes', label: 'Clientes', Icon: Users },
   { to: '/admin/demandas', label: 'Demandas', Icon: ListTodo },
+  { to: '/admin/mensagens', label: 'Mensagens', Icon: MessageSquare },
   { to: '/admin/solicitacoes', label: 'Solicitações', Icon: Mail },
   { to: '/admin/relatorios', label: 'Relatórios', Icon: TrendingUp },
   { to: '/admin/financeiro', label: 'Financeiro', Icon: DollarSign },
@@ -280,7 +281,7 @@ export default function AdminLayout() {
       {/* Settings Modal */}
       {showSettings && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
-          <div className="w-full max-w-md max-h-[90vh] overflow-y-auto bg-[#13101c]/95 backdrop-blur-2xl rounded-2xl border border-white/10 p-8 shadow-2xl shadow-black/50">
+          <div className="w-full max-w-md max-h-[90vh] overflow-y-auto bg-[#140f20]/80 backdrop-blur-2xl rounded-2xl border border-white/10 ring-1 ring-inset ring-white/5 p-8 shadow-2xl shadow-black/60">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-2xl font-normal text-white">Configurações</h2>
               <button
