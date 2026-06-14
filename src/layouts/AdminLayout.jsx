@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from 'react'
-import { NavLink, Outlet } from 'react-router-dom'
-import { LayoutDashboard, Users, ListTodo, Mail, TrendingUp, DollarSign, MessageSquare, Sparkles, Sun, Moon, Settings, LogOut, X, AlertCircle, CheckCircle } from 'lucide-react'
-import { useQuery } from '@tanstack/react-query'
+import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { LayoutDashboard, Users, ListTodo, Mail, TrendingUp, DollarSign, MessageSquare, Sparkles, Bell, Sun, Moon, Settings, LogOut, X, AlertCircle, CheckCircle } from 'lucide-react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '../context/AuthContext'
 import { useTheme } from '../context/ThemeContext'
 import { supabase } from '../lib/supabaseClient'
 import { listConversations } from '../lib/api/chat'
+import { listNotifications, markAllNotificationsRead } from '../lib/api/notifications'
 import UnionLogo from '../components/UnionLogo'
 import PhotoCropModal from '../components/PhotoCropModal'
 
@@ -23,6 +24,8 @@ const links = [
 export default function AdminLayout() {
   const { profile, signOut } = useAuth()
   const { isDark, toggleTheme } = useTheme()
+  const queryClient = useQueryClient()
+  const navigate = useNavigate()
   const [showSettings, setShowSettings] = useState(false)
   const [userPhoto, setUserPhoto] = useState(null)
   const [cropSrc, setCropSrc] = useState(null)
@@ -37,6 +40,28 @@ export default function AdminLayout() {
   const unreadChat = conversas.some(
     (c) => c.ultimoAutorPapel === 'cliente' && (!lastSeen || c.ultimaData > lastSeen)
   )
+
+  // Central de notificações
+  const [showNotif, setShowNotif] = useState(false)
+  const { data: notifications = [] } = useQuery({
+    queryKey: ['notifications', profile?.id],
+    queryFn: () => listNotifications(profile.id),
+    enabled: !!profile?.id,
+    refetchInterval: 20000,
+  })
+  const unreadNotif = notifications.filter((n) => !n.lida).length
+
+  async function abrirNotificacoes() {
+    setShowNotif((s) => !s)
+    if (!showNotif && unreadNotif > 0 && profile?.id) {
+      try {
+        await markAllNotificationsRead(profile.id)
+        queryClient.invalidateQueries({ queryKey: ['notifications', profile.id] })
+      } catch (e) {
+        console.warn(e)
+      }
+    }
+  }
   const [formData, setFormData] = useState({ nome: '', email: '' })
   const [passwords, setPasswords] = useState({ current: '', new: '', confirm: '' })
   const [saving, setSaving] = useState(false)
@@ -268,10 +293,56 @@ export default function AdminLayout() {
                 </div>
               )}
 
+              {/* Notificações */}
+              <div className="relative">
+                <button
+                  onClick={abrirNotificacoes}
+                  className="relative rounded-md p-2 text-neutral-300 hover:bg-white/10 transition-colors"
+                  title="Notificações"
+                >
+                  <Bell className="w-4 h-4" />
+                  {unreadNotif > 0 && (
+                    <span className="absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-yellow-400 px-1 text-[9px] font-semibold text-gray-900">
+                      {unreadNotif}
+                    </span>
+                  )}
+                </button>
+                {showNotif && (
+                  <>
+                    <div className="fixed inset-0 z-30" onClick={() => setShowNotif(false)} />
+                    <div className="absolute right-0 z-40 mt-2 w-80 rounded-xl border border-white/10 bg-[#140f20]/95 backdrop-blur-2xl p-2 shadow-2xl shadow-black/60">
+                      <p className="px-3 py-2 text-xs uppercase tracking-widest text-neutral-400">Notificações</p>
+                      <div className="max-h-80 overflow-y-auto">
+                        {notifications.length === 0 ? (
+                          <p className="px-3 py-6 text-center text-xs text-neutral-500">Nenhuma notificação.</p>
+                        ) : (
+                          notifications.map((n) => (
+                            <button
+                              key={n.id}
+                              onClick={() => {
+                                setShowNotif(false)
+                                if (n.link) navigate(n.link)
+                              }}
+                              className="block w-full rounded-lg px-3 py-2 text-left hover:bg-white/5 transition-colors"
+                            >
+                              <p className="text-sm font-normal text-white">{n.titulo}</p>
+                              {n.mensagem && <p className="text-xs text-neutral-400 truncate">{n.mensagem}</p>}
+                              <p className="mt-0.5 text-[10px] text-neutral-500">
+                                {new Date(n.created_at).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                              </p>
+                            </button>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+
               {/* Settings */}
               <button
                 onClick={() => setShowSettings(true)}
-                className="rounded-md p-2 text-neutral-300 hover:bg-neutral-700/40 transition-colors"
+                className="rounded-md p-2 text-neutral-300 hover:bg-white/10 transition-colors"
                 title="Configurações"
               >
                 <Settings className="w-4 h-4" />

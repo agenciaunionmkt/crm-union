@@ -1,5 +1,6 @@
 import { supabase } from '../supabaseClient'
 import { ensurePendingApproval } from './requests'
+import { createNotification } from './notifications'
 
 const DEMAND_SELECT = `
   *,
@@ -53,6 +54,20 @@ export async function createDemand(payload, tagIds = []) {
       await ensurePendingApproval(data.id)
     } catch (e) {
       console.warn('Não foi possível criar aprovação pendente:', e)
+    }
+  }
+
+  // Notifica o responsável designado
+  if (data.responsavel_id) {
+    try {
+      await createNotification({
+        userId: data.responsavel_id,
+        titulo: 'Nova demanda atribuída',
+        mensagem: data.titulo,
+        link: '/admin/demandas',
+      })
+    } catch (e) {
+      console.warn('Não foi possível notificar o responsável:', e)
     }
   }
 
