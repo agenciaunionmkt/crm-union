@@ -6,10 +6,10 @@ export default function ClientChat() {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold text-gray-900">Chat com a agência</h1>
-      <p className="mt-1 text-sm text-gray-500">Tire dúvidas e converse diretamente com o time</p>
+      <h1 className="text-2xl font-normal text-white">Chat com a agência</h1>
+      <p className="mt-1 text-sm text-neutral-400">Tire dúvidas e converse diretamente com o time</p>
 
-      <div className="mt-6 h-[28rem] rounded-xl border border-gray-200 bg-white p-5">
+      <div className="mt-6 h-[32rem] glass rounded-2xl p-5">
         <ChatWindow clienteId={profile?.cliente_id} currentUser={profile} />
       </div>
     </div>

@@ -111,7 +111,7 @@ export default function DemandForm({
             disabled={loadingAI || !form.titulo}
             className="text-xs font-normal text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 disabled:text-slate-400 transition-colors"
           >
-            ✨ {loadingAI ? 'Gerando...' : 'Sugerir com IA'}
+            {loadingAI ? 'Gerando...' : 'Sugerir com IA'}
           </button>
         </div>
         <textarea
@@ -240,7 +240,7 @@ export default function DemandForm({
                 size="sm"
                 onClick={() => setConfirmDelete(true)}
               >
-                🗑 Excluir demanda
+                Excluir demanda
               </Button>
             )}
           </div>

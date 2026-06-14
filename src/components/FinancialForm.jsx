@@ -197,7 +197,7 @@ export default function FinancialForm({ initialValues, onSubmit, onCancel, submi
               disabled={!form.nome}
               className="text-xs font-normal text-blue-600 hover:text-blue-700 disabled:text-gray-400"
             >
-              ✨ Sugerir
+              Sugerir
             </button>
           </div>
           <input

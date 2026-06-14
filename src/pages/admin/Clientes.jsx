@@ -40,7 +40,7 @@ export default function Clientes() {
             categoria: 'servicos',
             valor: parseFloat(clientData.valor_servico),
             status: 'pendente',
-            data_vencimento: new Date().toISOString().split('T')[0],
+            data_vencimento: access?.vencimento || new Date().toISOString().split('T')[0],
             cliente_id: client.id,
             recorrente: true,
           })
@@ -64,8 +64,8 @@ export default function Clientes() {
       setShowForm(false)
       setSuccessMessage(
         acessoEnviado
-          ? '✅ Cliente criado! Link de acesso enviado por e-mail.'
-          : '✅ Cliente criado com sucesso!'
+          ? 'Cliente criado! Link de acesso enviado por e-mail.'
+          : 'Cliente criado com sucesso!'
       )
       setTimeout(() => setSuccessMessage(''), 4000)
     },
@@ -79,7 +79,7 @@ export default function Clientes() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['clients'] })
       setDeleteConfirm(null)
-      setSuccessMessage('✅ Cliente removido com sucesso!')
+      setSuccessMessage('Cliente removido com sucesso!')
       setTimeout(() => setSuccessMessage(''), 3000)
     },
     onError: (error) => {
@@ -196,7 +196,7 @@ export default function Clientes() {
               </TableCell>
               <TableCell>
                 <Badge variant={client.tipo_cliente === 'recorrente' ? 'primary' : 'secondary'}>
-                  {client.tipo_cliente === 'recorrente' ? '🔄 Recorrente' : 'Avulso'}
+                  {client.tipo_cliente === 'recorrente' ? 'Recorrente' : 'Avulso'}
                 </Badge>
               </TableCell>
               <TableCell>
@@ -244,8 +244,8 @@ export default function Clientes() {
 
       {/* Modal - Confirmar Deleção */}
       {deleteConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="w-full max-w-sm bg-neutral-900 rounded-2xl border border-neutral-700/50 p-6 shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4">
+          <div className="w-full max-w-sm bg-[#13101c]/95 backdrop-blur-2xl rounded-2xl border border-white/10 p-6 shadow-2xl shadow-black/50">
             <div className="mb-4 flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-900/30 border border-red-700/50">
                 <AlertCircle className="h-5 w-5 text-red-400" />

@@ -109,15 +109,15 @@ export default function DemandCalendar({
                             }
                           : undefined
                       }
-                      className={`truncate rounded px-2 py-1 text-[11px] font-normal ${
+                      className={`truncate rounded-md border px-2 py-1.5 text-[11px] font-normal ${
                         overdue
-                          ? 'bg-red-100 dark:bg-red-500/15 text-red-700 dark:text-red-400 border border-red-300 dark:border-red-500/40'
-                          : 'bg-neutral-200 dark:bg-transparent/40 text-neutral-700 dark:text-neutral-300'
+                          ? 'bg-red-500/15 text-red-300 border-red-500/40'
+                          : 'bg-white/5 text-neutral-200 border-white/10'
                       } ${
                         onCardClick
                           ? overdue
-                            ? 'hover:bg-red-200 dark:hover:bg-red-500/25 cursor-pointer transition-colors'
-                            : 'hover:bg-neutral-300 dark:hover:bg-neutral-600/50 cursor-pointer transition-colors'
+                            ? 'hover:bg-red-500/25 cursor-pointer transition-colors'
+                            : 'hover:bg-white/10 hover:border-white/20 cursor-pointer transition-colors'
                           : ''
                       }`}
                       title={overdue ? `${demand.titulo} — atrasada` : demand.titulo}

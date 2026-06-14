@@ -14,11 +14,11 @@ function ApprovalCard({ approval, onReview, submitting }) {
   const [showFeedback, setShowFeedback] = useState(false)
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4">
+    <div className="glass rounded-2xl p-5">
       <div className="flex items-start justify-between">
         <div>
-          <p className="font-medium text-gray-900">{approval.demand?.titulo}</p>
-          <p className="mt-1 text-xs text-gray-500">Prazo: {formatDate(approval.demand?.prazo)}</p>
+          <p className="font-normal text-white">{approval.demand?.titulo}</p>
+          <p className="mt-1 text-xs text-neutral-400">Prazo: {formatDate(approval.demand?.prazo)}</p>
         </div>
       </div>
 
@@ -28,22 +28,22 @@ function ApprovalCard({ approval, onReview, submitting }) {
           onChange={(e) => setFeedback(e.target.value)}
           rows={2}
           placeholder="Descreva o que precisa ser ajustado..."
-          className="mt-3 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-200"
+          className="mt-3 w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 resize-none"
         />
       )}
 
-      <div className="mt-3 flex gap-2">
+      <div className="mt-4 flex gap-2">
         <button
           disabled={submitting}
           onClick={() => onReview(approval.id, 'aprovado', null)}
-          className="rounded-md bg-brand-500 px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-brand-600 disabled:opacity-60"
+          className="rounded-lg bg-yellow-400 px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-yellow-500 disabled:opacity-60 transition-colors"
         >
           Aprovar
         </button>
         {!showFeedback ? (
           <button
             onClick={() => setShowFeedback(true)}
-            className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="rounded-lg border border-white/15 px-4 py-2 text-sm font-normal text-neutral-300 hover:bg-white/5 transition-colors"
           >
             Pedir revisão
           </button>
@@ -51,7 +51,7 @@ function ApprovalCard({ approval, onReview, submitting }) {
           <button
             disabled={submitting || !feedback.trim()}
             onClick={() => onReview(approval.id, 'revisao_solicitada', feedback)}
-            className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-60"
+            className="rounded-lg border border-white/15 px-4 py-2 text-sm font-normal text-neutral-300 hover:bg-white/5 disabled:opacity-60 transition-colors"
           >
             Enviar revisão
           </button>
@@ -82,19 +82,19 @@ export default function Aprovacoes() {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold text-gray-900">Aprovar entregas</h1>
-      <p className="mt-1 text-sm text-gray-500">Aprove ou peça revisão dos materiais entregues</p>
+      <h1 className="text-2xl font-normal text-white">Aprovar entregas</h1>
+      <p className="mt-1 text-sm text-neutral-400">Aprove ou peça revisão dos materiais entregues</p>
 
-      {approvalsQuery.isLoading && <p className="mt-6 text-sm text-gray-400">Carregando...</p>}
+      {approvalsQuery.isLoading && <p className="mt-6 text-sm text-neutral-400">Carregando...</p>}
       {approvalsQuery.error && (
-        <p className="mt-6 text-sm text-red-600">Erro ao carregar aprovações: {approvalsQuery.error.message}</p>
+        <p className="mt-6 text-sm text-red-400">Erro ao carregar aprovações: {approvalsQuery.error.message}</p>
       )}
 
       {!approvalsQuery.isLoading && (
         <>
           <div className="mt-6 space-y-3">
             {pending.length === 0 && (
-              <p className="rounded-xl border border-dashed border-gray-300 bg-white p-6 text-sm text-gray-400">
+              <p className="rounded-2xl border border-dashed border-white/15 p-6 text-sm text-neutral-400">
                 Nenhuma entrega aguardando aprovação no momento.
               </p>
             )}
@@ -110,32 +110,32 @@ export default function Aprovacoes() {
 
           {reviewed.length > 0 && (
             <div className="mt-8">
-              <h2 className="text-sm font-semibold text-gray-700">Histórico de avaliações</h2>
-              <div className="mt-3 overflow-hidden rounded-xl border border-gray-200 bg-white">
+              <h2 className="text-sm font-normal uppercase tracking-widest text-neutral-400">Histórico de avaliações</h2>
+              <div className="mt-3 glass rounded-2xl overflow-hidden">
                 <table className="w-full text-left text-sm">
-                  <thead className="border-b border-gray-200 bg-gray-50 text-xs uppercase text-gray-500">
+                  <thead className="border-b border-white/10 bg-white/5 text-xs uppercase text-neutral-400">
                     <tr>
-                      <th className="px-4 py-3 font-medium">Demanda</th>
-                      <th className="px-4 py-3 font-medium">Resultado</th>
-                      <th className="px-4 py-3 font-medium">Comentário</th>
+                      <th className="px-4 py-3 font-normal">Demanda</th>
+                      <th className="px-4 py-3 font-normal">Resultado</th>
+                      <th className="px-4 py-3 font-normal">Comentário</th>
                     </tr>
                   </thead>
                   <tbody>
                     {reviewed.map((approval) => (
-                      <tr key={approval.id} className="border-b border-gray-100 last:border-0">
-                        <td className="px-4 py-3 font-medium text-gray-900">{approval.demand?.titulo}</td>
+                      <tr key={approval.id} className="border-b border-white/5 last:border-0">
+                        <td className="px-4 py-3 font-normal text-white">{approval.demand?.titulo}</td>
                         <td className="px-4 py-3">
                           <span
-                            className={`rounded-full px-2 py-1 text-xs font-medium ${
+                            className={`inline-flex rounded-full px-2.5 py-1 text-xs font-normal ${
                               approval.status === 'aprovado'
-                                ? 'bg-green-100 text-green-700'
-                                : 'bg-yellow-100 text-yellow-700'
+                                ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+                                : 'bg-yellow-400/15 text-yellow-300 border border-yellow-400/30'
                             }`}
                           >
                             {approval.status === 'aprovado' ? 'Aprovado' : 'Revisão solicitada'}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-gray-600">{approval.feedback || '—'}</td>
+                        <td className="px-4 py-3 text-neutral-400">{approval.feedback || '—'}</td>
                       </tr>
                     ))}
                   </tbody>

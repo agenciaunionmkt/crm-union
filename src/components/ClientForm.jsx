@@ -20,6 +20,7 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
   const isEdit = Boolean(initialValues?.id)
   const [acessoAtivar, setAcessoAtivar] = useState(false)
   const [acessoEmail, setAcessoEmail] = useState('')
+  const [vencimento, setVencimento] = useState('')
 
   function handleChange(field) {
     return (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }))
@@ -58,7 +59,11 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
       instagram_senha: form.instagram_senha || null,
     }
 
-    onSubmit(clientData, { ativar: acessoAtivar, email: acessoEmailFinal })
+    onSubmit(clientData, {
+      ativar: acessoAtivar,
+      email: acessoEmailFinal,
+      vencimento: form.tipo_cliente === 'recorrente' ? vencimento || null : null,
+    })
   }
 
   return (
@@ -131,10 +136,28 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
         </div>
       </div>
 
+      {/* Vencimento (clientes recorrentes) */}
+      {form.tipo_cliente === 'recorrente' && (
+        <div>
+          <label className="mb-1.5 block text-sm font-normal text-neutral-700 dark:text-neutral-300">
+            Data de vencimento
+          </label>
+          <input
+            type="date"
+            value={vencimento}
+            onChange={(e) => setVencimento(e.target.value)}
+            className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none"
+          />
+          <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+            Usada para gerar a cobrança recorrente no Financeiro.
+          </p>
+        </div>
+      )}
+
       {/* Instagram */}
       <div className="rounded-lg border border-neutral-300 dark:border-neutral-700/50 bg-neutral-100 dark:bg-neutral-800/20 p-5">
         <h3 className="text-sm font-normal text-neutral-900 dark:text-neutral-300 mb-4">
-          📱 Dados do Instagram
+          Dados do Instagram
         </h3>
         <div className="grid grid-cols-2 gap-4">
           <div>

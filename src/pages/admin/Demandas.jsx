@@ -40,12 +40,12 @@ export default function Demandas() {
       queryClient.invalidateQueries({ queryKey: ['demands'] })
       if (variables.id) {
         closeForm()
-        setSuccessMessage('✅ Demanda atualizada!')
+        setSuccessMessage('Demanda atualizada!')
       } else {
         // Mantém o modal aberto em modo edição para permitir anexar arquivos
         setEditingDemand(data)
         setDefaultDate(null)
-        setSuccessMessage('✅ Demanda criada! Agora você pode anexar arquivos abaixo.')
+        setSuccessMessage('Demanda criada! Agora você pode anexar arquivos abaixo.')
       }
       setTimeout(() => setSuccessMessage(''), 4000)
     },
@@ -56,7 +56,7 @@ export default function Demandas() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['demands'] })
       closeForm()
-      setSuccessMessage('✅ Demanda removida!')
+      setSuccessMessage('Demanda removida!')
       setTimeout(() => setSuccessMessage(''), 3000)
     },
   })

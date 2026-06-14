@@ -25,7 +25,7 @@ export default function Modal({
     <>
       {/* Backdrop com blur sofisticado */}
       <div
-        className="fixed inset-0 z-40 bg-black/40 backdrop-blur-md transition-opacity duration-300 animate-in fade-in"
+        className="fixed inset-0 z-40 bg-black/75 backdrop-blur-md transition-opacity duration-300 animate-in fade-in"
         onClick={onClose}
         role="presentation"
       />

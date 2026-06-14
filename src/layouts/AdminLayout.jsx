@@ -62,9 +62,9 @@ export default function AdminLayout() {
     try {
       localStorage.setItem('userPhoto', croppedDataUrl)
       setUserPhoto(croppedDataUrl)
-      setMessage({ type: 'success', text: '✅ Foto atualizada!' })
+      setMessage({ type: 'success', text: 'Foto atualizada!' })
     } catch {
-      setMessage({ type: 'error', text: '❌ Não foi possível salvar a foto (muito grande).' })
+      setMessage({ type: 'error', text: 'Não foi possível salvar a foto (muito grande).' })
     }
     setCropSrc(null)
   }
@@ -81,19 +81,19 @@ export default function AdminLayout() {
   const handleSaveProfile = async () => {
     // Validações
     if (!formData.nome.trim()) {
-      setMessage({ type: 'error', text: '❌ Nome é obrigatório' })
+      setMessage({ type: 'error', text: 'Nome é obrigatório' })
       return
     }
     if (formData.nome.trim().length < 3) {
-      setMessage({ type: 'error', text: '❌ Nome deve ter ao menos 3 caracteres' })
+      setMessage({ type: 'error', text: 'Nome deve ter ao menos 3 caracteres' })
       return
     }
     if (!formData.email.trim()) {
-      setMessage({ type: 'error', text: '❌ E-mail é obrigatório' })
+      setMessage({ type: 'error', text: 'E-mail é obrigatório' })
       return
     }
     if (!validateEmail(formData.email)) {
-      setMessage({ type: 'error', text: '❌ E-mail inválido' })
+      setMessage({ type: 'error', text: 'E-mail inválido' })
       return
     }
 
@@ -109,7 +109,7 @@ export default function AdminLayout() {
           .maybeSingle()
 
         if (existingUser) {
-          setMessage({ type: 'error', text: '❌ Este e-mail já está em uso' })
+          setMessage({ type: 'error', text: 'Este e-mail já está em uso' })
           setSaving(false)
           return
         }
@@ -129,10 +129,10 @@ export default function AdminLayout() {
         .eq('id', profile.id)
 
       if (error) throw error
-      setMessage({ type: 'success', text: '✅ Perfil atualizado com sucesso!' })
+      setMessage({ type: 'success', text: 'Perfil atualizado com sucesso!' })
       setTimeout(() => setShowSettings(false), 1500)
     } catch (error) {
-      setMessage({ type: 'error', text: `❌ ${error.message || 'Erro ao salvar perfil'}` })
+      setMessage({ type: 'error', text: `${error.message || 'Erro ao salvar perfil'}` })
     } finally {
       setSaving(false)
     }
@@ -141,23 +141,23 @@ export default function AdminLayout() {
   const handleChangePassword = async () => {
     // Validações
     if (!passwords.new || !passwords.confirm) {
-      setMessage({ type: 'error', text: '❌ Preencha a nova senha e confirmação' })
+      setMessage({ type: 'error', text: 'Preencha a nova senha e confirmação' })
       return
     }
     if (passwords.new.length < 8) {
-      setMessage({ type: 'error', text: '❌ Senha deve ter no mínimo 8 caracteres' })
+      setMessage({ type: 'error', text: 'Senha deve ter no mínimo 8 caracteres' })
       return
     }
     if (!/[A-Z]/.test(passwords.new)) {
-      setMessage({ type: 'error', text: '❌ Senha deve conter pelo menos uma letra maiúscula' })
+      setMessage({ type: 'error', text: 'Senha deve conter pelo menos uma letra maiúscula' })
       return
     }
     if (!/[0-9]/.test(passwords.new)) {
-      setMessage({ type: 'error', text: '❌ Senha deve conter pelo menos um número' })
+      setMessage({ type: 'error', text: 'Senha deve conter pelo menos um número' })
       return
     }
     if (passwords.new !== passwords.confirm) {
-      setMessage({ type: 'error', text: '❌ As senhas não conferem' })
+      setMessage({ type: 'error', text: 'As senhas não conferem' })
       return
     }
 
@@ -165,11 +165,11 @@ export default function AdminLayout() {
     try {
       const { error } = await supabase.auth.updateUser({ password: passwords.new })
       if (error) throw error
-      setMessage({ type: 'success', text: '✅ Senha alterada com sucesso!' })
+      setMessage({ type: 'success', text: 'Senha alterada com sucesso!' })
       setPasswords({ current: '', new: '', confirm: '' })
       setTimeout(() => setShowSettings(false), 1500)
     } catch (error) {
-      setMessage({ type: 'error', text: `❌ ${error.message || 'Erro ao alterar senha'}` })
+      setMessage({ type: 'error', text: `${error.message || 'Erro ao alterar senha'}` })
     } finally {
       setSaving(false)
     }

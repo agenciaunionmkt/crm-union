@@ -5,6 +5,7 @@ import UnionLogo from '../components/UnionLogo'
 const links = [
   { to: '/portal/solicitacoes', label: 'Solicitações' },
   { to: '/portal/aprovacoes', label: 'Aprovar entregas' },
+  { to: '/portal/chat', label: 'Chat com a agência' },
 ]
 
 export default function ClientLayout() {
