@@ -12,6 +12,7 @@ import ClienteDetalhe from './pages/admin/ClienteDetalhe'
 import Demandas from './pages/admin/Demandas'
 import Solicitacoes from './pages/admin/Solicitacoes'
 import AdminChat from './pages/admin/Chat'
+import Assistente from './pages/admin/Assistente'
 import Relatorios from './pages/admin/Relatorios'
 import Financeiro from './pages/admin/Financeiro'
 import ClientDemandas from './pages/client/Demandas'
@@ -37,6 +38,7 @@ function App() {
           <Route path="clientes/:id" element={<ClienteDetalhe />} />
           <Route path="demandas" element={<Demandas />} />
           <Route path="mensagens" element={<AdminChat />} />
+          <Route path="assistente" element={<Assistente />} />
           <Route path="solicitacoes" element={<Solicitacoes />} />
           <Route path="relatorios" element={<Relatorios />} />
           <Route path="financeiro" element={<Financeiro />} />
