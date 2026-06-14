@@ -5,8 +5,9 @@ import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { Wand2, Loader2, Trash2, CheckCircle } from 'lucide-react'
 import { listClients, getBriefing } from '../../lib/api/clients'
-import { createDemandsBulk } from '../../lib/api/demands'
+import { createDemandsBulk, createDemand } from '../../lib/api/demands'
 import { postsDoPlano, labelDoPlano } from '../../lib/plans'
+import DatePicker from '../../components/DatePicker'
 
 export default function AgenteConteudo() {
   const navigate = useNavigate()
@@ -27,6 +28,74 @@ export default function AgenteConteudo() {
   })
 
   const cliente = clients.find((c) => c.id === clienteId)
+
+  // --- Pedido rápido por IA (linguagem natural -> rascunho de demanda) ---
+  const [pedido, setPedido] = useState('')
+  const [rascunho, setRascunho] = useState(null)
+  const [gerandoPedido, setGerandoPedido] = useState(false)
+  const [criandoPedido, setCriandoPedido] = useState(false)
+  const [pedidoMsg, setPedidoMsg] = useState('')
+  const [pedidoErro, setPedidoErro] = useState('')
+
+  async function gerarRascunho() {
+    if (!pedido.trim()) return
+    setGerandoPedido(true)
+    setPedidoErro('')
+    setPedidoMsg('')
+    try {
+      const res = await fetch('/api/criar-demanda-ia', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pedido,
+          clientes: clients.map((c) => c.nome),
+          hoje: format(new Date(), 'yyyy-MM-dd'),
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Falha ao interpretar o pedido')
+      const match = clients.find((c) => c.nome.toLowerCase() === (data.cliente || '').toLowerCase())
+      setRascunho({
+        cliente_id: match?.id || '',
+        titulo: data.titulo || '',
+        descricao: data.descricao || '',
+        data: data.data || '',
+      })
+    } catch (e) {
+      setPedidoErro(e.message)
+    } finally {
+      setGerandoPedido(false)
+    }
+  }
+
+  async function criarDemandaPedido() {
+    if (!rascunho?.cliente_id) {
+      setPedidoErro('Selecione o cliente')
+      return
+    }
+    if (!rascunho?.data) {
+      setPedidoErro('Defina a data')
+      return
+    }
+    setCriandoPedido(true)
+    setPedidoErro('')
+    try {
+      await createDemand({
+        cliente_id: rascunho.cliente_id,
+        titulo: rascunho.titulo,
+        descricao: rascunho.descricao || null,
+        status: 'a_fazer',
+        prazo: rascunho.data,
+      })
+      setPedidoMsg('Demanda criada no cronograma do cliente!')
+      setRascunho(null)
+      setPedido('')
+    } catch (e) {
+      setPedidoErro(e.message)
+    } finally {
+      setCriandoPedido(false)
+    }
+  }
 
   function selecionarCliente(id) {
     setClienteId(id)
@@ -111,6 +180,100 @@ export default function AgenteConteudo() {
         <h1 className="text-2xl font-normal text-white">Agente de conteúdo</h1>
       </div>
       <p className="mt-1 text-sm text-neutral-400">Gere o calendário de posts do mês e crie as demandas automaticamente</p>
+
+      {/* Pedido rápido por IA */}
+      <div className="mt-6 glass rounded-2xl p-5">
+        <p className="text-sm font-normal text-white">Pedido rápido por IA</p>
+        <p className="mt-0.5 text-xs text-neutral-400">
+          Descreva em linguagem natural e mencione o cliente. Ex: "post de promoção de dia das mães para o Depyl".
+        </p>
+        <div className="mt-3 flex gap-2">
+          <input
+            type="text"
+            value={pedido}
+            onChange={(e) => setPedido(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && gerarRascunho()}
+            placeholder="Ex: gere um post de Black Friday para o cliente X na sexta"
+            className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
+          />
+          <button
+            onClick={gerarRascunho}
+            disabled={gerandoPedido || !pedido.trim()}
+            className="shrink-0 inline-flex items-center gap-1.5 rounded-lg border border-yellow-400/40 bg-yellow-400/10 px-4 py-2.5 text-sm font-normal text-yellow-300 hover:bg-yellow-400/20 disabled:opacity-60 transition-colors"
+          >
+            {gerandoPedido ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />}
+            Interpretar
+          </button>
+        </div>
+
+        {pedidoErro && <p className="mt-2 text-xs text-red-400">{pedidoErro}</p>}
+        {pedidoMsg && (
+          <div className="mt-3 flex items-center gap-2 rounded-lg bg-emerald-500/15 border border-emerald-500/30 px-3 py-2">
+            <CheckCircle className="w-4 h-4 text-emerald-400" />
+            <p className="text-xs text-emerald-300">{pedidoMsg}</p>
+          </div>
+        )}
+
+        {rascunho && (
+          <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.03] p-4 space-y-3">
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className="mb-1 block text-xs text-neutral-400">Cliente</label>
+                <select
+                  value={rascunho.cliente_id}
+                  onChange={(e) => setRascunho((r) => ({ ...r, cliente_id: e.target.value }))}
+                  className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white focus:border-yellow-400/50 focus:outline-none"
+                >
+                  <option value="">Selecione...</option>
+                  {clients.map((c) => (
+                    <option key={c.id} value={c.id}>{c.nome}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block text-xs text-neutral-400">Data</label>
+                <DatePicker
+                  value={rascunho.data}
+                  onChange={(v) => setRascunho((r) => ({ ...r, data: v }))}
+                  placeholder="Defina a data"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="mb-1 block text-xs text-neutral-400">Título</label>
+              <input
+                value={rascunho.titulo}
+                onChange={(e) => setRascunho((r) => ({ ...r, titulo: e.target.value }))}
+                className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white focus:border-yellow-400/50 focus:outline-none"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs text-neutral-400">Descrição</label>
+              <textarea
+                rows={4}
+                value={rascunho.descricao}
+                onChange={(e) => setRascunho((r) => ({ ...r, descricao: e.target.value }))}
+                className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white focus:border-yellow-400/50 focus:outline-none resize-none"
+              />
+            </div>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setRascunho(null)}
+                className="rounded-lg border border-white/15 px-4 py-2 text-sm font-normal text-neutral-300 hover:bg-white/5 transition-colors"
+              >
+                Descartar
+              </button>
+              <button
+                onClick={criarDemandaPedido}
+                disabled={criandoPedido}
+                className="rounded-lg bg-yellow-400 px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-yellow-500 disabled:opacity-60 transition-colors"
+              >
+                {criandoPedido ? 'Criando...' : 'Criar demanda'}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Controles */}
       <div className="mt-6 glass rounded-2xl p-5 grid gap-4 sm:grid-cols-[1fr_160px_120px_auto] items-end">
