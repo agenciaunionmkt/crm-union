@@ -50,12 +50,17 @@ export default function DemandForm({
 
     setLoadingAI(true)
     try {
-      // Por enquanto, uma sugestão simples.
-      // Pode ser integrado com uma API de IA real depois
-      const sugestao = `Demanda: ${form.titulo}\n\nEscopo:\n- Análise inicial\n- Desenvolvimento\n- Testes\n- Entrega\n\nPrazo: ${form.prazo || 'A definir'}`
-      setForm((prev) => ({ ...prev, descricao: sugestao }))
+      const cliente = (clients ?? []).find((c) => c.id === form.cliente_id)
+      const res = await fetch('/api/sugerir', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ titulo: form.titulo, contexto: cliente?.nome }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Não foi possível gerar a sugestão')
+      setForm((prev) => ({ ...prev, descricao: data.texto || prev.descricao }))
     } catch (error) {
-      alert('Erro ao gerar sugestão')
+      alert(error.message || 'Erro ao gerar sugestão')
     } finally {
       setLoadingAI(false)
     }
