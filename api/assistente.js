@@ -27,7 +27,7 @@ export default async function handler(req, res) {
     }
 
     const contexto = typeof body.context === 'string' ? body.context.trim() : ''
-    const systemContent = contexto
+    let systemContent = contexto
       ? `${SYSTEM_PROMPT}\n\nContexto da marca/cliente para personalizar as respostas (use o tom de voz e as regras abaixo):\n${contexto}`
       : SYSTEM_PROMPT
 
@@ -35,6 +35,38 @@ export default async function handler(req, res) {
     const recentes = messages
       .filter((m) => m && (m.role === 'user' || m.role === 'assistant') && m.content)
       .slice(-14)
+
+    // Busca na web (opcional) — usa Tavily para responder com informação atual
+    let fontes = []
+    const tavilyKey = process.env.TAVILY_API_KEY
+    if (body.web && tavilyKey) {
+      const query = [...recentes].reverse().find((m) => m.role === 'user')?.content || ''
+      try {
+        const tav = await fetch('https://api.tavily.com/search', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            api_key: tavilyKey,
+            query,
+            max_results: 5,
+            search_depth: 'basic',
+          }),
+        })
+        const tavData = await tav.json()
+        const results = Array.isArray(tavData.results) ? tavData.results : []
+        if (results.length) {
+          fontes = results.map((r) => ({ title: r.title, url: r.url }))
+          const webContexto = results
+            .map((r, i) => `[${i + 1}] ${r.title} (${r.url})\n${r.content}`)
+            .join('\n\n')
+          systemContent +=
+            `\n\nResultados de busca na web (use para responder com informação ATUAL; ` +
+            `cite os números das fontes quando relevante):\n${webContexto}`
+        }
+      } catch {
+        /* segue sem web se a busca falhar */
+      }
+    }
 
     const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
@@ -56,7 +88,7 @@ export default async function handler(req, res) {
     }
 
     const texto = data?.choices?.[0]?.message?.content?.trim() || ''
-    return res.status(200).json({ texto })
+    return res.status(200).json({ texto, fontes })
   } catch (e) {
     return res.status(500).json({ error: e.message || 'Erro inesperado' })
   }

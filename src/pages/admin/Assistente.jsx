@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { Sparkles, Send, Loader2, Copy, Check, FilePlus, Trash2 } from 'lucide-react'
+import { Sparkles, Send, Loader2, Copy, Check, FilePlus, Trash2, Globe, ExternalLink } from 'lucide-react'
 import { listClients, getBriefing } from '../../lib/api/clients'
 
 const sugestoes = [
@@ -26,6 +26,7 @@ export default function Assistente() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [clienteId, setClienteId] = useState('')
+  const [buscarWeb, setBuscarWeb] = useState(false)
   const [copiedIdx, setCopiedIdx] = useState(null)
   const bottomRef = useRef(null)
 
@@ -67,11 +68,11 @@ export default function Assistente() {
       const res = await fetch('/api/assistente', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: novaConversa, context: buildContext() }),
+        body: JSON.stringify({ messages: novaConversa, context: buildContext(), web: buscarWeb }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Não foi possível responder')
-      setMessages((prev) => [...prev, { role: 'assistant', content: data.texto }])
+      setMessages((prev) => [...prev, { role: 'assistant', content: data.texto, fontes: data.fontes || [] }])
     } catch (e) {
       setError(e.message || 'Erro ao falar com a IA')
     } finally {
@@ -135,6 +136,19 @@ export default function Assistente() {
         {clienteId && (
           <span className="text-xs text-emerald-400">usando tom de voz e regras da marca</span>
         )}
+        <button
+          type="button"
+          onClick={() => setBuscarWeb((v) => !v)}
+          title="Buscar informações atuais na web"
+          className={`ml-auto inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs transition-colors ${
+            buscarWeb
+              ? 'border-yellow-400/40 bg-yellow-400/10 text-yellow-300'
+              : 'border-white/15 text-neutral-400 hover:bg-white/5'
+          }`}
+        >
+          <Globe className="w-3.5 h-3.5" />
+          Buscar na web {buscarWeb ? 'ativo' : ''}
+        </button>
       </div>
 
       <div className="mt-4 h-[58vh] glass rounded-2xl p-5 flex flex-col">
@@ -169,6 +183,25 @@ export default function Assistente() {
                 >
                   {m.content}
                 </div>
+                {m.role === 'assistant' && m.fontes?.length > 0 && (
+                  <div className="mt-1.5 px-1">
+                    <p className="text-[10px] uppercase tracking-widest text-neutral-500">Fontes</p>
+                    <div className="mt-0.5 flex flex-col gap-0.5">
+                      {m.fontes.map((f, fi) => (
+                        <a
+                          key={fi}
+                          href={f.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-[11px] text-neutral-400 hover:text-yellow-300 transition-colors truncate"
+                        >
+                          <ExternalLink className="w-3 h-3 flex-shrink-0" />
+                          <span className="truncate">[{fi + 1}] {f.title}</span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 {m.role === 'assistant' && (
                   <div className="mt-1 flex gap-3 px-1">
                     <button
