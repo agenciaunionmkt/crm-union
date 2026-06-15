@@ -43,8 +43,11 @@ export default function ClientSolicitacoes() {
     },
   })
 
+  const semVinculo = !profile?.cliente_id
+
   function handleSubmit(e) {
     e.preventDefault()
+    if (semVinculo) return
     createMutation.mutate({
       cliente_id: profile.cliente_id,
       criado_por: profile.id,
@@ -61,6 +64,12 @@ export default function ClientSolicitacoes() {
     <div>
       <h1 className="text-2xl font-normal text-white">Nova solicitação</h1>
       <p className="mt-1 text-sm text-neutral-400">Envie um novo pedido para a agência</p>
+
+      {semVinculo && (
+        <div className="mt-4 rounded-lg border border-yellow-400/30 bg-yellow-400/10 px-4 py-3 text-sm text-yellow-200">
+          Sua conta ainda não está vinculada a um cliente. Avise a agência para liberar o envio de solicitações.
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="mt-6 max-w-xl glass rounded-2xl p-6">
         <div className="mb-4">
@@ -86,7 +95,7 @@ export default function ClientSolicitacoes() {
         <div className="flex items-center gap-3">
           <button
             type="submit"
-            disabled={createMutation.isPending}
+            disabled={createMutation.isPending || semVinculo}
             className="rounded-lg bg-yellow-400 px-4 py-2.5 text-sm font-semibold text-gray-900 hover:bg-yellow-500 disabled:opacity-60 transition-colors"
           >
             {createMutation.isPending ? 'Enviando...' : 'Enviar solicitação'}

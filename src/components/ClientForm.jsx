@@ -22,7 +22,9 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
   const isEdit = Boolean(initialValues?.id)
   const [acessoAtivar, setAcessoAtivar] = useState(false)
   const [acessoEmail, setAcessoEmail] = useState('')
-  const [vencimento, setVencimento] = useState('')
+  const [vencimento, setVencimento] = useState(
+    initialValues?.dia_vencimento ? String(initialValues.dia_vencimento) : ''
+  )
 
   function handleChange(field) {
     return (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }))
@@ -58,6 +60,7 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
       contato_telefone: form.contato_telefone || null,
       valor_servico: form.valor_servico ? parseFloat(form.valor_servico) : null,
       plano: form.plano || null,
+      dia_vencimento: form.tipo_cliente === 'recorrente' && vencimento ? parseInt(vencimento, 10) : null,
       instagram_usuario: form.instagram_usuario || null,
       instagram_senha: form.instagram_senha || null,
     }

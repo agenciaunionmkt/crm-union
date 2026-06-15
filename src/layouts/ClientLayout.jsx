@@ -150,6 +150,7 @@ export default function ClientLayout() {
             {infoRow('Plano', cliente?.plano ? labelDoPlano(cliente.plano) : '—')}
             {infoRow('Posts/mês', cliente?.plano ? postsDoPlano(cliente.plano) : '—')}
             {infoRow('Valor', formatCurrency(cliente?.valor_servico))}
+            {infoRow('Vencimento', cliente?.dia_vencimento ? `Dia ${cliente.dia_vencimento}` : '—')}
           </div>
 
           <div className="border-t border-white/10 pt-4">
