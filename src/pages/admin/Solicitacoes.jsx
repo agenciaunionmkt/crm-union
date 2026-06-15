@@ -29,6 +29,30 @@ function formatDate(value) {
 export default function Solicitacoes() {
   const queryClient = useQueryClient()
   const [convertingRequest, setConvertingRequest] = useState(null)
+  const [aiDraft, setAiDraft] = useState(null)
+  const [triandoId, setTriandoId] = useState(null)
+
+  async function triarComIA(request) {
+    setTriandoId(request.id)
+    try {
+      const res = await fetch('/api/criar-demanda-ia', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pedido: `${request.titulo}. ${request.descricao || ''}`,
+          clientes: request.client?.nome ? [request.client.nome] : [],
+          hoje: new Date().toISOString().split('T')[0],
+        }),
+      })
+      const data = await res.json()
+      setAiDraft(res.ok ? { titulo: data.titulo, descricao: data.descricao, data: data.data } : null)
+    } catch {
+      setAiDraft(null)
+    } finally {
+      setTriandoId(null)
+      setConvertingRequest(request)
+    }
+  }
 
   const requestsQuery = useQuery({ queryKey: ['client_requests'], queryFn: listClientRequests })
   const clientsQuery = useQuery({ queryKey: ['clients'], queryFn: listClients })
@@ -50,6 +74,7 @@ export default function Solicitacoes() {
       queryClient.invalidateQueries({ queryKey: ['client_requests'] })
       queryClient.invalidateQueries({ queryKey: ['demands'] })
       setConvertingRequest(null)
+      setAiDraft(null)
     },
   })
 
@@ -127,7 +152,14 @@ export default function Solicitacoes() {
                           </button>
                         )}
                         <button
-                          onClick={() => setConvertingRequest(request)}
+                          onClick={() => triarComIA(request)}
+                          disabled={triandoId === request.id}
+                          className="text-xs font-normal text-violet-300 hover:text-violet-200 disabled:opacity-60"
+                        >
+                          {triandoId === request.id ? 'Triando...' : 'Triar com IA'}
+                        </button>
+                        <button
+                          onClick={() => { setAiDraft(null); setConvertingRequest(request) }}
                           className="text-xs font-normal text-yellow-300 hover:text-yellow-200"
                         >
                           Converter em demanda
@@ -150,23 +182,24 @@ export default function Solicitacoes() {
 
       <Modal
         open={!!convertingRequest}
-        title="Converter em demanda"
-        onClose={() => setConvertingRequest(null)}
+        title={aiDraft ? 'Converter em demanda (triado por IA)' : 'Converter em demanda'}
+        onClose={() => { setConvertingRequest(null); setAiDraft(null) }}
         maxWidth="max-w-2xl"
       >
         {convertingRequest && (
           <DemandForm
             initialValues={{
               cliente_id: convertingRequest.cliente_id,
-              titulo: convertingRequest.titulo,
-              descricao: convertingRequest.descricao ?? '',
+              titulo: aiDraft?.titulo || convertingRequest.titulo,
+              descricao: aiDraft?.descricao ?? convertingRequest.descricao ?? '',
               status: 'a_fazer',
+              ...(aiDraft?.data ? { prazo: aiDraft.data } : {}),
             }}
             clients={clientsQuery.data}
             teamUsers={teamQuery.data}
             tags={tagsQuery.data}
             submitting={convertMutation.isPending}
-            onCancel={() => setConvertingRequest(null)}
+            onCancel={() => { setConvertingRequest(null); setAiDraft(null) }}
             onSubmit={(values, tagIds) =>
               convertMutation.mutate({ values, tagIds, requestId: convertingRequest.id })
             }

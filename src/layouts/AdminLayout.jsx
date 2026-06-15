@@ -79,13 +79,12 @@ export default function AdminLayout() {
     }
   }, [showSettings, profile])
 
-  // Carregar foto do localStorage ao montar o componente
+  // Foto é por usuário (chave com o id), pra não vazar entre contas
+  const photoKey = profile?.id ? `userPhoto_${profile.id}` : null
   useEffect(() => {
-    const savedPhoto = localStorage.getItem('userPhoto')
-    if (savedPhoto) {
-      setUserPhoto(savedPhoto)
-    }
-  }, [])
+    if (!photoKey) return
+    setUserPhoto(localStorage.getItem(photoKey) || null)
+  }, [photoKey])
 
   const handlePhotoUpload = (e) => {
     const file = e.target.files?.[0]
@@ -102,7 +101,7 @@ export default function AdminLayout() {
 
   const handleCropApply = (croppedDataUrl) => {
     try {
-      localStorage.setItem('userPhoto', croppedDataUrl)
+      if (photoKey) localStorage.setItem(photoKey, croppedDataUrl)
       setUserPhoto(croppedDataUrl)
       setMessage({ type: 'success', text: 'Foto atualizada!' })
     } catch {
@@ -441,7 +440,7 @@ export default function AdminLayout() {
                       <button
                         type="button"
                         onClick={() => {
-                          localStorage.removeItem('userPhoto')
+                          if (photoKey) localStorage.removeItem(photoKey)
                           setUserPhoto(null)
                         }}
                         className="px-4 py-2 bg-transparent border border-red-700/50 text-red-400 text-sm rounded-lg hover:bg-red-900/20 transition-colors"
