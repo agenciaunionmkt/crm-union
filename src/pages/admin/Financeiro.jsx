@@ -113,10 +113,10 @@ export default function Financeiro() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-normal text-neutral-900 dark:text-white">
+          <h1 className="text-2xl font-normal text-white">
             Financeiro
           </h1>
-          <p className="mt-1 text-xs text-neutral-900 dark:text-neutral-400" style={!isDark ? { color: '#1a1a1a' } : {}}>
+          <p className="mt-1 text-sm text-neutral-400">
             Gerencie entradas, saídas e transações financeiras
           </p>
         </div>
@@ -164,13 +164,13 @@ export default function Financeiro() {
           placeholder="Buscar por nome..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="px-4 py-2.5 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
+          className="px-4 py-2.5 rounded-lg border border-white/15 bg-white/5 text-white placeholder-neutral-500 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
           style={inputStyle}
         />
         <select
           value={tipoFilter}
           onChange={(e) => setTipoFilter(e.target.value)}
-          className="px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:ring-yellow-400/20"
+          className="px-3 py-2 rounded-lg border border-white/15 bg-white/5 text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
           style={inputStyle}
         >
           <option value="">Todos os tipos</option>
@@ -180,7 +180,7 @@ export default function Financeiro() {
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:ring-yellow-400/20"
+          className="px-3 py-2 rounded-lg border border-white/15 bg-white/5 text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
           style={inputStyle}
         >
           <option value="">Todos os status</option>

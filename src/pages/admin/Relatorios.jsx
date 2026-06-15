@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { Download } from 'lucide-react'
 import { listClients } from '../../lib/api/clients'
 import { getMonthlyReport } from '../../lib/api/reports'
 import { generateMonthlyReportPdf } from '../../lib/pdf/monthlyReport'
@@ -80,17 +81,17 @@ export default function Relatorios() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-normal text-neutral-900 dark:text-white">Relatórios</h1>
-        <p className="mt-1.5 text-xs text-neutral-700 dark:text-neutral-400">Relatório mensal por cliente, com exportação em PDF</p>
+        <h1 className="text-2xl font-normal text-white">Relatórios</h1>
+        <p className="mt-1 text-sm text-neutral-400">Relatório mensal por cliente, com exportação em PDF</p>
       </div>
 
-      <div className="mt-6 flex flex-wrap items-end gap-4">
-        <div>
-          <label className="mb-2 block text-xs font-medium text-neutral-700 dark:text-neutral-300">Cliente</label>
+      <div className="mt-6 glass rounded-2xl p-5 flex flex-wrap items-end gap-4">
+        <div className="flex-1 min-w-[200px]">
+          <label className="mb-1.5 block text-xs text-neutral-400">Cliente</label>
           <select
             value={clienteId}
             onChange={(e) => setClienteId(e.target.value)}
-            className="w-64 rounded-lg border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
+            className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
           >
             <option value="">Selecione um cliente</option>
             {(clientsQuery.data ?? []).map((client) => (
@@ -102,12 +103,12 @@ export default function Relatorios() {
         </div>
 
         <div>
-          <label className="mb-2 block text-xs font-medium text-neutral-700 dark:text-neutral-300">Mês de referência</label>
+          <label className="mb-1.5 block text-xs text-neutral-400">Mês de referência</label>
           <input
             type="month"
             value={monthValue}
             onChange={(e) => setMonthValue(e.target.value)}
-            className="rounded-lg border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
+            className="rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 [color-scheme:dark]"
           />
         </div>
 
@@ -115,8 +116,9 @@ export default function Relatorios() {
           type="button"
           disabled={!report}
           onClick={() => generateMonthlyReportPdf(report)}
-          className="inline-flex items-center gap-2 rounded-lg border border-neutral-400 dark:border-neutral-500 text-neutral-600 dark:text-neutral-400 px-4 py-2 text-xs font-normal hover:bg-neutral-100 dark:hover:bg-neutral-800/30 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+          className="inline-flex items-center gap-2 rounded-lg border border-white/15 text-neutral-200 px-4 py-2.5 text-sm font-normal hover:bg-white/5 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
         >
+          <Download className="w-4 h-4" />
           <span>Exportar PDF</span>
         </button>
       </div>

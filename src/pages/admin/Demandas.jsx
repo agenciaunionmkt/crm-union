@@ -157,10 +157,10 @@ export default function Demandas() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-normal text-neutral-900 dark:text-white">
+          <h1 className="text-2xl font-normal text-white">
             Demandas
           </h1>
-          <p className="mt-1 text-xs text-neutral-900 dark:text-neutral-400" style={!isDark ? { color: '#1a1a1a' } : {}}>
+          <p className="mt-1 text-sm text-neutral-400">
             Cronograma e gestão de demandas do seu time
           </p>
         </div>
