@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '../../context/AuthContext'
 import {
@@ -44,8 +44,8 @@ export default function ClienteDetalhe() {
   const { id } = useParams()
   const { profile } = useAuth()
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
 
-  const [showEditClient, setShowEditClient] = useState(false)
   const [showPlanForm, setShowPlanForm] = useState(false)
   const [editingPlan, setEditingPlan] = useState(null)
   const [briefingForm, setBriefingForm] = useState({
@@ -83,7 +83,7 @@ export default function ClienteDetalhe() {
     mutationFn: (payload) => updateClient(id, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['clients'] })
-      setShowEditClient(false)
+      queryClient.invalidateQueries({ queryKey: ['clients', id] })
     },
   })
 
@@ -170,21 +170,28 @@ export default function ClienteDetalhe() {
         ← Voltar para clientes
       </Link>
 
-      <div className="mt-3 flex items-start justify-between">
-        <div>
-          <h1 className="text-2xl font-normal text-white">{client.nome}</h1>
-          <p className="mt-1 text-sm text-neutral-400">{client.segmento || 'Sem segmento definido'}</p>
-          <div className="mt-2 flex gap-4 text-sm text-neutral-400">
-            <span>{client.contato_email || 'sem e-mail'}</span>
-            <span>{client.contato_telefone || 'sem telefone'}</span>
-          </div>
+      <div className="mt-3">
+        <h1 className="text-2xl font-normal text-white">{client.nome}</h1>
+        <p className="mt-1 text-sm text-neutral-400">{client.segmento || 'Sem segmento definido'}</p>
+      </div>
+
+      {/* Dados do cliente (edição inline) */}
+      <div className="mt-6 glass rounded-2xl p-6">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <h2 className="text-base font-normal text-white">Dados do cliente</h2>
+          {updateClientMutation.isSuccess && (
+            <span className="text-xs text-emerald-400">Dados salvos</span>
+          )}
         </div>
-        <button
-          onClick={() => setShowEditClient(true)}
-          className="rounded-lg border border-yellow-400/40 bg-yellow-400/10 px-4 py-2 text-sm font-normal text-yellow-300 hover:bg-yellow-400/20 transition-colors"
-        >
-          Editar dados
-        </button>
+        <ClientForm
+          initialValues={client}
+          submitting={updateClientMutation.isPending}
+          onCancel={() => navigate('/admin/clientes')}
+          onSubmit={(values) => updateClientMutation.mutate(values)}
+        />
+        {updateClientMutation.error && (
+          <p className="mt-3 text-sm text-red-400">{updateClientMutation.error.message}</p>
+        )}
       </div>
 
       {/* Briefing */}
@@ -344,19 +351,6 @@ export default function ClienteDetalhe() {
           <ChatWindow clienteId={id} currentUser={profile} />
         </div>
       </div>
-
-      {/* Modal: editar dados do cliente */}
-      <Modal open={showEditClient} title="Editar cliente" onClose={() => setShowEditClient(false)}>
-        <ClientForm
-          initialValues={client}
-          submitting={updateClientMutation.isPending}
-          onCancel={() => setShowEditClient(false)}
-          onSubmit={(values) => updateClientMutation.mutate(values)}
-        />
-        {updateClientMutation.error && (
-          <p className="mt-3 text-sm text-red-400">{updateClientMutation.error.message}</p>
-        )}
-      </Modal>
 
       {/* Modal: criar/editar plano */}
       <Modal
