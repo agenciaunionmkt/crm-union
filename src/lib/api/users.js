@@ -36,7 +36,17 @@ export async function inviteClientUser({ email, nome, clienteId }) {
   if (error && !jaExiste) throw error
 
   const userId = data?.user?.id
-  if (userId) {
+
+  // 1) Se já existe um perfil com esse e-mail, vincula por e-mail (cobre re-convites)
+  const { data: atualizados, error: updError } = await supabase
+    .from('users')
+    .update({ cliente_id: clienteId, papel: 'cliente', nome })
+    .eq('email', normalizedEmail)
+    .select('id')
+  if (updError) throw updError
+
+  // 2) Se não havia perfil e o signUp criou o usuário, cria o perfil vinculado
+  if ((!atualizados || atualizados.length === 0) && userId) {
     const { error: upsertError } = await supabase
       .from('users')
       .upsert(
