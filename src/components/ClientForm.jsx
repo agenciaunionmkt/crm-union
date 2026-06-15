@@ -12,6 +12,8 @@ const emptyForm = {
   contato_telefone: '',
   valor_servico: '',
   plano: '',
+  posts_personalizado: '',
+  plano_descricao: '',
   instagram_usuario: '',
   instagram_senha: '',
 }
@@ -60,6 +62,11 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
       contato_telefone: form.contato_telefone || null,
       valor_servico: form.valor_servico ? parseFloat(form.valor_servico) : null,
       plano: form.plano || null,
+      posts_personalizado:
+        form.plano === 'personalizado' && form.posts_personalizado
+          ? parseInt(form.posts_personalizado, 10)
+          : null,
+      plano_descricao: form.plano === 'personalizado' ? form.plano_descricao || null : null,
       dia_vencimento: form.tipo_cliente === 'recorrente' && vencimento ? parseInt(vencimento, 10) : null,
       instagram_usuario: form.instagram_usuario || null,
       instagram_senha: form.instagram_senha || null,
@@ -154,13 +161,45 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
         >
           <option value="">Sem plano</option>
           {Object.entries(PLANOS).map(([key, p]) => (
-            <option key={key} value={key}>{p.label} — {p.posts} posts/mês</option>
+            <option key={key} value={key}>
+              {p.posts ? `${p.label} — ${p.posts} posts/mês` : p.label}
+            </option>
           ))}
         </select>
-        {form.plano && (
+        {form.plano && form.plano !== 'personalizado' && (
           <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
             Gera {postsDoPlano(form.plano)} posts por mês no Agente de conteúdo.
           </p>
+        )}
+
+        {form.plano === 'personalizado' && (
+          <div className="mt-4 space-y-4 rounded-lg border border-neutral-300 dark:border-neutral-700/50 bg-neutral-100 dark:bg-neutral-800/20 p-4">
+            <div>
+              <label className="mb-1.5 block text-xs font-normal text-neutral-600 dark:text-neutral-400">
+                Posts por mês
+              </label>
+              <input
+                type="number"
+                min="1"
+                value={form.posts_personalizado ?? ''}
+                onChange={handleChange('posts_personalizado')}
+                placeholder="Ex: 16"
+                className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none"
+              />
+            </div>
+            <div>
+              <label className="mb-1.5 block text-xs font-normal text-neutral-600 dark:text-neutral-400">
+                O que esse pacote tem de diferente
+              </label>
+              <textarea
+                rows={3}
+                value={form.plano_descricao ?? ''}
+                onChange={handleChange('plano_descricao')}
+                placeholder="Ex: 16 posts + 4 reels + gestão de tráfego..."
+                className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none resize-none"
+              />
+            </div>
+          </div>
         )}
       </div>
 

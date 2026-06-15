@@ -6,7 +6,7 @@ import { ptBR } from 'date-fns/locale'
 import { Wand2, Loader2, Trash2, CheckCircle } from 'lucide-react'
 import { listClients, getBriefing } from '../../lib/api/clients'
 import { createDemandsBulk, createDemand } from '../../lib/api/demands'
-import { postsDoPlano, labelDoPlano } from '../../lib/plans'
+import { postsDoCliente, labelDoPlano } from '../../lib/plans'
 import DatePicker from '../../components/DatePicker'
 
 export default function AgenteConteudo() {
@@ -100,7 +100,7 @@ export default function AgenteConteudo() {
   function selecionarCliente(id) {
     setClienteId(id)
     const c = clients.find((x) => x.id === id)
-    const qtd = postsDoPlano(c?.plano)
+    const qtd = postsDoCliente(c)
     if (qtd) setQuantidade(qtd)
     setPosts([])
     setDone('')

@@ -5,7 +5,7 @@ import { Mail, CheckSquare, MessageSquare, CalendarDays, Menu, X, Settings } fro
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabaseClient'
 import { getClient } from '../lib/api/clients'
-import { labelDoPlano, postsDoPlano } from '../lib/plans'
+import { labelDoPlano, postsDoCliente } from '../lib/plans'
 import UnionLogo from '../components/UnionLogo'
 import Modal from '../components/Modal'
 
@@ -148,7 +148,9 @@ export default function ClientLayout() {
             {infoRow('E-mail de acesso', profile?.email ?? '—')}
             {infoRow('E-mail de contato', cliente?.contato_email ?? '—')}
             {infoRow('Plano', cliente?.plano ? labelDoPlano(cliente.plano) : '—')}
-            {infoRow('Posts/mês', cliente?.plano ? postsDoPlano(cliente.plano) : '—')}
+            {infoRow('Posts/mês', cliente?.plano ? postsDoCliente(cliente) : '—')}
+            {cliente?.plano === 'personalizado' && cliente?.plano_descricao &&
+              infoRow('Detalhes do pacote', cliente.plano_descricao)}
             {infoRow('Valor', formatCurrency(cliente?.valor_servico))}
             {infoRow('Vencimento', cliente?.dia_vencimento ? `Dia ${cliente.dia_vencimento}` : '—')}
           </div>

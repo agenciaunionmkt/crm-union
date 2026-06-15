@@ -15,7 +15,7 @@ function formatDateTime(value) {
 export default function ChatWindow({ clienteId, currentUser }) {
   const queryClient = useQueryClient()
   const [message, setMessage] = useState('')
-  const bottomRef = useRef(null)
+  const listRef = useRef(null)
 
   const messagesQuery = useQuery({
     queryKey: ['chat', clienteId],
@@ -72,7 +72,9 @@ export default function ChatWindow({ clienteId, currentUser }) {
   }
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+    // Rola só a lista de mensagens (não a página inteira)
+    const el = listRef.current
+    if (el) el.scrollTop = el.scrollHeight
   }, [messages.length])
 
   function handleSubmit(e) {
@@ -87,7 +89,7 @@ export default function ChatWindow({ clienteId, currentUser }) {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex-1 space-y-3 overflow-y-auto px-1 py-2">
+      <div ref={listRef} className="flex-1 space-y-3 overflow-y-auto px-1 py-2">
         {messagesQuery.isLoading && <p className="text-xs text-neutral-400">Carregando...</p>}
         {!messagesQuery.isLoading && messages.length === 0 && (
           <div className="flex h-full flex-col items-center justify-center text-center">
@@ -114,7 +116,6 @@ export default function ChatWindow({ clienteId, currentUser }) {
             </div>
           )
         })}
-        <div ref={bottomRef} />
       </div>
 
       <form onSubmit={handleSubmit} className="mt-2 flex items-center gap-2 border-t border-white/10 pt-3">
