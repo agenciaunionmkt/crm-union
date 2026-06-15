@@ -17,18 +17,6 @@ import ClientForm from '../../components/ClientForm'
 import PlanForm from '../../components/PlanForm'
 import ChatWindow from '../../components/ChatWindow'
 
-const statusLabels = {
-  ativo: 'Ativo',
-  pausado: 'Pausado',
-  encerrado: 'Encerrado',
-}
-
-const statusStyles = {
-  ativo: 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30',
-  pausado: 'bg-yellow-400/15 text-yellow-300 border border-yellow-400/30',
-  encerrado: 'bg-white/5 text-neutral-400 border border-white/10',
-}
-
 function formatCurrency(value) {
   if (value === null || value === undefined) return '—'
   return Number(value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })

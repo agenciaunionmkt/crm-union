@@ -5,19 +5,12 @@ import { ptBR } from 'date-fns/locale'
 import { listClients } from '../../lib/api/clients'
 import { getMonthlyReport } from '../../lib/api/reports'
 import { generateMonthlyReportPdf } from '../../lib/pdf/monthlyReport'
-import { demandStatusLabels, demandStatusStyles } from '../client/Demandas'
-
-const approvalStatusLabels = {
-  pendente: 'Pendente',
-  aprovado: 'Aprovado',
-  revisao_solicitada: 'Revisão solicitada',
-}
-
-const approvalStatusStyles = {
-  pendente: 'bg-yellow-400/15 text-yellow-300 border border-yellow-400/30',
-  aprovado: 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30',
-  revisao_solicitada: 'bg-orange-500/15 text-orange-300 border border-orange-500/30',
-}
+import {
+  demandStatusLabels,
+  demandStatusStyles,
+  approvalStatusLabels,
+  approvalStatusStyles,
+} from '../../lib/status'
 
 function formatDate(value) {
   if (!value) return '—'

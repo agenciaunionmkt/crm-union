@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '../../context/AuthContext'
 import { listApprovalsByClient, reviewApproval } from '../../lib/api/requests'
-import { demandStatusLabels, demandStatusStyles } from './Demandas'
+import { demandStatusLabels, demandStatusStyles } from '../../lib/status'
 import Modal from '../../components/Modal'
 
 function formatDate(value) {

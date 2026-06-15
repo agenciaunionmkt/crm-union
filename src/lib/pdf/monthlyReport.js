@@ -2,7 +2,7 @@ import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
-import { demandStatusLabels } from '../../pages/client/Demandas'
+import { demandStatusLabels } from '../status'
 
 function formatDate(value) {
   if (!value) return '—'

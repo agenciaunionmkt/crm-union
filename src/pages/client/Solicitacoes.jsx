@@ -2,20 +2,7 @@ import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '../../context/AuthContext'
 import { createClientRequest, listClientRequestsByClient } from '../../lib/api/requests'
-
-const statusLabels = {
-  pendente: 'Pendente',
-  em_analise: 'Em análise',
-  convertido: 'Convertido em demanda',
-  recusado: 'Recusado',
-}
-
-const statusStyles = {
-  pendente: 'bg-yellow-400/15 text-yellow-300 border border-yellow-400/30',
-  em_analise: 'bg-violet-500/15 text-violet-300 border border-violet-500/30',
-  convertido: 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30',
-  recusado: 'bg-white/5 text-neutral-400 border border-white/10',
-}
+import { requestStatusLabels as statusLabels, requestStatusStyles as statusStyles } from '../../lib/status'
 
 function formatDate(value) {
   if (!value) return '—'

@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext'
 import { listDemandsByClient } from '../../lib/api/demands'
 import DemandCalendar from '../../components/DemandCalendar'
 import Modal from '../../components/Modal'
-import { demandStatusLabels, demandStatusStyles } from './Demandas'
+import { demandStatusLabels, demandStatusStyles } from '../../lib/status'
 
 function formatDate(value) {
   if (!value) return '—'

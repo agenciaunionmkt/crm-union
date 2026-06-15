@@ -2,21 +2,8 @@ import { Fragment, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '../../context/AuthContext'
 import { listDemandsByClient } from '../../lib/api/demands'
+import { demandStatusLabels, demandStatusStyles } from '../../lib/status'
 import DemandActivity from '../../components/DemandActivity'
-
-export const demandStatusLabels = {
-  a_fazer: 'A fazer',
-  em_andamento: 'Em andamento',
-  em_revisao: 'Em revisão',
-  entregue: 'Entregue',
-}
-
-export const demandStatusStyles = {
-  a_fazer: 'bg-white/5 text-neutral-300 border border-white/10',
-  em_andamento: 'bg-violet-500/15 text-violet-300 border border-violet-500/30',
-  em_revisao: 'bg-yellow-400/15 text-yellow-300 border border-yellow-400/30',
-  entregue: 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30',
-}
 
 function formatDate(value) {
   if (!value) return '—'
