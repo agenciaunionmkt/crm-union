@@ -269,80 +269,6 @@ export default function ClienteDetalhe() {
         </form>
       </div>
 
-      {/* Planos */}
-      <div className="mt-6 glass rounded-2xl p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-base font-normal text-white">Plano contratado</h2>
-            <p className="mt-1 text-xs text-neutral-400">Histórico de pacotes contratados pelo cliente</p>
-          </div>
-          <button
-            onClick={() => {
-              setEditingPlan(null)
-              setShowPlanForm(true)
-            }}
-            className="rounded-lg border border-white/15 px-3 py-2 text-sm font-normal text-neutral-300 hover:bg-white/5 transition-colors"
-          >
-            + Novo plano
-          </button>
-        </div>
-
-        <div className="mt-4 overflow-hidden rounded-xl border border-white/10">
-          {plansQuery.isLoading && <p className="p-4 text-sm text-neutral-400">Carregando...</p>}
-          {!plansQuery.isLoading && (plansQuery.data ?? []).length === 0 && (
-            <p className="p-4 text-sm text-neutral-400">Nenhum plano cadastrado.</p>
-          )}
-          {(plansQuery.data ?? []).length > 0 && (
-            <table className="w-full text-left text-sm">
-              <thead className="border-b border-white/10 bg-white/5 text-xs uppercase text-neutral-400">
-                <tr>
-                  <th className="px-4 py-3 font-normal">Pacote</th>
-                  <th className="px-4 py-3 font-normal">Valor</th>
-                  <th className="px-4 py-3 font-normal">Período</th>
-                  <th className="px-4 py-3 font-normal">Status</th>
-                  <th className="px-4 py-3 font-normal"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {plansQuery.data.map((plan) => (
-                  <tr key={plan.id} className="border-b border-white/5 last:border-0">
-                    <td className="px-4 py-3 font-normal text-white">{plan.pacote}</td>
-                    <td className="px-4 py-3 text-neutral-300">{formatCurrency(plan.valor)}</td>
-                    <td className="px-4 py-3 text-neutral-300">
-                      {formatDate(plan.inicio)} – {formatDate(plan.fim)}
-                    </td>
-                    <td className="px-4 py-3">
-                      <span
-                        className={`inline-flex rounded-full px-2.5 py-1 text-xs font-normal ${statusStyles[plan.status]}`}
-                      >
-                        {statusLabels[plan.status]}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      <button
-                        onClick={() => {
-                          setEditingPlan(plan)
-                          setShowPlanForm(true)
-                        }}
-                        className="mr-3 text-xs font-normal text-neutral-300 hover:text-white"
-                      >
-                        Editar
-                      </button>
-                      <button
-                        onClick={() => handleDeletePlan(plan)}
-                        className="text-xs font-normal text-red-400 hover:text-red-300"
-                      >
-                        Remover
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
-      </div>
-
       {/* Chat com o cliente */}
       <div className="mt-6 glass rounded-2xl p-6">
         <h2 className="text-base font-normal text-white">Chat com o cliente</h2>
@@ -352,30 +278,6 @@ export default function ClienteDetalhe() {
         </div>
       </div>
 
-      {/* Modal: criar/editar plano */}
-      <Modal
-        open={showPlanForm}
-        title={editingPlan ? 'Editar plano' : 'Novo plano'}
-        onClose={() => {
-          setShowPlanForm(false)
-          setEditingPlan(null)
-        }}
-      >
-        <PlanForm
-          initialValues={editingPlan}
-          submitting={planMutation.isPending}
-          onCancel={() => {
-            setShowPlanForm(false)
-            setEditingPlan(null)
-          }}
-          onSubmit={(values) =>
-            planMutation.mutate({ planId: editingPlan?.id ?? null, payload: values })
-          }
-        />
-        {planMutation.error && (
-          <p className="mt-3 text-sm text-red-400">{planMutation.error.message}</p>
-        )}
-      </Modal>
     </div>
   )
 }

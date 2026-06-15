@@ -145,7 +145,7 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
       {/* Plano */}
       <div>
         <label className="mb-1.5 block text-sm font-normal text-neutral-700 dark:text-neutral-300">
-          Plano de conteúdo
+          Plano contratado
         </label>
         <select
           value={form.plano ?? ''}
