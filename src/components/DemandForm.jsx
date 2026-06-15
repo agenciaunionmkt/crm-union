@@ -126,7 +126,7 @@ export default function DemandForm({
           rows={4}
           value={form.descricao ?? ''}
           onChange={handleChange('descricao')}
-          className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent text-neutral-900 dark:text-white text-sm font-normal focus:outline-none dark:focus:ring-emerald-400"
+          className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent text-neutral-900 dark:text-white text-sm font-normal focus:outline-none focus:ring-yellow-400/20"
           placeholder="Detalhes da demanda"
         />
       </div>
@@ -141,7 +141,7 @@ export default function DemandForm({
             required
             value={form.cliente_id}
             onChange={handleChange('cliente_id')}
-            className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none dark:focus:ring-emerald-400"
+            className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none focus:ring-yellow-400/20"
           >
             <option value="">Selecione...</option>
             {(clients ?? []).map((client) => (
@@ -158,7 +158,7 @@ export default function DemandForm({
           <select
             value={form.responsavel_id}
             onChange={handleChange('responsavel_id')}
-            className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none dark:focus:ring-emerald-400"
+            className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none focus:ring-yellow-400/20"
           >
             <option value="">Sem responsável</option>
             {(teamUsers ?? []).map((user) => (

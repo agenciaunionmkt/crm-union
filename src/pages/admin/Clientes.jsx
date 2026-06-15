@@ -138,7 +138,7 @@ export default function Clientes() {
         </div>
         <button
           onClick={() => setShowForm(true)}
-          className="inline-flex items-center gap-2 rounded-md border border-emerald-400 dark:border-emerald-500/60 text-emerald-600 dark:text-emerald-400 px-4 py-2 text-xs font-normal bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-800/30 transition-colors"
+          className="inline-flex items-center gap-2 rounded-lg bg-yellow-400 text-gray-900 px-4 py-2 text-xs font-semibold hover:bg-yellow-500 transition-colors"
         >
           <span>+</span>
           <span>Novo cliente</span>
@@ -152,7 +152,7 @@ export default function Clientes() {
           placeholder="Buscar clientes..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full px-4 py-2.5 rounded-lg border border-neutral-600 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white placeholder-neutral-500 dark:placeholder-neutral-400 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/30"
+          className="w-full px-4 py-2.5 rounded-lg border border-neutral-600 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white placeholder-neutral-500 dark:placeholder-neutral-400 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
         />
       </div>
 

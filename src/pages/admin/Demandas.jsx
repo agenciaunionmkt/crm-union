@@ -166,7 +166,7 @@ export default function Demandas() {
         </div>
         <button
           onClick={() => openNewDemand()}
-          className="inline-flex items-center gap-2 rounded-md border border-emerald-400 dark:border-emerald-500/60 text-emerald-600 dark:text-emerald-400 px-4 py-2 text-xs font-normal bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-800/30 transition-colors active:scale-95"
+          className="inline-flex items-center gap-2 rounded-lg bg-yellow-400 text-gray-900 px-4 py-2 text-xs font-semibold hover:bg-yellow-500 transition-colors active:scale-95"
         >
           <span>+</span>
           <span>Nova demanda</span>

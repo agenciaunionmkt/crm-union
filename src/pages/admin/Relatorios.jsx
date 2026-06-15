@@ -97,7 +97,7 @@ export default function Relatorios() {
           <select
             value={clienteId}
             onChange={(e) => setClienteId(e.target.value)}
-            className="w-64 rounded-lg border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-500/30"
+            className="w-64 rounded-lg border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
           >
             <option value="">Selecione um cliente</option>
             {(clientsQuery.data ?? []).map((client) => (
@@ -114,7 +114,7 @@ export default function Relatorios() {
             type="month"
             value={monthValue}
             onChange={(e) => setMonthValue(e.target.value)}
-            className="rounded-lg border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-500/30"
+            className="rounded-lg border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
           />
         </div>
 

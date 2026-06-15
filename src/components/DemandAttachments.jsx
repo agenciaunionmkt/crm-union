@@ -45,7 +45,7 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
           <button
             type="button"
             onClick={() => pendingRef.current?.click()}
-            className="inline-flex items-center gap-1.5 rounded-md border border-emerald-400 dark:border-emerald-500/60 text-emerald-600 dark:text-emerald-400 px-3 py-1.5 text-xs font-normal bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-800/30 transition-colors"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 text-neutral-200 px-3 py-1.5 text-xs font-normal hover:bg-white/5 transition-colors"
           >
             + Adicionar arquivo
           </button>
@@ -96,7 +96,7 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
           type="button"
           onClick={() => fileRef.current?.click()}
           disabled={uploadMutation.isPending}
-          className="inline-flex items-center gap-1.5 rounded-md border border-emerald-400 dark:border-emerald-500/60 text-emerald-600 dark:text-emerald-400 px-3 py-1.5 text-xs font-normal bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-800/30 transition-colors disabled:opacity-60"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 text-neutral-200 px-3 py-1.5 text-xs font-normal hover:bg-white/5 transition-colors disabled:opacity-60"
         >
           {uploadMutation.isPending ? (
             <>
@@ -130,7 +130,7 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
                 href={att.arquivo_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex min-w-0 items-center gap-2 text-sm text-neutral-700 dark:text-neutral-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                className="flex min-w-0 items-center gap-2 text-sm text-neutral-700 dark:text-neutral-300 hover:text-yellow-300 transition-colors"
               >
                 <ExternalLink className="w-3.5 h-3.5 flex-shrink-0" />
                 <span className="truncate">{att.nome_arquivo || 'arquivo'}</span>

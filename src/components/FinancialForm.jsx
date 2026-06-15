@@ -87,7 +87,7 @@ export default function FinancialForm({ initialValues, onSubmit, onCancel, submi
           <select
             value={form.tipo}
             onChange={handleChange('tipo')}
-            className="w-full rounded-lg border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm font-normal bg-transparent dark:bg-transparent text-neutral-900 dark:text-white focus:border-neutral-600 dark:focus:border-neutral-600 focus:outline-none focus:ring-emerald-500/30"
+            className="w-full rounded-lg border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm font-normal bg-transparent dark:bg-transparent text-neutral-900 dark:text-white focus:border-neutral-600 dark:focus:border-neutral-600 focus:outline-none focus:ring-yellow-400/20"
           >
             <option value="entrada">Entrada</option>
             <option value="saida">Saída</option>
@@ -101,7 +101,7 @@ export default function FinancialForm({ initialValues, onSubmit, onCancel, submi
           <select
             value={form.status}
             onChange={handleChange('status')}
-            className="w-full rounded-lg border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm font-normal bg-transparent dark:bg-transparent text-neutral-900 dark:text-white focus:border-neutral-600 dark:focus:border-neutral-600 focus:outline-none focus:ring-emerald-500/30"
+            className="w-full rounded-lg border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm font-normal bg-transparent dark:bg-transparent text-neutral-900 dark:text-white focus:border-neutral-600 dark:focus:border-neutral-600 focus:outline-none focus:ring-yellow-400/20"
           >
             <option value="pendente">Pendente</option>
             <option value="pago">Pago</option>
@@ -121,7 +121,7 @@ export default function FinancialForm({ initialValues, onSubmit, onCancel, submi
           className={`w-full rounded-lg border px-3 py-2 text-sm font-normal bg-transparent dark:bg-transparent text-neutral-900 dark:text-white focus:outline-none ${
             errors.nome
               ? 'border-red-400 dark:border-red-500 focus:border-neutral-600 dark:focus:border-neutral-600 focus:ring-red-500/30'
-              : 'border-neutral-300 dark:border-neutral-600 focus:border-neutral-600 dark:focus:border-neutral-600 focus:ring-emerald-500/30'
+              : 'border-neutral-300 dark:border-neutral-600 focus:border-neutral-600 dark:focus:border-neutral-600 focus:ring-yellow-400/20'
           }`}
           placeholder="Ex: Aluguel do escritório"
         />
@@ -203,7 +203,7 @@ export default function FinancialForm({ initialValues, onSubmit, onCancel, submi
           <input
             value={form.categoria ?? ''}
             onChange={handleChange('categoria')}
-            className="w-full rounded-lg border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm font-normal bg-transparent dark:bg-transparent text-neutral-900 dark:text-white focus:border-neutral-600 dark:focus:border-neutral-600 focus:outline-none focus:ring-emerald-500/30"
+            className="w-full rounded-lg border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm font-normal bg-transparent dark:bg-transparent text-neutral-900 dark:text-white focus:border-neutral-600 dark:focus:border-neutral-600 focus:outline-none focus:ring-yellow-400/20"
             placeholder="Ex: Operacional, Pessoal..."
           />
         </div>
@@ -217,7 +217,7 @@ export default function FinancialForm({ initialValues, onSubmit, onCancel, submi
           value={form.notas ?? ''}
           onChange={handleChange('notas')}
           rows="3"
-          className="w-full rounded-lg border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm font-normal bg-transparent dark:bg-transparent text-neutral-900 dark:text-white focus:border-neutral-600 dark:focus:border-neutral-600 focus:outline-none focus:ring-emerald-500/30"
+          className="w-full rounded-lg border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm font-normal bg-transparent dark:bg-transparent text-neutral-900 dark:text-white focus:border-neutral-600 dark:focus:border-neutral-600 focus:outline-none focus:ring-yellow-400/20"
           placeholder="Observações adicionais..."
         />
       </div>
@@ -243,7 +243,7 @@ export default function FinancialForm({ initialValues, onSubmit, onCancel, submi
           <select
             value={form.frequencia}
             onChange={handleChange('frequencia')}
-            className="w-full rounded-lg border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm font-normal bg-transparent dark:bg-transparent text-neutral-900 dark:text-white focus:border-neutral-600 dark:focus:border-neutral-600 focus:outline-none focus:ring-emerald-500/30"
+            className="w-full rounded-lg border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm font-normal bg-transparent dark:bg-transparent text-neutral-900 dark:text-white focus:border-neutral-600 dark:focus:border-neutral-600 focus:outline-none focus:ring-yellow-400/20"
           >
             <option value="semanal">Semanal</option>
             <option value="bimensal">Bimensal</option>

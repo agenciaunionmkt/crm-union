@@ -105,7 +105,7 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
           <select
             value={form.tipo_cliente}
             onChange={handleChange('tipo_cliente')}
-            className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none dark:focus:ring-emerald-400"
+            className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none focus:ring-yellow-400/20"
           >
             <option value="avulso">Avulso</option>
             <option value="recorrente">Recorrente</option>
@@ -144,7 +144,7 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
             step="0.01"
             min="0"
             placeholder="0,00"
-            className="flex-1 px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none dark:focus:ring-emerald-400"
+            className="flex-1 px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none focus:ring-yellow-400/20"
           />
         </div>
       </div>

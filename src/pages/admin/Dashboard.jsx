@@ -1,13 +1,11 @@
-import { useState } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import { useQuery } from '@tanstack/react-query'
-import { Users, Calendar, Zap, RotateCw, TrendingUp, Activity, ArrowUpRight, X } from 'lucide-react'
+import { Users, Calendar, Zap, RotateCw, Activity } from 'lucide-react'
 import { listClients } from '../../lib/api/clients'
 import { listDemands } from '../../lib/api/demands'
 
 export default function AdminDashboard() {
   const { profile } = useAuth()
-  const [showSettings, setShowSettings] = useState(false)
 
   const { data: clients = [] } = useQuery({
     queryKey: ['clients'],
@@ -42,6 +40,19 @@ export default function AdminDashboard() {
   const demandasAtrasadas = demands.filter(
     (d) => d.prazo && d.prazo < hojeStr && d.status !== 'entregue'
   ).length
+
+  // Contagem por status (dados reais)
+  const statusCount = { a_fazer: 0, em_andamento: 0, em_revisao: 0, entregue: 0 }
+  demands.forEach((d) => {
+    if (statusCount[d.status] !== undefined) statusCount[d.status] += 1
+  })
+  const demandasAtivas = demands.filter((d) => d.status !== 'entregue').length
+  const statusBars = [
+    { key: 'a_fazer', label: 'A fazer', count: statusCount.a_fazer, color: 'bg-neutral-400' },
+    { key: 'em_andamento', label: 'Em andamento', count: statusCount.em_andamento, color: 'bg-violet-500' },
+    { key: 'em_revisao', label: 'Em revisão', count: statusCount.em_revisao, color: 'bg-yellow-400' },
+    { key: 'entregue', label: 'Entregue', count: statusCount.entregue, color: 'bg-emerald-500' },
+  ]
 
   const metrics = [
     {
@@ -132,160 +143,53 @@ export default function AdminDashboard() {
             <div className="space-y-2">
               <p className="text-neutral-500 text-xs">Total de clientes</p>
               <p className="text-2xl font-normal text-white">{clients.length}</p>
-              <p className="text-xs text-green-400 flex items-center gap-1">
-                <ArrowUpRight className="w-3 h-3" /> Crescimento
-              </p>
+              <p className="text-xs text-neutral-400">{clientesRecorrentes} recorrentes</p>
             </div>
             <div className="space-y-2">
               <p className="text-neutral-500 text-xs">Demandas ativas</p>
-              <p className="text-2xl font-normal text-white">{demands.length}</p>
-              <p className="text-xs text-neutral-400">Em andamento</p>
+              <p className="text-2xl font-normal text-white">{demandasAtivas}</p>
+              <p className="text-xs text-neutral-400">{statusCount.entregue} entregues</p>
             </div>
             <div className="space-y-2">
               <p className="text-neutral-500 text-xs">Taxa de recorrência</p>
               <p className="text-2xl font-normal text-white">
                 {clients.length > 0 ? Math.round((clientesRecorrentes / clients.length) * 100) : 0}%
               </p>
-              <p className="text-xs text-green-400 flex items-center gap-1">
-                <TrendingUp className="w-3 h-3" /> Otimizado
-              </p>
+              <p className="text-xs text-neutral-400">dos clientes</p>
             </div>
           </div>
         </div>
 
-        {/* Performance Card */}
+        {/* Status das demandas (dados reais) */}
         <div className="glass glass-hover rounded-2xl p-8">
           <div className="mb-8">
-            <p className="text-neutral-400 text-xs uppercase tracking-widest mb-2">Performance</p>
-            <h2 className="text-2xl font-normal text-white">Status</h2>
+            <p className="text-neutral-400 text-xs uppercase tracking-widest mb-2">Demandas</p>
+            <h2 className="text-2xl font-normal text-white">Por status</h2>
           </div>
 
           <div className="space-y-4">
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs text-neutral-400">Satisfação</span>
-                <span className="text-sm font-normal text-white">100%</span>
-              </div>
-              <div className="w-full bg-neutral-800 rounded-full h-2 overflow-hidden">
-                <div className="bg-green-600 h-full w-full rounded-full" />
-              </div>
-            </div>
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs text-neutral-400">Eficiência</span>
-                <span className="text-sm font-normal text-white">85%</span>
-              </div>
-              <div className="w-full bg-neutral-800 rounded-full h-2 overflow-hidden">
-                <div className="bg-blue-600 h-full w-[85%] rounded-full" />
-              </div>
-            </div>
+            {statusBars.map((s) => {
+              const total = demands.length || 1
+              const pct = Math.round((s.count / total) * 100)
+              return (
+                <div key={s.key}>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs text-neutral-400">{s.label}</span>
+                    <span className="text-sm font-normal text-white">{s.count}</span>
+                  </div>
+                  <div className="w-full bg-white/5 rounded-full h-2 overflow-hidden">
+                    <div className={`${s.color} h-full rounded-full`} style={{ width: `${pct}%` }} />
+                  </div>
+                </div>
+              )
+            })}
+            {demands.length === 0 && (
+              <p className="text-xs text-neutral-500">Nenhuma demanda ainda.</p>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Settings Modal */}
-      {showSettings && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="w-full max-w-md bg-neutral-900 rounded-2xl border border-neutral-700/50 p-8 shadow-2xl">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-normal text-white">Configurações</h2>
-              <button
-                onClick={() => setShowSettings(false)}
-                className="p-2 hover:bg-neutral-800 rounded-lg transition-colors"
-              >
-                <X className="w-5 h-5 text-neutral-400" />
-              </button>
-            </div>
-
-            <div className="space-y-6">
-              {/* Profile Section */}
-              <div className="space-y-4">
-                <p className="text-xs uppercase tracking-widest text-neutral-400">Perfil</p>
-
-                {/* Avatar Upload */}
-                <div className="flex flex-col items-center gap-4">
-                  <div className="w-20 h-20 rounded-full border-2 border-neutral-600 flex items-center justify-center bg-transparent">
-                    <Users className="w-10 h-10 text-neutral-400" />
-                  </div>
-                  <button className="px-4 py-2 bg-transparent border border-neutral-600 text-neutral-300 text-sm rounded-lg hover:bg-neutral-800/50 transition-colors">
-                    Adicionar foto
-                  </button>
-                </div>
-
-                {/* Name Field */}
-                <div>
-                  <label className="text-xs text-neutral-400 mb-2 block">Nome completo</label>
-                  <input
-                    type="text"
-                    defaultValue={profile?.nome ?? 'Usuário'}
-                    className="w-full bg-transparent border border-neutral-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-neutral-600"
-                  />
-                </div>
-
-                {/* Email Field */}
-                <div>
-                  <label className="text-xs text-neutral-400 mb-2 block">Email</label>
-                  <input
-                    type="email"
-                    defaultValue={profile?.email ?? 'email@example.com'}
-                    className="w-full bg-transparent border border-neutral-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-neutral-600"
-                  />
-                </div>
-
-                {/* Role Field */}
-                <div>
-                  <label className="text-xs text-neutral-400 mb-2 block">Função</label>
-                  <input
-                    type="text"
-                    defaultValue={profile?.papel ?? 'gestor'}
-                    className="w-full bg-transparent border border-neutral-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-neutral-600"
-                    disabled
-                  />
-                </div>
-
-                {/* Password Section */}
-                <div className="pt-4 border-t border-neutral-700">
-                  <p className="text-xs uppercase tracking-widest text-neutral-400 mb-4">Segurança</p>
-
-                  <div>
-                    <label className="text-xs text-neutral-400 mb-2 block">Nova senha</label>
-                    <input
-                      type="password"
-                      placeholder="••••••••"
-                      className="w-full bg-transparent border border-neutral-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-neutral-600"
-                    />
-                  </div>
-
-                  <div className="mt-3">
-                    <label className="text-xs text-neutral-400 mb-2 block">Confirmar senha</label>
-                    <input
-                      type="password"
-                      placeholder="••••••••"
-                      className="w-full bg-transparent border border-neutral-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-neutral-600"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex gap-3 pt-4">
-                <button
-                  onClick={() => setShowSettings(false)}
-                  className="flex-1 px-4 py-2 bg-transparent border border-neutral-600 text-neutral-300 text-sm rounded-lg hover:bg-neutral-800/50 transition-colors"
-                >
-                  Cancelar
-                </button>
-                <button
-                  onClick={() => setShowSettings(false)}
-                  className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg transition-colors"
-                >
-                  Salvar
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }
