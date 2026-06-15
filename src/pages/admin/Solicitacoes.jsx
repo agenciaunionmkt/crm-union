@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Sparkles } from 'lucide-react'
 import { listClients } from '../../lib/api/clients'
 import { listTeamUsers } from '../../lib/api/users'
 import { createDemand, listTags } from '../../lib/api/demands'
@@ -99,85 +100,76 @@ export default function Solicitacoes() {
         </p>
       </div>
 
-      <div className="mt-6 glass rounded-2xl overflow-hidden">
-        {requestsQuery.isLoading && <p className="p-6 text-sm text-neutral-400">Carregando...</p>}
-        {requestsQuery.error && (
-          <p className="p-6 text-sm text-red-400">
-            Erro ao carregar solicitações: {requestsQuery.error.message}
-          </p>
-        )}
-        {!requestsQuery.isLoading && requests.length === 0 && (
-          <p className="p-6 text-sm text-neutral-400">Nenhuma solicitação enviada ainda.</p>
-        )}
-        {requests.length > 0 && (
-          <table className="w-full text-left text-sm">
-            <thead className="border-b border-white/10 bg-white/5 text-xs uppercase text-neutral-400">
-              <tr>
-                <th className="px-4 py-3 font-normal">Cliente</th>
-                <th className="px-4 py-3 font-normal">Solicitação</th>
-                <th className="px-4 py-3 font-normal">Enviado em</th>
-                <th className="px-4 py-3 font-normal">Status</th>
-                <th className="px-4 py-3 font-normal"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {requests.map((request) => (
-                <tr key={request.id} className="border-b border-white/5 align-top last:border-0">
-                  <td className="px-4 py-3 font-normal text-white">
-                    {request.client?.nome ?? '—'}
-                  </td>
-                  <td className="px-4 py-3 text-neutral-300">
-                    <p className="font-normal text-white">{request.titulo}</p>
-                    {request.descricao && (
-                      <p className="mt-1 max-w-md text-xs text-neutral-400">{request.descricao}</p>
-                    )}
-                  </td>
-                  <td className="px-4 py-3 text-neutral-400">{formatDate(request.created_at)}</td>
-                  <td className="px-4 py-3">
-                    <span
-                      className={`inline-flex rounded-full px-2.5 py-1 text-xs font-normal ${statusStyles[request.status]}`}
-                    >
-                      {statusLabels[request.status]}
+      {requestsQuery.isLoading && <p className="mt-6 text-sm text-neutral-400">Carregando...</p>}
+      {requestsQuery.error && (
+        <p className="mt-6 text-sm text-red-400">Erro ao carregar solicitações: {requestsQuery.error.message}</p>
+      )}
+      {!requestsQuery.isLoading && requests.length === 0 && (
+        <p className="mt-6 rounded-2xl border border-dashed border-white/15 p-6 text-sm text-neutral-400">
+          Nenhuma solicitação enviada ainda.
+        </p>
+      )}
+
+      <div className="mt-6 space-y-3">
+        {requests.map((request) => {
+          const ativo = request.status === 'pendente' || request.status === 'em_analise'
+          return (
+            <div key={request.id} className="glass rounded-2xl p-5">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 text-xs text-neutral-400">
+                    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-violet-500/20 text-[10px] font-semibold text-violet-200">
+                      {(request.client?.nome ?? '?').charAt(0).toUpperCase()}
                     </span>
-                  </td>
-                  <td className="px-4 py-3 text-right">
-                    {(request.status === 'pendente' || request.status === 'em_analise') && (
-                      <div className="flex justify-end gap-3">
-                        {request.status === 'pendente' && (
-                          <button
-                            onClick={() => handleEmAnalise(request)}
-                            className="text-xs font-normal text-neutral-300 hover:text-white"
-                          >
-                            Em análise
-                          </button>
-                        )}
-                        <button
-                          onClick={() => triarComIA(request)}
-                          disabled={triandoId === request.id}
-                          className="text-xs font-normal text-violet-300 hover:text-violet-200 disabled:opacity-60"
-                        >
-                          {triandoId === request.id ? 'Triando...' : 'Triar com IA'}
-                        </button>
-                        <button
-                          onClick={() => { setAiDraft(null); setConvertingRequest(request) }}
-                          className="text-xs font-normal text-yellow-300 hover:text-yellow-200"
-                        >
-                          Converter em demanda
-                        </button>
-                        <button
-                          onClick={() => handleRecusar(request)}
-                          className="text-xs font-normal text-red-400 hover:text-red-300"
-                        >
-                          Recusar
-                        </button>
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+                    <span className="truncate">{request.client?.nome ?? 'Cliente'}</span>
+                    <span className="text-neutral-600">·</span>
+                    <span>{formatDate(request.created_at)}</span>
+                  </div>
+                  <p className="mt-2 font-normal text-white">{request.titulo}</p>
+                  {request.descricao && (
+                    <p className="mt-1 max-w-xl text-sm text-neutral-400">{request.descricao}</p>
+                  )}
+                </div>
+                <span className={`inline-flex flex-shrink-0 rounded-full px-2.5 py-1 text-xs font-normal ${statusStyles[request.status]}`}>
+                  {statusLabels[request.status]}
+                </span>
+              </div>
+
+              {ativo && (
+                <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-white/10 pt-3">
+                  <button
+                    onClick={() => triarComIA(request)}
+                    disabled={triandoId === request.id}
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-violet-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-violet-700 disabled:opacity-60 transition-colors"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    {triandoId === request.id ? 'Triando...' : 'Triar com IA'}
+                  </button>
+                  <button
+                    onClick={() => { setAiDraft(null); setConvertingRequest(request) }}
+                    className="rounded-lg border border-yellow-400/40 bg-yellow-400/10 px-3 py-1.5 text-xs font-normal text-yellow-300 hover:bg-yellow-400/20 transition-colors"
+                  >
+                    Converter em demanda
+                  </button>
+                  {request.status === 'pendente' && (
+                    <button
+                      onClick={() => handleEmAnalise(request)}
+                      className="rounded-lg border border-white/15 px-3 py-1.5 text-xs font-normal text-neutral-300 hover:bg-white/5 transition-colors"
+                    >
+                      Marcar em análise
+                    </button>
+                  )}
+                  <button
+                    onClick={() => handleRecusar(request)}
+                    className="ml-auto rounded-lg border border-red-500/30 px-3 py-1.5 text-xs font-normal text-red-400 hover:bg-red-500/10 transition-colors"
+                  >
+                    Recusar
+                  </button>
+                </div>
+              )}
+            </div>
+          )
+        })}
       </div>
 
       <Modal

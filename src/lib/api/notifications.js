@@ -20,6 +20,22 @@ export async function createNotification({ userId, titulo, mensagem, link }) {
   if (error) throw error
 }
 
+// Cria uma notificação para toda a equipe (admin + equipe).
+export async function notifyTeam({ titulo, mensagem, link }) {
+  const { data: team, error } = await supabase
+    .from('users')
+    .select('id')
+    .in('papel', ['admin', 'equipe'])
+  if (error || !team?.length) return
+  const rows = team.map((u) => ({
+    user_id: u.id,
+    titulo,
+    mensagem: mensagem ?? null,
+    link: link ?? null,
+  }))
+  await supabase.from('notifications').insert(rows)
+}
+
 export async function markAllNotificationsRead(userId) {
   const { error } = await supabase
     .from('notifications')

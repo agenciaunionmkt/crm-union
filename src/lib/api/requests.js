@@ -1,4 +1,5 @@
 import { supabase } from '../supabaseClient'
+import { notifyTeam } from './notifications'
 
 const REQUEST_SELECT = `
   *,
@@ -36,6 +37,18 @@ export async function createClientRequest(payload) {
     .single()
 
   if (error) throw error
+
+  // Notifica a equipe sobre a nova solicitação
+  try {
+    await notifyTeam({
+      titulo: 'Nova solicitação',
+      mensagem: `${data.client?.nome ?? 'Cliente'}: ${data.titulo}`,
+      link: '/admin/solicitacoes',
+    })
+  } catch (e) {
+    console.warn('Falha ao notificar equipe:', e)
+  }
+
   return data
 }
 

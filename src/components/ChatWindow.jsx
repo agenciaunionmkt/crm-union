@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Sparkles, Loader2 } from 'lucide-react'
 import { listMessages, sendMessage } from '../lib/api/chat'
+import { notifyTeam } from '../lib/api/notifications'
 
 function formatDateTime(value) {
   if (!value) return '—'
@@ -28,6 +29,14 @@ export default function ChatWindow({ clienteId, currentUser }) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['chat', clienteId] })
       setMessage('')
+      // Se quem enviou foi o cliente, notifica a equipe
+      if (currentUser?.papel === 'cliente') {
+        notifyTeam({
+          titulo: 'Nova mensagem de cliente',
+          mensagem: `${currentUser?.nome ?? 'Cliente'} enviou uma mensagem`,
+          link: '/admin/mensagens',
+        }).catch(() => {})
+      }
     },
   })
 
