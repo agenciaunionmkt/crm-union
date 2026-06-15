@@ -83,8 +83,8 @@ export default function DemandCalendar({
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] backdrop-blur-xl">
-        <div className="grid grid-cols-7 gap-0">
+      <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.02] backdrop-blur-xl">
+        <div className="grid grid-cols-7 gap-0 min-w-[700px]">
           {weekDays.map((day) => (
             <div key={day} className="px-3 py-3 text-center text-xs font-normal text-neutral-400 border-b border-white/10">
               {day}

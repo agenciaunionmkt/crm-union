@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Users, ListTodo, Mail, TrendingUp, DollarSign, MessageSquare, Sparkles, Wand2, Bell, Sun, Moon, Settings, LogOut, X, AlertCircle, CheckCircle } from 'lucide-react'
+import { LayoutDashboard, Users, ListTodo, Mail, TrendingUp, DollarSign, MessageSquare, Sparkles, Wand2, Bell, Menu, Sun, Moon, Settings, LogOut, X, AlertCircle, CheckCircle } from 'lucide-react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '../context/AuthContext'
 import { useTheme } from '../context/ThemeContext'
@@ -30,6 +30,7 @@ export default function AdminLayout() {
   const [showSettings, setShowSettings] = useState(false)
   const [userPhoto, setUserPhoto] = useState(null)
   const [cropSrc, setCropSrc] = useState(null)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   // Notificação de novas mensagens de clientes (atualiza sozinho a cada 20s)
   const { data: conversas = [] } = useQuery({
@@ -218,23 +219,38 @@ export default function AdminLayout() {
 
   return (
     <div className="flex min-h-screen union-app-bg text-white">
+      {/* Overlay (mobile) */}
+      {sidebarOpen && (
+        <div className="fixed inset-0 z-40 bg-black/60 lg:hidden" onClick={() => setSidebarOpen(false)} />
+      )}
+
       {/* Sidebar */}
-      <aside className="w-60 flex flex-col border-r border-white/10 bg-white/[0.03] backdrop-blur-xl">
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-60 flex flex-col border-r border-white/10 bg-[#0f0b16] lg:bg-white/[0.03] backdrop-blur-xl transform transition-transform duration-200 lg:static lg:z-auto lg:translate-x-0 ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
         {/* Logo */}
-        <div className="px-5 py-4 border-b border-white/10">
-          <UnionLogo size="sm" variant="light" />
-          <p className="mt-2 text-xs font-normal text-neutral-400 uppercase tracking-widest opacity-70">
-            Admin
-          </p>
+        <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
+          <div>
+            <UnionLogo size="sm" variant="light" />
+            <p className="mt-2 text-xs font-normal text-neutral-400 uppercase tracking-widest opacity-70">
+              Admin
+            </p>
+          </div>
+          <button onClick={() => setSidebarOpen(false)} className="lg:hidden p-1 text-neutral-400 hover:text-white">
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 space-y-1 px-3 py-4">
+        <nav className="flex-1 space-y-1 px-3 py-4 overflow-y-auto">
           {links.map((link) => (
             <NavLink
               key={link.to}
               to={link.to}
               end={link.end}
+              onClick={() => setSidebarOpen(false)}
               className={({ isActive }) =>
                 `flex items-center gap-3 rounded-lg px-3 py-2.5 text-xs font-normal transition-all duration-200 ${
                   isActive
@@ -259,20 +275,27 @@ export default function AdminLayout() {
       </aside>
 
       {/* Main */}
-      <main className="flex-1 flex flex-col">
+      <main className="flex-1 flex flex-col min-w-0">
         {/* Header */}
         <header className="border-b border-white/10 bg-white/[0.02] backdrop-blur-xl">
-          <div className="flex items-center justify-between px-6 py-3.5">
-            <div>
-              <p className="text-xs font-normal text-neutral-500 dark:text-neutral-400 uppercase tracking-widest opacity-70">
+          <div className="flex items-center justify-between px-4 sm:px-6 py-3.5">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setSidebarOpen(true)}
+                className="lg:hidden p-2 -ml-2 rounded-md text-neutral-300 hover:bg-white/10"
+                aria-label="Abrir menu"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
+              <p className="hidden sm:block text-xs font-normal text-neutral-500 dark:text-neutral-400 uppercase tracking-widest opacity-70">
                 {new Date().toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'short' })}
               </p>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
 
               {/* User Info */}
-              <div className="text-right">
+              <div className="hidden sm:block text-right">
                 <p className="text-xs font-normal text-neutral-900 dark:text-white">
                   {profile?.nome ?? 'Usuário'}
                 </p>
@@ -362,7 +385,7 @@ export default function AdminLayout() {
         </header>
 
         {/* Content */}
-        <div className="flex-1 overflow-auto p-6">
+        <div className="flex-1 overflow-auto p-4 sm:p-6 min-w-0">
           <Outlet />
         </div>
       </main>
