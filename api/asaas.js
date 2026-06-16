@@ -4,6 +4,10 @@
 
 const ASAAS_URL = process.env.ASAAS_API_URL || 'https://sandbox.asaas.com/api/v3'
 
+// Multa e juros por atraso, conforme contrato (2% de multa + 1% ao mês de juros).
+const MULTA = { value: 2, type: 'PERCENTAGE' }
+const JUROS = { value: 1 }
+
 async function asaas(path, method, body, key) {
   const r = await fetch(`${ASAAS_URL}${path}`, {
     method,
@@ -101,6 +105,8 @@ export default async function handler(req, res) {
         value: valor,
         dueDate: vencimento,
         description: descricao,
+        fine: MULTA,
+        interest: JUROS,
       }, key)
 
       const entry = await sbInsertEntry({
@@ -132,6 +138,8 @@ export default async function handler(req, res) {
         nextDueDate: proximoVencimento(cliente.dia_vencimento),
         cycle: 'MONTHLY',
         description: `Mensalidade - ${cliente.nome}`,
+        fine: MULTA,
+        interest: JUROS,
       }, key)
       await sbUpdateClient(cliente.id, { asaas_subscription_id: sub.id })
       return res.status(200).json({ subscriptionId: sub.id })
