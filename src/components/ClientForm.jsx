@@ -10,6 +10,8 @@ const emptyForm = {
   nome: '',
   segmento: '',
   tipo_cliente: 'avulso',
+  cnpj: '',
+  endereco: '',
   contato_email: '',
   contato_telefone: '',
   valor_servico: '',
@@ -60,6 +62,8 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
       nome: form.nome.trim(),
       segmento: form.segmento || null,
       tipo_cliente: form.tipo_cliente,
+      cnpj: form.cnpj || null,
+      endereco: form.endereco || null,
       contato_email: form.contato_email || null,
       contato_telefone: form.contato_telefone || null,
       valor_servico: form.valor_servico ? parseFloat(form.valor_servico) : null,
@@ -106,14 +110,13 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
         </Select>
       </div>
 
-      {/* Contato */}
+      {/* CNPJ & Endereço */}
       <div className="grid grid-cols-2 gap-4">
         <Input
-          label="E-mail de contato"
-          type="email"
-          value={form.contato_email ?? ''}
-          onChange={handleChange('contato_email')}
-          placeholder="contato@cliente.com"
+          label="CNPJ"
+          value={form.cnpj ?? ''}
+          onChange={handleChange('cnpj')}
+          placeholder="00.000.000/0000-00"
         />
         <Input
           label="Telefone"
@@ -122,6 +125,22 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
           placeholder="(11) 99999-9999"
         />
       </div>
+
+      <Input
+        label="Endereço"
+        value={form.endereco ?? ''}
+        onChange={handleChange('endereco')}
+        placeholder="Rua, nº, bairro, cidade/UF, CEP"
+      />
+
+      {/* Contato */}
+      <Input
+        label="E-mail de contato"
+        type="email"
+        value={form.contato_email ?? ''}
+        onChange={handleChange('contato_email')}
+        placeholder="contato@cliente.com"
+      />
 
       {/* Valor */}
       <Input

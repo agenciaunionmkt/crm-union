@@ -8,6 +8,7 @@ import {
   deleteFinancialEntry,
   getFinancialSummary,
 } from '../../lib/api/financial'
+import { listClients } from '../../lib/api/clients'
 import Modal from '../../components/ui/Modal'
 import FinancialForm from '../../components/FinancialForm'
 import Badge from '../../components/ui/Badge'
@@ -36,6 +37,11 @@ export default function Financeiro() {
   const { data: summary } = useQuery({
     queryKey: ['financial-summary'],
     queryFn: getFinancialSummary,
+  })
+
+  const { data: clientes } = useQuery({
+    queryKey: ['clients'],
+    queryFn: listClients,
   })
 
   const createMutation = useMutation({
@@ -271,6 +277,7 @@ export default function Financeiro() {
           initialValues={
             editingId ? filtered.find((e) => e.id === editingId) : undefined
           }
+          clientes={clientes}
           submitting={createMutation.isPending || updateMutation.isPending}
           onCancel={handleCloseForm}
           onSubmit={handleSubmit}
