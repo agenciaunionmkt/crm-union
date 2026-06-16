@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { FileText, ExternalLink, Upload } from 'lucide-react'
+import { FileText, ExternalLink, Upload, RefreshCw, Copy, Check, Trash2 } from 'lucide-react'
 import { listContracts, createContract, deleteContract, refreshContractLink } from '../lib/api/contracts'
 import Input from './ui/Input'
 
@@ -27,6 +27,14 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
   const [titulo, setTitulo] = useState('')
   const [signerEmail, setSignerEmail] = useState(defaultEmail)
   const [file, setFile] = useState(null)
+  const [copiedId, setCopiedId] = useState(null)
+
+  function copiarLink(c) {
+    navigator.clipboard?.writeText(c.link_assinatura).then(() => {
+      setCopiedId(c.id)
+      setTimeout(() => setCopiedId(null), 2000)
+    })
+  }
 
   const contractsQuery = useQuery({
     queryKey: ['contratos', clienteId],
@@ -164,15 +172,36 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
                 </a>
               )}
 
+              {/* Admin: gera o link (fallback) ou copia para enviar ao cliente */}
               {isAdmin && c.status === 'enviado' && !c.link_assinatura && (
                 <button
                   type="button"
                   onClick={() => refreshMutation.mutate(c.id)}
-                  disabled={refreshMutation.isPending}
-                  title={refreshMutation.error?.message || ''}
-                  className="text-xs text-yellow-300 hover:text-yellow-200 disabled:opacity-60 transition-colors"
+                  disabled={refreshMutation.isPending && refreshMutation.variables === c.id}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-yellow-400/40 bg-yellow-400/10 px-3 py-1.5 text-xs font-medium text-yellow-300 hover:bg-yellow-400/20 disabled:opacity-60 transition-colors"
                 >
-                  {refreshMutation.isPending ? 'Gerando...' : 'Gerar link'}
+                  <RefreshCw
+                    className={`w-3.5 h-3.5 ${refreshMutation.isPending && refreshMutation.variables === c.id ? 'animate-spin' : ''}`}
+                  />
+                  {refreshMutation.isPending && refreshMutation.variables === c.id ? 'Gerando...' : 'Gerar link'}
+                </button>
+              )}
+
+              {isAdmin && c.status === 'enviado' && c.link_assinatura && (
+                <button
+                  type="button"
+                  onClick={() => copiarLink(c)}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 px-3 py-1.5 text-xs font-normal text-neutral-200 hover:bg-white/5 transition-colors"
+                >
+                  {copiedId === c.id ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-400" /> Copiado
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5" /> Copiar link
+                    </>
+                  )}
                 </button>
               )}
 
@@ -184,9 +213,11 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
                       deleteMutation.mutate(c.id)
                     }
                   }}
-                  className="text-xs text-neutral-500 hover:text-red-400 transition-colors"
+                  title="Remover do painel"
+                  aria-label="Remover do painel"
+                  className="rounded-lg p-1.5 text-neutral-500 hover:bg-white/5 hover:text-red-400 transition-colors"
                 >
-                  Remover
+                  <Trash2 className="w-4 h-4" />
                 </button>
               )}
             </div>
