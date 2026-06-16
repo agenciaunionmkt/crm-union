@@ -120,6 +120,10 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
           </p>
         )}
 
+        {isAdmin && refreshMutation.error && (
+          <p className="mb-2 text-xs text-red-400">{refreshMutation.error.message}</p>
+        )}
+
         <div className="space-y-2">
           {contratos.map((c) => (
             <div
@@ -165,6 +169,7 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
                   type="button"
                   onClick={() => refreshMutation.mutate(c.id)}
                   disabled={refreshMutation.isPending}
+                  title={refreshMutation.error?.message || ''}
                   className="text-xs text-yellow-300 hover:text-yellow-200 disabled:opacity-60 transition-colors"
                 >
                   {refreshMutation.isPending ? 'Gerando...' : 'Gerar link'}

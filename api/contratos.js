@@ -23,7 +23,7 @@ const GET_DOC = `
   query($id: UUID!) {
     document(id: $id) {
       id
-      signatures { public_id email signed { created_at } link { short_link } }
+      signatures { public_id email link { short_link } }
     }
   }
 `
