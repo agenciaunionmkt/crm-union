@@ -21,7 +21,6 @@ const Relatorios = lazy(() => import('./pages/admin/Relatorios'))
 const Financeiro = lazy(() => import('./pages/admin/Financeiro'))
 const ClientDemandas = lazy(() => import('./pages/client/Demandas'))
 const ClientCalendario = lazy(() => import('./pages/client/Calendario'))
-const ClientAprovacoes = lazy(() => import('./pages/client/Aprovacoes'))
 const ClientSolicitacoes = lazy(() => import('./pages/client/Solicitacoes'))
 const ClientHistorico = lazy(() => import('./pages/client/Historico'))
 const ClientChat = lazy(() => import('./pages/client/Chat'))
@@ -67,7 +66,6 @@ function App() {
             <Route index element={<Navigate to="/portal/solicitacoes" replace />} />
             <Route path="calendario" element={<ClientCalendario />} />
             <Route path="demandas" element={<ClientDemandas />} />
-            <Route path="aprovacoes" element={<ClientAprovacoes />} />
             <Route path="contratos" element={<ClientContratos />} />
             <Route path="solicitacoes" element={<ClientSolicitacoes />} />
             <Route path="historico" element={<ClientHistorico />} />
