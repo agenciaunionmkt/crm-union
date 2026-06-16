@@ -117,6 +117,7 @@ export default async function handler(req, res) {
         vencimento,
         status: 'pendente',
         recorrente: false,
+        cliente_id: cliente.id,
         asaas_payment_id: pay.id,
         link_pagamento: pay.invoiceUrl,
       })

@@ -25,6 +25,7 @@ const ClientSolicitacoes = lazy(() => import('./pages/client/Solicitacoes'))
 const ClientHistorico = lazy(() => import('./pages/client/Historico'))
 const ClientChat = lazy(() => import('./pages/client/Chat'))
 const ClientContratos = lazy(() => import('./pages/client/Contratos'))
+const ClientPagamentos = lazy(() => import('./pages/client/Pagamentos'))
 
 function Carregando() {
   return (
@@ -67,6 +68,7 @@ function App() {
             <Route path="calendario" element={<ClientCalendario />} />
             <Route path="demandas" element={<ClientDemandas />} />
             <Route path="contratos" element={<ClientContratos />} />
+            <Route path="pagamentos" element={<ClientPagamentos />} />
             <Route path="solicitacoes" element={<ClientSolicitacoes />} />
             <Route path="historico" element={<ClientHistorico />} />
             <Route path="chat" element={<ClientChat />} />

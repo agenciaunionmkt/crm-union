@@ -8,6 +8,16 @@ function sbHeaders(extra = {}) {
 }
 const SB = () => process.env.VITE_SUPABASE_URL
 
+async function clienteIdByCustomer(customerId) {
+  if (!customerId) return null
+  const r = await fetch(
+    `${SB()}/rest/v1/clients?asaas_customer_id=eq.${encodeURIComponent(customerId)}&select=id`,
+    { headers: sbHeaders() }
+  )
+  const d = await r.json()
+  return Array.isArray(d) && d[0] ? d[0].id : null
+}
+
 async function findByPayment(paymentId) {
   const r = await fetch(
     `${SB()}/rest/v1/financial_entries?asaas_payment_id=eq.${encodeURIComponent(paymentId)}&select=id`,
@@ -59,6 +69,7 @@ export default async function handler(req, res) {
         vencimento: payment.dueDate,
         status: 'pendente',
         recorrente: !!payment.subscription,
+        cliente_id: await clienteIdByCustomer(payment.customer),
         asaas_payment_id: payment.id,
         link_pagamento: payment.invoiceUrl || null,
       })
@@ -75,6 +86,7 @@ export default async function handler(req, res) {
           vencimento: payment.dueDate,
           status: 'pago',
           recorrente: !!payment.subscription,
+          cliente_id: await clienteIdByCustomer(payment.customer),
           asaas_payment_id: payment.id,
           link_pagamento: payment.invoiceUrl || null,
         })

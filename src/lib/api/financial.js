@@ -62,6 +62,19 @@ export async function deleteFinancialEntry(id) {
   if (error) throw error
 }
 
+// Cobranças de um cliente (para o portal do cliente acompanhar)
+export async function listClientCharges(clienteId) {
+  const { data, error } = await supabase
+    .from('financial_entries')
+    .select('*')
+    .eq('cliente_id', clienteId)
+    .eq('tipo', 'entrada')
+    .order('vencimento', { ascending: false })
+
+  if (error) throw error
+  return data
+}
+
 // Obter resumo financeiro (total entradas, saídas, saldo)
 export async function getFinancialSummary() {
   const { data: entries, error } = await supabase
