@@ -35,9 +35,9 @@ create policy users_staff on public.users for all to authenticated
 drop policy if exists users_self_or_staff_select on public.users;
 create policy users_self_or_staff_select on public.users for select to authenticated
   using (id = auth.uid() or papel in ('admin','equipe'));
+-- Sem política de update para o próprio usuário: evita que um cliente altere o
+-- próprio papel (escalada de privilégio). A gestão de usuários é feita pela equipe.
 drop policy if exists users_self_update on public.users;
-create policy users_self_update on public.users for update to authenticated
-  using (id = auth.uid()) with check (id = auth.uid());
 
 -- ============================================================
 -- clients
