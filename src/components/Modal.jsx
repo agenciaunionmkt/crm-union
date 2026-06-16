@@ -1,24 +1,23 @@
-import { useEffect } from 'react'
+import { useRef } from 'react'
+import { useModalA11y } from '../lib/useModalA11y'
 
 export default function Modal({ open, title, onClose, children, maxWidth = 'max-w-lg' }) {
-  useEffect(() => {
-    if (!open) return
-    const onKey = (e) => e.key === 'Escape' && onClose?.()
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [open, onClose])
+  const panelRef = useRef(null)
+  useModalA11y(open, panelRef, onClose)
 
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
       <div
         className="absolute inset-0 bg-black/75 backdrop-blur-md"
         onClick={onClose}
         role="presentation"
       />
       <div
-        className={`relative w-full ${maxWidth} max-h-[90vh] flex flex-col rounded-2xl border border-white/10 ring-1 ring-inset ring-white/5 bg-[#140f20]/80 backdrop-blur-2xl shadow-2xl shadow-black/60`}
+        ref={panelRef}
+        tabIndex={-1}
+        className={`relative w-full ${maxWidth} max-h-[90vh] flex flex-col rounded-2xl border border-white/10 ring-1 ring-inset ring-white/5 bg-[#140f20]/80 backdrop-blur-2xl shadow-2xl shadow-black/60 focus:outline-none`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between border-b border-white/10 bg-[#140f20]/70 backdrop-blur-2xl px-6 py-5 flex-shrink-0">

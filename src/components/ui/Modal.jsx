@@ -1,4 +1,5 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+import { useModalA11y } from '../../lib/useModalA11y'
 
 export default function Modal({
   open = false,
@@ -8,6 +9,9 @@ export default function Modal({
   maxWidth = 'max-w-2xl',
   size = 'md',
 }) {
+  const panelRef = useRef(null)
+  useModalA11y(open, panelRef, onClose)
+
   useEffect(() => {
     if (open) {
       document.body.style.overflow = 'hidden'
@@ -18,13 +22,6 @@ export default function Modal({
       document.body.style.overflow = 'unset'
     }
   }, [open])
-
-  useEffect(() => {
-    if (!open) return
-    const onKey = (e) => e.key === 'Escape' && onClose?.()
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [open, onClose])
 
   if (!open) return null
 
@@ -44,6 +41,8 @@ export default function Modal({
         aria-modal="true"
       >
         <div
+          ref={panelRef}
+          tabIndex={-1}
           className={`
             w-full ${maxWidth}
             rounded-2xl
@@ -53,6 +52,7 @@ export default function Modal({
             max-h-[90vh]
             overflow-y-auto
             border border-white/10
+            focus:outline-none
             animate-in scale-in-95 fade-in duration-300 zoom-in-95
           `}
           onClick={(e) => e.stopPropagation()}
