@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useTheme } from '../../context/ThemeContext'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Edit, Trash2 } from 'lucide-react'
 import {
@@ -11,16 +10,10 @@ import {
 } from '../../lib/api/financial'
 import Modal from '../../components/ui/Modal'
 import FinancialForm from '../../components/FinancialForm'
-import Button from '../../components/ui/Button'
 import Badge from '../../components/ui/Badge'
 import Input from '../../components/ui/Input'
+import Select from '../../components/ui/Select'
 import Table, { TableHead, TableBody, TableRow, TableHeader, TableCell } from '../../components/ui/Table'
-
-const statusColors = {
-  pendente: { bg: 'bg-yellow-50', text: 'text-yellow-700', badge: 'bg-yellow-100' },
-  pago: { bg: 'bg-green-50', text: 'text-green-700', badge: 'bg-green-100' },
-  vencido: { bg: 'bg-red-50', text: 'text-red-700', badge: 'bg-red-100' },
-}
 
 const tipoLabels = {
   entrada: 'Entrada',
@@ -29,14 +22,11 @@ const tipoLabels = {
 
 export default function Financeiro() {
   const queryClient = useQueryClient()
-  const { isDark } = useTheme()
   const [search, setSearch] = useState('')
   const [tipoFilter, setTipoFilter] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState(null)
-
-  const inputStyle = !isDark ? { backgroundColor: '#ffffff', borderColor: '#d4d4d8', color: '#1a1a1a' } : {}
 
   const { data: entries, isLoading, error } = useQuery({
     queryKey: ['financial', { tipoFilter, statusFilter }],
@@ -159,35 +149,23 @@ export default function Financeiro() {
 
       {/* Filters */}
       <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-        <input
+        <Input
           type="text"
           placeholder="Buscar por nome..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="px-4 py-2.5 rounded-lg border border-white/15 bg-white/5 text-white placeholder-neutral-500 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
-          style={inputStyle}
         />
-        <select
-          value={tipoFilter}
-          onChange={(e) => setTipoFilter(e.target.value)}
-          className="px-3 py-2 rounded-lg border border-white/15 bg-white/5 text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
-          style={inputStyle}
-        >
+        <Select value={tipoFilter} onChange={(e) => setTipoFilter(e.target.value)}>
           <option value="">Todos os tipos</option>
           <option value="entrada">Entradas</option>
           <option value="saida">Saídas</option>
-        </select>
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="px-3 py-2 rounded-lg border border-white/15 bg-white/5 text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
-          style={inputStyle}
-        >
+        </Select>
+        <Select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
           <option value="">Todos os status</option>
           <option value="pendente">Pendentes</option>
           <option value="pago">Pagos</option>
           <option value="vencido">Vencidos</option>
-        </select>
+        </Select>
       </div>
 
       {/* Table */}

@@ -147,12 +147,11 @@ export default function Clientes() {
 
       {/* Search */}
       <div className="mb-6 max-w-sm">
-        <input
+        <Input
           type="text"
           placeholder="Buscar clientes..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full px-4 py-2.5 rounded-lg border border-neutral-600 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white placeholder-neutral-500 dark:placeholder-neutral-400 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
         />
       </div>
 

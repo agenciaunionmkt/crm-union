@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import Input from './ui/Input'
+import Select from './ui/Select'
+import Textarea from './ui/Textarea'
 import Button from './ui/Button'
 import { PLANOS, postsDoPlano } from '../lib/plans'
 
@@ -98,19 +100,10 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
           onChange={handleChange('segmento')}
           placeholder="Ex: Moda, Alimentação..."
         />
-        <div>
-          <label className="mb-1.5 block text-sm font-normal text-neutral-700 dark:text-neutral-300">
-            Tipo de Cliente
-          </label>
-          <select
-            value={form.tipo_cliente}
-            onChange={handleChange('tipo_cliente')}
-            className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none focus:ring-yellow-400/20"
-          >
-            <option value="avulso">Avulso</option>
-            <option value="recorrente">Recorrente</option>
-          </select>
-        </div>
+        <Select label="Tipo de Cliente" value={form.tipo_cliente} onChange={handleChange('tipo_cliente')}>
+          <option value="avulso">Avulso</option>
+          <option value="recorrente">Recorrente</option>
+        </Select>
       </div>
 
       {/* Contato */}
@@ -131,74 +124,49 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
       </div>
 
       {/* Valor */}
-      <div>
-        <label className="mb-1.5 block text-sm font-normal text-neutral-700 dark:text-neutral-300">
-          Valor do serviço
-        </label>
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-normal text-neutral-600 dark:text-neutral-400">R$</span>
-          <input
-            type="number"
-            value={form.valor_servico ?? ''}
-            onChange={handleChange('valor_servico')}
-            step="0.01"
-            min="0"
-            placeholder="0,00"
-            className="flex-1 px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none focus:ring-yellow-400/20"
-          />
-        </div>
-      </div>
+      <Input
+        label="Valor do serviço"
+        type="number"
+        value={form.valor_servico ?? ''}
+        onChange={handleChange('valor_servico')}
+        step="0.01"
+        min="0"
+        placeholder="0,00"
+        leftIcon="R$"
+      />
 
       {/* Plano */}
       <div>
-        <label className="mb-1.5 block text-sm font-normal text-neutral-700 dark:text-neutral-300">
-          Plano contratado
-        </label>
-        <select
-          value={form.plano ?? ''}
-          onChange={handleChange('plano')}
-          className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none"
-        >
+        <Select label="Plano contratado" value={form.plano ?? ''} onChange={handleChange('plano')}>
           <option value="">Sem plano</option>
           {Object.entries(PLANOS).map(([key, p]) => (
             <option key={key} value={key}>
               {p.posts ? `${p.label} — ${p.posts} posts/mês` : p.label}
             </option>
           ))}
-        </select>
+        </Select>
         {form.plano && form.plano !== 'personalizado' && (
-          <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+          <p className="mt-1 text-xs text-neutral-400">
             Gera {postsDoPlano(form.plano)} posts por mês no Agente de conteúdo.
           </p>
         )}
 
         {form.plano === 'personalizado' && (
-          <div className="mt-4 space-y-4 rounded-lg border border-neutral-300 dark:border-neutral-700/50 bg-neutral-100 dark:bg-neutral-800/20 p-4">
-            <div>
-              <label className="mb-1.5 block text-xs font-normal text-neutral-600 dark:text-neutral-400">
-                Posts por mês
-              </label>
-              <input
-                type="number"
-                min="1"
-                value={form.posts_personalizado ?? ''}
-                onChange={handleChange('posts_personalizado')}
-                placeholder="Ex: 16"
-                className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none"
-              />
-            </div>
-            <div>
-              <label className="mb-1.5 block text-xs font-normal text-neutral-600 dark:text-neutral-400">
-                O que esse pacote tem de diferente
-              </label>
-              <textarea
-                rows={3}
-                value={form.plano_descricao ?? ''}
-                onChange={handleChange('plano_descricao')}
-                placeholder="Ex: 16 posts + 4 reels + gestão de tráfego..."
-                className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none resize-none"
-              />
-            </div>
+          <div className="mt-4 space-y-4 rounded-lg border border-white/10 bg-white/5 p-4">
+            <Input
+              label="Posts por mês"
+              type="number"
+              min="1"
+              value={form.posts_personalizado ?? ''}
+              onChange={handleChange('posts_personalizado')}
+              placeholder="Ex: 16"
+            />
+            <Textarea
+              label="O que esse pacote tem de diferente"
+              value={form.plano_descricao ?? ''}
+              onChange={handleChange('plano_descricao')}
+              placeholder="Ex: 16 posts + 4 reels + gestão de tráfego..."
+            />
           </div>
         )}
       </div>
@@ -206,74 +174,55 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
       {/* Vencimento (clientes recorrentes) */}
       {form.tipo_cliente === 'recorrente' && (
         <div>
-          <label className="mb-1.5 block text-sm font-normal text-neutral-700 dark:text-neutral-300">
-            Dia do vencimento
-          </label>
-          <select
-            value={vencimento}
-            onChange={(e) => setVencimento(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none"
-          >
+          <Select label="Dia do vencimento" value={vencimento} onChange={(e) => setVencimento(e.target.value)}>
             <option value="">Selecione o dia</option>
             {Array.from({ length: 31 }, (_, i) => i + 1).map((d) => (
               <option key={d} value={d}>Dia {d}</option>
             ))}
-          </select>
-          <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+          </Select>
+          <p className="mt-1 text-xs text-neutral-400">
             Todo mês a cobrança vence neste dia (gerada no Financeiro).
           </p>
         </div>
       )}
 
       {/* Instagram */}
-      <div className="rounded-lg border border-neutral-300 dark:border-neutral-700/50 bg-neutral-100 dark:bg-neutral-800/20 p-5">
-        <h3 className="text-sm font-normal text-neutral-900 dark:text-neutral-300 mb-4">
+      <div className="rounded-lg border border-white/10 bg-white/5 p-5">
+        <h3 className="text-sm font-normal text-neutral-300 mb-4">
           Dados do Instagram
         </h3>
         <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="mb-1.5 block text-xs font-normal text-neutral-600 dark:text-neutral-400">
-              Usuário (@)
-            </label>
-            <div className="flex items-center gap-1">
-              <span className="text-sm text-neutral-600 dark:text-neutral-500">@</span>
-              <input
-                type="text"
-                value={form.instagram_usuario ?? ''}
-                onChange={handleChange('instagram_usuario')}
-                placeholder="usuario"
-                className="flex-1 px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none"
-              />
-            </div>
-          </div>
-          <div>
-            <label className="mb-1.5 block text-xs font-normal text-neutral-600 dark:text-neutral-400">
-              Senha
-            </label>
-            <div className="relative">
-              <input
-                type={showInstaSenha ? 'text' : 'password'}
-                value={form.instagram_senha ?? ''}
-                onChange={handleChange('instagram_senha')}
-                placeholder="••••••••"
-                className="w-full px-3 py-2 pr-10 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none"
-              />
+          <Input
+            label="Usuário (@)"
+            type="text"
+            value={form.instagram_usuario ?? ''}
+            onChange={handleChange('instagram_usuario')}
+            placeholder="usuario"
+            leftIcon="@"
+          />
+          <Input
+            label="Senha"
+            type={showInstaSenha ? 'text' : 'password'}
+            value={form.instagram_senha ?? ''}
+            onChange={handleChange('instagram_senha')}
+            placeholder="••••••••"
+            rightIcon={
               <button
                 type="button"
                 onClick={() => setShowInstaSenha((v) => !v)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300 focus:outline-none"
+                className="text-neutral-400 hover:text-neutral-200 focus:outline-none"
                 aria-label={showInstaSenha ? 'Ocultar senha' : 'Mostrar senha'}
               >
                 {showInstaSenha ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
-            </div>
-          </div>
+            }
+          />
         </div>
       </div>
 
       {/* Acesso ao portal */}
       {!isEdit && (
-        <div className="rounded-lg border border-neutral-300 dark:border-neutral-700/50 bg-neutral-100 dark:bg-neutral-800/20 p-5">
+        <div className="rounded-lg border border-white/10 bg-white/5 p-5">
           <label className="flex items-start gap-3 cursor-pointer">
             <input
               type="checkbox"
@@ -282,13 +231,13 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
                 setAcessoAtivar(e.target.checked)
                 if (e.target.checked && !acessoEmail) setAcessoEmail(form.contato_email ?? '')
               }}
-              className="mt-0.5 h-4 w-4 rounded border-neutral-400 accent-emerald-500"
+              className="mt-0.5 h-4 w-4 rounded border-white/20 bg-white/5 accent-yellow-400"
             />
             <span>
-              <span className="block text-sm font-normal text-neutral-900 dark:text-neutral-300">
+              <span className="block text-sm font-normal text-neutral-300">
                 Dar acesso ao portal do cliente
               </span>
-              <span className="block text-xs text-neutral-500 dark:text-neutral-400">
+              <span className="block text-xs text-neutral-400">
                 Enviaremos um e-mail para o cliente criar a própria senha.
               </span>
             </span>
@@ -296,15 +245,12 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
 
           {acessoAtivar && (
             <div className="mt-4">
-              <label className="mb-1.5 block text-xs font-normal text-neutral-600 dark:text-neutral-400">
-                E-mail de acesso
-              </label>
-              <input
+              <Input
+                label="E-mail de acesso"
                 type="email"
                 value={acessoEmail}
                 onChange={(e) => setAcessoEmail(e.target.value)}
                 placeholder="cliente@empresa.com"
-                className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none"
               />
             </div>
           )}
@@ -312,7 +258,7 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
       )}
 
       {/* Actions */}
-      <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+      <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
         <Button
           type="button"
           variant="outline"

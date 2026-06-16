@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import Input from './ui/Input'
+import Select from './ui/Select'
+import Textarea from './ui/Textarea'
 import Button from './ui/Button'
-import Badge from './ui/Badge'
 import DatePicker from './DatePicker'
 
 const emptyForm = {
@@ -110,69 +111,49 @@ export default function DemandForm({
       {/* Descrição */}
       <div>
         <div className="flex items-center justify-between mb-1.5">
-          <label className="block text-sm font-normal text-neutral-700 dark:text-neutral-300">
+          <label className="block text-sm font-normal text-neutral-300">
             Descrição
           </label>
           <button
             type="button"
             onClick={generateDescriptionWithAI}
             disabled={loadingAI || !form.titulo}
-            className="text-xs font-normal text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 disabled:text-slate-400 transition-colors"
+            className="text-xs font-normal text-yellow-300 hover:text-yellow-200 disabled:text-neutral-500 transition-colors"
           >
             {loadingAI ? 'Gerando...' : 'Sugerir com IA'}
           </button>
         </div>
-        <textarea
+        <Textarea
           rows={4}
           value={form.descricao ?? ''}
           onChange={handleChange('descricao')}
-          className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent text-neutral-900 dark:text-white text-sm font-normal focus:outline-none focus:ring-yellow-400/20"
           placeholder="Detalhes da demanda"
         />
       </div>
 
       {/* Cliente & Responsável */}
       <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="mb-1.5 block text-sm font-normal text-neutral-700 dark:text-neutral-300">
-            Cliente
-          </label>
-          <select
-            required
-            value={form.cliente_id}
-            onChange={handleChange('cliente_id')}
-            className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none focus:ring-yellow-400/20"
-          >
-            <option value="">Selecione...</option>
-            {(clients ?? []).map((client) => (
-              <option key={client.id} value={client.id}>
-                {client.nome}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label className="mb-1.5 block text-sm font-normal text-neutral-700 dark:text-neutral-300">
-            Responsável
-          </label>
-          <select
-            value={form.responsavel_id}
-            onChange={handleChange('responsavel_id')}
-            className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-transparent dark:bg-transparent text-neutral-900 dark:text-white text-sm focus:outline-none focus:ring-yellow-400/20"
-          >
-            <option value="">Sem responsável</option>
-            {(teamUsers ?? []).map((user) => (
-              <option key={user.id} value={user.id}>
-                {user.nome}
-              </option>
-            ))}
-          </select>
-        </div>
+        <Select label="Cliente" required value={form.cliente_id} onChange={handleChange('cliente_id')}>
+          <option value="">Selecione...</option>
+          {(clients ?? []).map((client) => (
+            <option key={client.id} value={client.id}>
+              {client.nome}
+            </option>
+          ))}
+        </Select>
+        <Select label="Responsável" value={form.responsavel_id} onChange={handleChange('responsavel_id')}>
+          <option value="">Sem responsável</option>
+          {(teamUsers ?? []).map((user) => (
+            <option key={user.id} value={user.id}>
+              {user.nome}
+            </option>
+          ))}
+        </Select>
       </div>
 
       {/* Prazo */}
       <div>
-        <label className="mb-1.5 block text-sm font-normal text-neutral-700 dark:text-neutral-300">
+        <label className="mb-1.5 block text-sm font-normal text-neutral-300">
           Prazo
         </label>
         <DatePicker
@@ -184,7 +165,7 @@ export default function DemandForm({
 
       {/* Status (seletor de pílulas) */}
       <div>
-        <label className="mb-1.5 block text-sm font-normal text-neutral-700 dark:text-neutral-300">
+        <label className="mb-1.5 block text-sm font-normal text-neutral-300">
           Status
         </label>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -214,12 +195,12 @@ export default function DemandForm({
 
       {/* Actions */}
       {!hideActions && (
-      <div className="flex items-center justify-between pt-6 border-t border-neutral-200 dark:border-neutral-700">
+      <div className="flex items-center justify-between pt-6 border-t border-white/10">
         {onDelete && (
           <div>
             {confirmDelete ? (
               <div className="flex items-center gap-2">
-                <p className="text-xs font-normal text-red-600 dark:text-red-400">Tem certeza?</p>
+                <p className="text-xs font-normal text-red-400">Tem certeza?</p>
                 <button
                   type="button"
                   onClick={() => {
@@ -233,7 +214,7 @@ export default function DemandForm({
                 <button
                   type="button"
                   onClick={() => setConfirmDelete(false)}
-                  className="rounded-lg border border-red-300 dark:border-red-700 px-3 py-1.5 text-xs font-normal text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                  className="rounded-lg border border-red-500/40 px-3 py-1.5 text-xs font-normal text-red-400 hover:bg-red-500/10 transition-colors"
                 >
                   Cancelar
                 </button>
