@@ -13,6 +13,27 @@ const CREATE_DOC = `
   }
 `
 
+const CREATE_LINK = `
+  mutation($public_id: String!) {
+    createLinkToSignature(public_id: $public_id) { short_link }
+  }
+`
+
+// Gera o link de assinatura do signatário (o short_link nem sempre vem no createDocument).
+async function gerarLink(key, publicId) {
+  try {
+    const r = await fetch(AUTENTIQUE_URL, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: CREATE_LINK, variables: { public_id: publicId } }),
+    })
+    const data = await r.json()
+    return data?.data?.createLinkToSignature?.short_link || null
+  } catch {
+    return null
+  }
+}
+
 async function sbInsert(row) {
   const url = process.env.VITE_SUPABASE_URL
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY
@@ -79,7 +100,10 @@ export default async function handler(req, res) {
 
     const doc = data.data.createDocument
     const signature = (doc.signatures || []).find((s) => s.email === signerEmail) || doc.signatures?.[0]
-    const link = signature?.link?.short_link || null
+    let link = signature?.link?.short_link || null
+    if (!link && signature?.public_id) {
+      link = await gerarLink(key, signature.public_id)
+    }
 
     const contrato = await sbInsert({
       cliente_id: clienteId,
