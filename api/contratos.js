@@ -23,6 +23,7 @@ const GET_DOC = `
   query($id: UUID!) {
     document(id: $id) {
       id
+      files { signed }
       signatures { public_id email link { short_link } }
     }
   }
@@ -47,14 +48,17 @@ async function gerarLink(key, publicId) {
   return data?.createLinkToSignature?.short_link || null
 }
 
-// Busca o link de assinatura de um documento já existente (sem consumir novo documento).
-async function resolverLinkDoDocumento(key, autentiqueId, signerEmail) {
+// Consulta o documento no Autentique: resolve o link de assinatura e se já está assinado.
+async function sincronizarDocumento(key, autentiqueId, signerEmail) {
   const data = await autentiqueGraphql(key, GET_DOC, { id: autentiqueId })
-  const sigs = data?.document?.signatures || []
+  const doc = data?.document
+  const sigs = doc?.signatures || []
   const signature = sigs.find((s) => s.email === signerEmail) || sigs[0]
   if (!signature) throw new Error('Documento sem signatário correspondente')
-  if (signature.link?.short_link) return signature.link.short_link
-  return await gerarLink(key, signature.public_id)
+
+  const link = signature.link?.short_link || (await gerarLink(key, signature.public_id))
+  const signedUrl = doc?.files?.signed || null
+  return { link, signedUrl, assinado: !!signedUrl }
 }
 
 async function sbGetContrato(id) {
@@ -116,14 +120,26 @@ export default async function handler(req, res) {
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {}
 
-    // Ação: gerar/atualizar o link de um contrato já existente (não consome documento).
+    // Ação: sincronizar um contrato existente (link + status) sem consumir documento.
     if (body.action === 'refresh-link') {
       const contrato = await sbGetContrato(body.contratoId)
       if (!contrato) return res.status(404).json({ error: 'Contrato não encontrado' })
-      const link = await resolverLinkDoDocumento(key, contrato.autentique_id, contrato.signatario_email)
-      if (!link) return res.status(502).json({ error: 'Não foi possível obter o link de assinatura' })
-      const atualizado = await sbUpdateContrato(contrato.id, { link_assinatura: link })
-      return res.status(200).json({ contrato: atualizado, link })
+      const { link, signedUrl, assinado } = await sincronizarDocumento(
+        key,
+        contrato.autentique_id,
+        contrato.signatario_email
+      )
+      const patch = {}
+      if (link && link !== contrato.link_assinatura) patch.link_assinatura = link
+      if (assinado && contrato.status !== 'assinado') {
+        patch.status = 'assinado'
+        patch.signed_at = new Date().toISOString()
+        if (signedUrl) patch.arquivo_url = signedUrl
+      }
+      const atualizado = Object.keys(patch).length
+        ? await sbUpdateContrato(contrato.id, patch)
+        : contrato
+      return res.status(200).json({ contrato: atualizado, link, assinado })
     }
 
     const { clienteId, titulo, signerEmail, fileBase64, fileName, createdBy } = body

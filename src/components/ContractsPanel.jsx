@@ -188,21 +188,35 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
               )}
 
               {isAdmin && c.status === 'enviado' && c.link_assinatura && (
-                <button
-                  type="button"
-                  onClick={() => copiarLink(c)}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 px-3 py-1.5 text-xs font-normal text-neutral-200 hover:bg-white/5 transition-colors"
-                >
-                  {copiedId === c.id ? (
-                    <>
-                      <Check className="w-3.5 h-3.5 text-emerald-400" /> Copiado
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3.5 h-3.5" /> Copiar link
-                    </>
-                  )}
-                </button>
+                <>
+                  <button
+                    type="button"
+                    onClick={() => copiarLink(c)}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 px-3 py-1.5 text-xs font-normal text-neutral-200 hover:bg-white/5 transition-colors"
+                  >
+                    {copiedId === c.id ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-400" /> Copiado
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" /> Copiar link
+                      </>
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => refreshMutation.mutate(c.id)}
+                    disabled={refreshMutation.isPending && refreshMutation.variables === c.id}
+                    title="Verificar se o cliente já assinou"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 px-3 py-1.5 text-xs font-normal text-neutral-200 hover:bg-white/5 disabled:opacity-60 transition-colors"
+                  >
+                    <RefreshCw
+                      className={`w-3.5 h-3.5 ${refreshMutation.isPending && refreshMutation.variables === c.id ? 'animate-spin' : ''}`}
+                    />
+                    Atualizar status
+                  </button>
+                </>
               )}
 
               {isAdmin && (
