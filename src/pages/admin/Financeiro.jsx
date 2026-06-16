@@ -21,6 +21,13 @@ const tipoLabels = {
   saida: 'Saída',
 }
 
+// Formata YYYY-MM-DD sem conversão de fuso (evita "voltar" 1 dia).
+function formatDate(value) {
+  if (!value) return '—'
+  const [y, m, d] = value.split('T')[0].split('-')
+  return `${d}/${m}/${y}`
+}
+
 export default function Financeiro() {
   const queryClient = useQueryClient()
   const [search, setSearch] = useState('')
@@ -224,7 +231,7 @@ export default function Financeiro() {
                 </span>
               </TableCell>
               <TableCell>
-                {new Date(entry.vencimento).toLocaleDateString('pt-BR')}
+                {formatDate(entry.vencimento)}
               </TableCell>
               <TableCell>
                 <Badge variant={
