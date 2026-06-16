@@ -28,6 +28,18 @@ export async function createContract({ clienteId, titulo, signerEmail, file, cre
   return data
 }
 
+// Busca/atualiza o link de assinatura de um contrato já existente (sem criar novo no Autentique).
+export async function refreshContractLink(contratoId) {
+  const res = await fetch('/api/contratos', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'refresh-link', contratoId }),
+  })
+  const data = await res.json()
+  if (!res.ok) throw new Error(data.error || 'Não foi possível gerar o link')
+  return data
+}
+
 export async function deleteContract(id) {
   const { error } = await supabase.from('contratos').delete().eq('id', id)
   if (error) throw error

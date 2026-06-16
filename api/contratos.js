@@ -19,19 +19,73 @@ const CREATE_LINK = `
   }
 `
 
+const GET_DOC = `
+  query($id: UUID!) {
+    document(id: $id) {
+      id
+      signatures { public_id email signed { created_at } link { short_link } }
+    }
+  }
+`
+
+async function autentiqueGraphql(key, query, variables) {
+  const r = await fetch(AUTENTIQUE_URL, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query, variables }),
+  })
+  const data = await r.json()
+  if (!r.ok || data.errors) {
+    throw new Error(data?.errors?.[0]?.message || 'Erro na API do Autentique')
+  }
+  return data.data
+}
+
 // Gera o link de assinatura do signatário (o short_link nem sempre vem no createDocument).
 async function gerarLink(key, publicId) {
   try {
-    const r = await fetch(AUTENTIQUE_URL, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query: CREATE_LINK, variables: { public_id: publicId } }),
-    })
-    const data = await r.json()
-    return data?.data?.createLinkToSignature?.short_link || null
+    const data = await autentiqueGraphql(key, CREATE_LINK, { public_id: publicId })
+    return data?.createLinkToSignature?.short_link || null
   } catch {
     return null
   }
+}
+
+// Busca o link de assinatura de um documento já existente (sem consumir novo documento).
+async function resolverLinkDoDocumento(key, autentiqueId, signerEmail) {
+  const data = await autentiqueGraphql(key, GET_DOC, { id: autentiqueId })
+  const sigs = data?.document?.signatures || []
+  const signature = sigs.find((s) => s.email === signerEmail) || sigs[0]
+  if (!signature) return null
+  return signature.link?.short_link || (await gerarLink(key, signature.public_id))
+}
+
+async function sbGetContrato(id) {
+  const url = process.env.VITE_SUPABASE_URL
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY
+  const r = await fetch(`${url}/rest/v1/contratos?id=eq.${encodeURIComponent(id)}&select=*`, {
+    headers: { apikey: key, Authorization: `Bearer ${key}` },
+  })
+  const data = await r.json()
+  return Array.isArray(data) ? data[0] : null
+}
+
+async function sbUpdateContrato(id, patch) {
+  const url = process.env.VITE_SUPABASE_URL
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY
+  const r = await fetch(`${url}/rest/v1/contratos?id=eq.${encodeURIComponent(id)}`, {
+    method: 'PATCH',
+    headers: {
+      apikey: key,
+      Authorization: `Bearer ${key}`,
+      'Content-Type': 'application/json',
+      Prefer: 'return=representation',
+    },
+    body: JSON.stringify(patch),
+  })
+  const data = await r.json()
+  if (!r.ok) throw new Error(data?.message || 'Falha ao atualizar contrato')
+  return Array.isArray(data) ? data[0] : data
 }
 
 async function sbInsert(row) {
@@ -64,6 +118,17 @@ export default async function handler(req, res) {
 
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {}
+
+    // Ação: gerar/atualizar o link de um contrato já existente (não consome documento).
+    if (body.action === 'refresh-link') {
+      const contrato = await sbGetContrato(body.contratoId)
+      if (!contrato) return res.status(404).json({ error: 'Contrato não encontrado' })
+      const link = await resolverLinkDoDocumento(key, contrato.autentique_id, contrato.signatario_email)
+      if (!link) return res.status(502).json({ error: 'Não foi possível obter o link de assinatura' })
+      const atualizado = await sbUpdateContrato(contrato.id, { link_assinatura: link })
+      return res.status(200).json({ contrato: atualizado, link })
+    }
+
     const { clienteId, titulo, signerEmail, fileBase64, fileName, createdBy } = body
 
     if (!clienteId || !titulo || !signerEmail || !fileBase64) {

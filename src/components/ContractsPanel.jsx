@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { FileText, ExternalLink, Upload } from 'lucide-react'
-import { listContracts, createContract, deleteContract } from '../lib/api/contracts'
+import { listContracts, createContract, deleteContract, refreshContractLink } from '../lib/api/contracts'
 import Input from './ui/Input'
 
 const statusStyles = {
@@ -46,6 +46,11 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
 
   const deleteMutation = useMutation({
     mutationFn: deleteContract,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['contratos', clienteId] }),
+  })
+
+  const refreshMutation = useMutation({
+    mutationFn: refreshContractLink,
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['contratos', clienteId] }),
   })
 
@@ -153,6 +158,17 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
                 >
                   Ver PDF <ExternalLink className="w-3.5 h-3.5" />
                 </a>
+              )}
+
+              {isAdmin && c.status === 'enviado' && !c.link_assinatura && (
+                <button
+                  type="button"
+                  onClick={() => refreshMutation.mutate(c.id)}
+                  disabled={refreshMutation.isPending}
+                  className="text-xs text-yellow-300 hover:text-yellow-200 disabled:opacity-60 transition-colors"
+                >
+                  {refreshMutation.isPending ? 'Gerando...' : 'Gerar link'}
+                </button>
               )}
 
               {isAdmin && (
