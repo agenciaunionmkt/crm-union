@@ -3,6 +3,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Paperclip, Trash2, Loader2, ExternalLink } from 'lucide-react'
 import { listAttachments, uploadAttachment, deleteAttachment } from '../lib/api/attachments'
 
+function isImagem(att) {
+  return /\.(png|jpe?g|gif|webp|avif|bmp|svg)$/i.test(att.nome_arquivo || att.arquivo_url || '')
+}
+
 export default function DemandAttachments({ demandId, currentUser, onPendingChange }) {
   const fileRef = useRef(null)
   const pendingRef = useRef(null)
@@ -34,6 +38,9 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
     if (file) uploadMutation.mutate(file)
     e.target.value = ''
   }
+
+  const imagens = items.filter(isImagem)
+  const outros = items.filter((a) => !isImagem(a))
 
   if (!demandId) {
     return (
@@ -120,33 +127,68 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
           Nenhum arquivo anexado.
         </p>
       ) : (
-        <ul className="space-y-2">
-          {items.map((att) => (
-            <li
-              key={att.id}
-              className="flex items-center justify-between gap-3 rounded-lg border border-neutral-200 dark:border-neutral-700 px-3 py-2"
-            >
-              <a
-                href={att.arquivo_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex min-w-0 items-center gap-2 text-sm text-neutral-700 dark:text-neutral-300 hover:text-yellow-300 transition-colors"
-              >
-                <ExternalLink className="w-3.5 h-3.5 flex-shrink-0" />
-                <span className="truncate">{att.nome_arquivo || 'arquivo'}</span>
-              </a>
-              <button
-                type="button"
-                onClick={() => deleteMutation.mutate(att)}
-                disabled={deleteMutation.isPending}
-                className="flex-shrink-0 p-1.5 rounded text-neutral-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-60"
-                title="Remover anexo"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </li>
-          ))}
-        </ul>
+        <div className="space-y-3">
+          {/* Imagens em miniatura */}
+          {imagens.length > 0 && (
+            <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+              {imagens.map((att) => (
+                <div
+                  key={att.id}
+                  className="group relative aspect-square overflow-hidden rounded-lg border border-white/10 bg-white/5"
+                >
+                  <a href={att.arquivo_url} target="_blank" rel="noopener noreferrer" title={att.nome_arquivo}>
+                    <img
+                      src={att.arquivo_url}
+                      alt={att.nome_arquivo || 'anexo'}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105"
+                    />
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => deleteMutation.mutate(att)}
+                    disabled={deleteMutation.isPending}
+                    className="absolute right-1 top-1 rounded-md bg-black/60 p-1 text-neutral-200 opacity-0 hover:text-red-400 group-hover:opacity-100 transition-opacity disabled:opacity-60"
+                    title="Remover anexo"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Outros arquivos (não-imagem) */}
+          {outros.length > 0 && (
+            <ul className="space-y-2">
+              {outros.map((att) => (
+                <li
+                  key={att.id}
+                  className="flex items-center justify-between gap-3 rounded-lg border border-neutral-200 dark:border-neutral-700 px-3 py-2"
+                >
+                  <a
+                    href={att.arquivo_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex min-w-0 items-center gap-2 text-sm text-neutral-700 dark:text-neutral-300 hover:text-yellow-300 transition-colors"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5 flex-shrink-0" />
+                    <span className="truncate">{att.nome_arquivo || 'arquivo'}</span>
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => deleteMutation.mutate(att)}
+                    disabled={deleteMutation.isPending}
+                    className="flex-shrink-0 p-1.5 rounded text-neutral-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-60"
+                    title="Remover anexo"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       )}
     </div>
   )

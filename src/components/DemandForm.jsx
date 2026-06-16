@@ -18,7 +18,8 @@ export const statusOptions = [
   { value: 'a_fazer', label: 'A fazer' },
   { value: 'em_andamento', label: 'Em andamento' },
   { value: 'em_revisao', label: 'Em revisão' },
-  { value: 'entregue', label: 'Entregue' },
+  { value: 'entregue', label: 'Aguardando aprovação' },
+  { value: 'aprovado', label: 'Aprovado' },
 ]
 
 export default function DemandForm({
@@ -168,14 +169,15 @@ export default function DemandForm({
         <label className="mb-1.5 block text-sm font-normal text-neutral-300">
           Status
         </label>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
           {statusOptions.map((option) => {
             const active = form.status === option.value
             const activeTone = {
               a_fazer: 'bg-white/10 text-white border-white/30',
               em_andamento: 'bg-violet-500/20 text-violet-200 border-violet-500/50',
               em_revisao: 'bg-yellow-400/20 text-yellow-200 border-yellow-400/50',
-              entregue: 'bg-emerald-500/20 text-emerald-200 border-emerald-500/50',
+              entregue: 'bg-blue-500/20 text-blue-200 border-blue-500/50',
+              aprovado: 'bg-emerald-500/20 text-emerald-200 border-emerald-500/50',
             }[option.value]
             return (
               <button

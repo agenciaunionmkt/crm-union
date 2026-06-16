@@ -1,8 +1,10 @@
 import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { CheckCircle2 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
-import { listDemandsByClient } from '../../lib/api/demands'
+import { listDemandsByClient, updateDemandStatus } from '../../lib/api/demands'
 import { listAttachments } from '../../lib/api/attachments'
+import { notifyTeam } from '../../lib/api/notifications'
 import DemandCalendar from '../../components/DemandCalendar'
 import DemandActivity from '../../components/DemandActivity'
 import Modal from '../../components/Modal'
@@ -20,6 +22,7 @@ function isImagem(att) {
 
 export default function ClientCalendario() {
   const { profile } = useAuth()
+  const queryClient = useQueryClient()
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const [detalhe, setDetalhe] = useState(null)
   const [expandImg, setExpandImg] = useState(null)
@@ -28,6 +31,19 @@ export default function ClientCalendario() {
     queryKey: ['client-demands', profile?.cliente_id],
     queryFn: () => listDemandsByClient(profile.cliente_id),
     enabled: !!profile?.cliente_id,
+  })
+
+  const aprovarMutation = useMutation({
+    mutationFn: (id) => updateDemandStatus(id, 'aprovado'),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['client-demands', profile?.cliente_id] })
+      setDetalhe((prev) => (prev ? { ...prev, status: 'aprovado' } : prev))
+      notifyTeam({
+        titulo: 'Publicação aprovada',
+        mensagem: `${profile?.nome ?? 'Cliente'} aprovou "${data?.titulo ?? 'uma publicação'}"`,
+        link: '/admin/demandas',
+      }).catch(() => {})
+    },
   })
 
   const { data: anexos = [] } = useQuery({
@@ -97,6 +113,30 @@ export default function ClientCalendario() {
                 </div>
               )}
             </div>
+
+            {/* Aprovação da publicação */}
+            {detalhe.status === 'entregue' && (
+              <div className="rounded-lg border border-blue-500/30 bg-blue-500/10 p-4">
+                <p className="text-sm text-blue-200">Esta publicação está aguardando sua aprovação.</p>
+                <button
+                  type="button"
+                  onClick={() => aprovarMutation.mutate(detalhe.id)}
+                  disabled={aprovarMutation.isPending}
+                  className="mt-3 inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600 disabled:opacity-60 transition-colors"
+                >
+                  <CheckCircle2 className="w-4 h-4" />
+                  {aprovarMutation.isPending ? 'Aprovando...' : 'Aprovar publicação'}
+                </button>
+                {aprovarMutation.error && (
+                  <p className="mt-2 text-xs text-red-300">{aprovarMutation.error.message}</p>
+                )}
+              </div>
+            )}
+            {detalhe.status === 'aprovado' && (
+              <div className="flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
+                <CheckCircle2 className="w-4 h-4" /> Publicação aprovada. Obrigado!
+              </div>
+            )}
 
             {/* Comentários do cliente nesta demanda */}
             <div className="border-t border-white/10 pt-4">
