@@ -27,6 +27,7 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
   const [titulo, setTitulo] = useState('')
   const [signerEmail, setSignerEmail] = useState(defaultEmail)
   const [file, setFile] = useState(null)
+  const [sandbox, setSandbox] = useState(false)
   const [copiedId, setCopiedId] = useState(null)
 
   function copiarLink(c) {
@@ -44,7 +45,7 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
 
   const createMutation = useMutation({
     mutationFn: () =>
-      createContract({ clienteId, titulo, signerEmail, file, createdBy: currentUser?.id }),
+      createContract({ clienteId, titulo, signerEmail, file, createdBy: currentUser?.id, sandbox }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['contratos', clienteId] })
       setTitulo('')
@@ -103,6 +104,18 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
               />
             </label>
           </div>
+
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={sandbox}
+              onChange={(e) => setSandbox(e.target.checked)}
+              className="rounded border-white/20 bg-white/5 text-yellow-400 accent-yellow-400"
+            />
+            <span className="text-xs text-neutral-400">
+              Modo teste (sandbox) — não consome do plano, sem validade jurídica
+            </span>
+          </label>
 
           <div className="flex items-center gap-3">
             <button

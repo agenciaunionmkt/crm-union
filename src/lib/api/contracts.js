@@ -9,7 +9,7 @@ export async function listContracts(clienteId) {
 }
 
 // Lê o arquivo como base64 e envia para a função serverless criar no Autentique.
-export async function createContract({ clienteId, titulo, signerEmail, file, createdBy }) {
+export async function createContract({ clienteId, titulo, signerEmail, file, createdBy, sandbox }) {
   const fileBase64 = await fileToBase64(file)
   const res = await fetch('/api/contratos', {
     method: 'POST',
@@ -21,6 +21,7 @@ export async function createContract({ clienteId, titulo, signerEmail, file, cre
       fileBase64,
       fileName: file.name,
       createdBy,
+      sandbox,
     }),
   })
   const data = await res.json()

@@ -4,8 +4,8 @@
 const AUTENTIQUE_URL = 'https://api.autentique.com.br/v2/graphql'
 
 const CREATE_DOC = `
-  mutation($document: DocumentInput!, $signers: [SignerInput!]!, $file: Upload!) {
-    createDocument(document: $document, signers: $signers, file: $file) {
+  mutation($document: DocumentInput!, $signers: [SignerInput!]!, $file: Upload!, $sandbox: Boolean) {
+    createDocument(document: $document, signers: $signers, file: $file, sandbox: $sandbox) {
       id
       name
       signatures { public_id email link { short_link } }
@@ -142,7 +142,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ contrato: atualizado, link, assinado })
     }
 
-    const { clienteId, titulo, signerEmail, fileBase64, fileName, createdBy } = body
+    const { clienteId, titulo, signerEmail, fileBase64, fileName, createdBy, sandbox } = body
 
     if (!clienteId || !titulo || !signerEmail || !fileBase64) {
       return res.status(400).json({ error: 'Informe cliente, título, e-mail do signatário e arquivo' })
@@ -156,6 +156,7 @@ export default async function handler(req, res) {
         document: { name: titulo },
         signers: [{ email: signerEmail, action: 'SIGN' }],
         file: null,
+        sandbox: !!sandbox,
       },
     })
 
