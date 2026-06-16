@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { Mail, CheckSquare, MessageSquare, CalendarDays, Menu, X, Settings } from 'lucide-react'
+import { Mail, CheckSquare, MessageSquare, CalendarDays, FileSignature, Menu, X, Settings } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabaseClient'
 import { getClient } from '../lib/api/clients'
@@ -13,6 +13,7 @@ const links = [
   { to: '/portal/calendario', label: 'Calendário', Icon: CalendarDays },
   { to: '/portal/solicitacoes', label: 'Solicitações', Icon: Mail },
   { to: '/portal/aprovacoes', label: 'Aprovar entregas', Icon: CheckSquare },
+  { to: '/portal/contratos', label: 'Contratos', Icon: FileSignature },
   { to: '/portal/chat', label: 'Chat com a agência', Icon: MessageSquare },
 ]
 

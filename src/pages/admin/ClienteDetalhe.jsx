@@ -16,6 +16,7 @@ import Modal from '../../components/Modal'
 import ClientForm from '../../components/ClientForm'
 import PlanForm from '../../components/PlanForm'
 import ChatWindow from '../../components/ChatWindow'
+import ContractsPanel from '../../components/ContractsPanel'
 
 function formatCurrency(value) {
   if (value === null || value === undefined) return '—'
@@ -255,6 +256,22 @@ export default function ClienteDetalhe() {
             )}
           </div>
         </form>
+      </div>
+
+      {/* Contratos */}
+      <div className="mt-6 glass rounded-2xl p-6">
+        <h2 className="text-base font-normal text-white">Contratos</h2>
+        <p className="mt-1 text-xs text-neutral-400">
+          Envie um contrato em PDF para o cliente assinar pelo Autentique. O status é atualizado automaticamente quando ele assinar.
+        </p>
+        <div className="mt-4">
+          <ContractsPanel
+            clienteId={id}
+            defaultEmail={client.contato_email ?? ''}
+            currentUser={profile}
+            mode="admin"
+          />
+        </div>
       </div>
 
       {/* Chat com o cliente */}
