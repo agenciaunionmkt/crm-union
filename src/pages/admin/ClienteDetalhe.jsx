@@ -17,6 +17,7 @@ import ClientForm from '../../components/ClientForm'
 import PlanForm from '../../components/PlanForm'
 import ChatWindow from '../../components/ChatWindow'
 import ContractsPanel from '../../components/ContractsPanel'
+import AsaasPanel from '../../components/AsaasPanel'
 
 function formatCurrency(value) {
   if (value === null || value === undefined) return '—'
@@ -271,6 +272,17 @@ export default function ClienteDetalhe() {
             currentUser={profile}
             mode="admin"
           />
+        </div>
+      </div>
+
+      {/* Cobranças (Asaas) */}
+      <div className="mt-6 glass rounded-2xl p-6">
+        <h2 className="text-base font-normal text-white">Cobranças (Asaas)</h2>
+        <p className="mt-1 text-xs text-neutral-400">
+          Gere cobranças por PIX/boleto. Quando o cliente paga, o lançamento no Financeiro é marcado como pago automaticamente.
+        </p>
+        <div className="mt-4">
+          <AsaasPanel cliente={client} />
         </div>
       </div>
 

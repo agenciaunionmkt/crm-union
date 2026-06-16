@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Edit, Trash2 } from 'lucide-react'
+import { Edit, Trash2, ExternalLink } from 'lucide-react'
 import {
   listFinancialEntries,
   createFinancialEntry,
@@ -246,6 +246,17 @@ export default function Financeiro() {
               </TableCell>
               <TableCell className="text-right">
                 <div className="flex items-center justify-end gap-3">
+                  {entry.link_pagamento && (
+                    <a
+                      href={entry.link_pagamento}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1.5 rounded text-neutral-500 hover:bg-white/5 hover:text-yellow-300 transition-colors"
+                      title="Abrir fatura (PIX/boleto)"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  )}
                   <button
                     onClick={() => handleEdit(entry)}
                     className="p-1.5 rounded text-neutral-500 dark:text-neutral-400 hover:bg-neutral-200/50 dark:hover:bg-neutral-700/40 transition-colors"
