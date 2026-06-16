@@ -14,7 +14,7 @@ const CREATE_DOC = `
 `
 
 const CREATE_LINK = `
-  mutation($public_id: String!) {
+  mutation($public_id: UUID!) {
     createLinkToSignature(public_id: $public_id) { short_link }
   }
 `
