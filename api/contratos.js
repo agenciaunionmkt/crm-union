@@ -43,12 +43,8 @@ async function autentiqueGraphql(key, query, variables) {
 
 // Gera o link de assinatura do signatário (o short_link nem sempre vem no createDocument).
 async function gerarLink(key, publicId) {
-  try {
-    const data = await autentiqueGraphql(key, CREATE_LINK, { public_id: publicId })
-    return data?.createLinkToSignature?.short_link || null
-  } catch {
-    return null
-  }
+  const data = await autentiqueGraphql(key, CREATE_LINK, { public_id: publicId })
+  return data?.createLinkToSignature?.short_link || null
 }
 
 // Busca o link de assinatura de um documento já existente (sem consumir novo documento).
@@ -56,8 +52,9 @@ async function resolverLinkDoDocumento(key, autentiqueId, signerEmail) {
   const data = await autentiqueGraphql(key, GET_DOC, { id: autentiqueId })
   const sigs = data?.document?.signatures || []
   const signature = sigs.find((s) => s.email === signerEmail) || sigs[0]
-  if (!signature) return null
-  return signature.link?.short_link || (await gerarLink(key, signature.public_id))
+  if (!signature) throw new Error('Documento sem signatário correspondente')
+  if (signature.link?.short_link) return signature.link.short_link
+  return await gerarLink(key, signature.public_id)
 }
 
 async function sbGetContrato(id) {
