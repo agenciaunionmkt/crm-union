@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Sparkles, Loader2 } from 'lucide-react'
+import { Sparkles, Loader2, Paperclip, ExternalLink } from 'lucide-react'
 import { listMessages, sendMessage } from '../lib/api/chat'
 import { notifyTeam } from '../lib/api/notifications'
+import { uploadPublicFile, isImageUrl } from '../lib/api/storage'
+import EmojiPicker from './ui/EmojiPicker'
 
 function formatDateTime(value) {
   if (!value) return '—'
@@ -15,6 +17,8 @@ function formatDateTime(value) {
 export default function ChatWindow({ clienteId, currentUser }) {
   const queryClient = useQueryClient()
   const [message, setMessage] = useState('')
+  const [uploading, setUploading] = useState(false)
+  const fileRef = useRef(null)
   const listRef = useRef(null)
 
   const messagesQuery = useQuery({
@@ -87,6 +91,27 @@ export default function ChatWindow({ clienteId, currentUser }) {
     })
   }
 
+  async function handlePickFile(e) {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file) return
+    setUploading(true)
+    try {
+      const { url, nome } = await uploadPublicFile(file, `chat/${clienteId}`)
+      sendMutation.mutate({
+        clienteId,
+        autorId: currentUser?.id,
+        mensagem: message.trim(),
+        arquivoUrl: url,
+        nomeArquivo: nome,
+      })
+    } catch (err) {
+      alert(err.message || 'Falha ao enviar arquivo')
+    } finally {
+      setUploading(false)
+    }
+  }
+
   return (
     <div className="flex h-full flex-col">
       <div ref={listRef} className="flex-1 space-y-3 overflow-y-auto px-1 py-2">
@@ -108,7 +133,28 @@ export default function ChatWindow({ clienteId, currentUser }) {
                     : 'bg-white/8 text-neutral-100 border border-white/10 rounded-bl-sm'
                 }`}
               >
-                <p className="whitespace-pre-wrap">{msg.mensagem}</p>
+                {msg.mensagem && <p className="whitespace-pre-wrap">{msg.mensagem}</p>}
+                {msg.arquivo_url && (
+                  isImageUrl(msg.nome_arquivo || msg.arquivo_url) ? (
+                    <a href={msg.arquivo_url} target="_blank" rel="noopener noreferrer" className={msg.mensagem ? 'mt-2 block' : 'block'}>
+                      <img
+                        src={msg.arquivo_url}
+                        alt={msg.nome_arquivo || 'anexo'}
+                        className="max-h-48 w-auto rounded-lg border border-black/10"
+                      />
+                    </a>
+                  ) : (
+                    <a
+                      href={msg.arquivo_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`inline-flex items-center gap-1.5 underline ${msg.mensagem ? 'mt-2' : ''} ${isMe ? 'text-gray-900' : 'text-yellow-300'}`}
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      {msg.nome_arquivo || 'arquivo'}
+                    </a>
+                  )
+                )}
                 <p className={`mt-1 text-[10px] ${isMe ? 'text-gray-800/70' : 'text-neutral-500'}`}>
                   {msg.autor?.nome ?? 'Usuário'} · {formatDateTime(msg.created_at)}
                 </p>
@@ -130,6 +176,17 @@ export default function ChatWindow({ clienteId, currentUser }) {
             {suggesting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
           </button>
         )}
+        <EmojiPicker onSelect={(e) => setMessage((m) => m + e)} />
+        <button
+          type="button"
+          onClick={() => fileRef.current?.click()}
+          disabled={uploading}
+          title="Anexar arquivo"
+          className="shrink-0 inline-flex items-center justify-center rounded-lg border border-white/15 px-2.5 py-2.5 text-neutral-300 hover:bg-white/5 disabled:opacity-60 transition-colors"
+        >
+          {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Paperclip className="w-4 h-4" />}
+        </button>
+        <input ref={fileRef} type="file" className="hidden" onChange={handlePickFile} />
         <input
           type="text"
           value={message}

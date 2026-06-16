@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Sparkles } from 'lucide-react'
+import { Sparkles, ExternalLink } from 'lucide-react'
 import { listClients } from '../../lib/api/clients'
 import { listTeamUsers } from '../../lib/api/users'
 import { createDemand, listTags } from '../../lib/api/demands'
@@ -115,6 +115,17 @@ export default function Solicitacoes() {
                   <p className="mt-2 font-normal text-white">{request.titulo}</p>
                   {request.descricao && (
                     <p className="mt-1 max-w-xl text-sm text-neutral-400">{request.descricao}</p>
+                  )}
+                  {request.arquivo_url && (
+                    <a
+                      href={request.arquivo_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-2 inline-flex items-center gap-1.5 text-xs text-yellow-300 hover:text-yellow-200"
+                    >
+                      <ExternalLink className="w-3 h-3" />
+                      {request.nome_arquivo || 'anexo'}
+                    </a>
                   )}
                 </div>
                 <span className={`inline-flex flex-shrink-0 rounded-full px-2.5 py-1 text-xs font-normal ${statusStyles[request.status]}`}>

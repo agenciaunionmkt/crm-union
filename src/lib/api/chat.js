@@ -41,10 +41,16 @@ export async function listConversations() {
   return Array.from(porCliente.values())
 }
 
-export async function sendMessage({ clienteId, autorId, mensagem }) {
+export async function sendMessage({ clienteId, autorId, mensagem, arquivoUrl = null, nomeArquivo = null }) {
   const { data, error } = await supabase
     .from('chat_messages')
-    .insert({ cliente_id: clienteId, autor_id: autorId, mensagem })
+    .insert({
+      cliente_id: clienteId,
+      autor_id: autorId,
+      mensagem,
+      arquivo_url: arquivoUrl,
+      nome_arquivo: nomeArquivo,
+    })
     .select(MESSAGE_SELECT)
     .single()
 
