@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Eye, EyeOff } from 'lucide-react'
 import Input from './ui/Input'
 import Select from './ui/Select'
 import Textarea from './ui/Textarea'
@@ -19,12 +18,10 @@ const emptyForm = {
   posts_personalizado: '',
   plano_descricao: '',
   instagram_usuario: '',
-  instagram_senha: '',
 }
 
 export default function ClientForm({ initialValues, onSubmit, onCancel, submitting }) {
   const [form, setForm] = useState({ ...emptyForm, ...initialValues })
-  const [showInstaSenha, setShowInstaSenha] = useState(false)
   const isEdit = Boolean(initialValues?.id)
   const [acessoAtivar, setAcessoAtivar] = useState(false)
   const [acessoEmail, setAcessoEmail] = useState('')
@@ -75,7 +72,6 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
       plano_descricao: form.plano === 'personalizado' ? form.plano_descricao || null : null,
       dia_vencimento: form.tipo_cliente === 'recorrente' && vencimento ? parseInt(vencimento, 10) : null,
       instagram_usuario: form.instagram_usuario || null,
-      instagram_senha: form.instagram_senha || null,
     }
 
     onSubmit(clientData, {
@@ -206,38 +202,14 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
       )}
 
       {/* Instagram */}
-      <div className="rounded-lg border border-white/10 bg-white/5 p-5">
-        <h3 className="text-sm font-normal text-neutral-300 mb-4">
-          Dados do Instagram
-        </h3>
-        <div className="grid grid-cols-2 gap-4">
-          <Input
-            label="Usuário (@)"
-            type="text"
-            value={form.instagram_usuario ?? ''}
-            onChange={handleChange('instagram_usuario')}
-            placeholder="usuario"
-            leftIcon="@"
-          />
-          <Input
-            label="Senha"
-            type={showInstaSenha ? 'text' : 'password'}
-            value={form.instagram_senha ?? ''}
-            onChange={handleChange('instagram_senha')}
-            placeholder="••••••••"
-            rightIcon={
-              <button
-                type="button"
-                onClick={() => setShowInstaSenha((v) => !v)}
-                className="text-neutral-400 hover:text-neutral-200 focus:outline-none"
-                aria-label={showInstaSenha ? 'Ocultar senha' : 'Mostrar senha'}
-              >
-                {showInstaSenha ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-              </button>
-            }
-          />
-        </div>
-      </div>
+      <Input
+        label="Instagram (@usuário)"
+        type="text"
+        value={form.instagram_usuario ?? ''}
+        onChange={handleChange('instagram_usuario')}
+        placeholder="usuario"
+        leftIcon="@"
+      />
 
       {/* Acesso ao portal */}
       {!isEdit && (
