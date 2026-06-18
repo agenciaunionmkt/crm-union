@@ -276,7 +276,7 @@ export default function AdminLayout() {
       {/* Main */}
       <main className="flex-1 flex flex-col min-w-0">
         {/* Header */}
-        <header className="border-b border-white/10 bg-white/[0.02] backdrop-blur-xl">
+        <header className="relative z-30 border-b border-white/10 bg-white/[0.02] backdrop-blur-xl">
           <div className="flex items-center justify-between px-4 sm:px-6 py-3.5">
             <div className="flex items-center gap-3">
               <button
@@ -332,8 +332,8 @@ export default function AdminLayout() {
                 </button>
                 {showNotif && (
                   <>
-                    <div className="fixed inset-0 z-30" onClick={() => setShowNotif(false)} />
-                    <div className="absolute right-0 z-40 mt-2 w-80 rounded-xl border border-white/10 bg-[#140f20]/95 backdrop-blur-2xl p-2 shadow-2xl shadow-black/60">
+                    <div className="fixed inset-0 z-40" onClick={() => setShowNotif(false)} />
+                    <div className="absolute right-0 z-50 mt-2 w-80 rounded-xl border border-white/10 bg-[#140f20] p-2 shadow-2xl shadow-black/60">
                       <p className="px-3 py-2 text-xs uppercase tracking-widest text-neutral-400">Notificações</p>
                       <div className="max-h-80 overflow-y-auto">
                         {notifications.length === 0 ? (

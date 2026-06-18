@@ -22,10 +22,13 @@ export default function ProtectedRoute({ allowedRoles }) {
     return <Navigate to="/login" replace />
   }
 
-  if (allowedRoles && profile && !allowedRoles.includes(profile.papel)) {
-    // Usuário autenticado, mas sem permissão para esta área.
-    const fallback = profile.papel === 'cliente' ? '/portal' : '/admin'
-    return <Navigate to={fallback} replace />
+  if (allowedRoles) {
+    // Exige perfil válido com papel permitido. Sessão sem perfil (ex.: signup
+    // direto pela API, sem linha em users) NÃO acessa áreas protegidas.
+    if (!profile || !allowedRoles.includes(profile.papel)) {
+      const fallback = profile?.papel === 'cliente' ? '/portal' : '/login'
+      return <Navigate to={fallback} replace />
+    }
   }
 
   return <Outlet />
