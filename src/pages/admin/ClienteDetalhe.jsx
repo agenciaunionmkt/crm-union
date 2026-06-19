@@ -12,6 +12,7 @@ import {
   updatePlan,
   upsertBriefing,
 } from '../../lib/api/clients'
+import { inviteClientUser } from '../../lib/api/users'
 import Modal from '../../components/Modal'
 import ClientForm from '../../components/ClientForm'
 import PlanForm from '../../components/PlanForm'
@@ -38,6 +39,7 @@ export default function ClienteDetalhe() {
 
   const [showPlanForm, setShowPlanForm] = useState(false)
   const [editingPlan, setEditingPlan] = useState(null)
+  const [acessoEmail, setAcessoEmail] = useState('')
   const [briefingForm, setBriefingForm] = useState({
     tom_de_voz: '',
     referencias: '',
@@ -69,12 +71,20 @@ export default function ClienteDetalhe() {
     }
   }, [briefingQuery.data])
 
+  useEffect(() => {
+    if (clientQuery.data?.contato_email) setAcessoEmail(clientQuery.data.contato_email)
+  }, [clientQuery.data])
+
   const updateClientMutation = useMutation({
     mutationFn: (payload) => updateClient(id, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['clients'] })
       queryClient.invalidateQueries({ queryKey: ['clients', id] })
     },
+  })
+
+  const inviteMutation = useMutation({
+    mutationFn: () => inviteClientUser({ email: acessoEmail, nome: clientQuery.data?.nome, clienteId: id }),
   })
 
   const briefingMutation = useMutation({
@@ -181,6 +191,40 @@ export default function ClienteDetalhe() {
         />
         {updateClientMutation.error && (
           <p className="mt-3 text-sm text-red-400">{updateClientMutation.error.message}</p>
+        )}
+      </div>
+
+      {/* Acesso ao portal */}
+      <div className="mt-6 glass rounded-2xl p-6">
+        <h2 className="text-base font-normal text-white">Acesso ao portal</h2>
+        <p className="mt-1 text-xs text-neutral-400">
+          Envie ao cliente um link para ele criar a senha e acessar o portal. Use também para reenviar o acesso.
+        </p>
+        <div className="mt-4 flex flex-wrap items-end gap-3">
+          <div className="flex-1 min-w-[240px]">
+            <label className="mb-1.5 block text-sm font-normal text-neutral-300">E-mail de acesso</label>
+            <input
+              type="email"
+              value={acessoEmail}
+              onChange={(e) => setAcessoEmail(e.target.value)}
+              placeholder="cliente@empresa.com"
+              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
+            />
+          </div>
+          <button
+            type="button"
+            onClick={() => inviteMutation.mutate()}
+            disabled={inviteMutation.isPending || !acessoEmail.trim()}
+            className="rounded-lg bg-yellow-400 px-4 py-2.5 text-sm font-semibold text-gray-900 hover:bg-yellow-500 disabled:opacity-60 transition-colors"
+          >
+            {inviteMutation.isPending ? 'Enviando...' : 'Enviar acesso'}
+          </button>
+        </div>
+        {inviteMutation.isSuccess && (
+          <p className="mt-2 text-xs text-emerald-400">Link de acesso enviado para o e-mail.</p>
+        )}
+        {inviteMutation.error && (
+          <p className="mt-2 text-xs text-red-400">{inviteMutation.error.message}</p>
         )}
       </div>
 
