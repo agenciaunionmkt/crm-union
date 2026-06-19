@@ -56,7 +56,14 @@ async function sincronizarDocumento(key, autentiqueId, signerEmail) {
   const signature = sigs.find((s) => s.email === signerEmail) || sigs[0]
   if (!signature) throw new Error('Documento sem signatário correspondente')
 
-  const link = signature.link?.short_link || (await gerarLink(key, signature.public_id))
+  let link = signature.link?.short_link || null
+  if (!link && signature.public_id) {
+    try {
+      link = await gerarLink(key, signature.public_id)
+    } catch {
+      link = null
+    }
+  }
   const signedUrl = doc?.files?.signed || null
   return { link, signedUrl, assinado: !!signedUrl }
 }
@@ -142,6 +149,27 @@ export default async function handler(req, res) {
       return res.status(200).json({ contrato: atualizado, link, assinado })
     }
 
+    // Ação: importar um documento que já existe no Autentique para o CRM
+    // (ex.: contrato criado mas não salvo por falha anterior).
+    if (body.action === 'importar') {
+      const { clienteId, titulo, signerEmail, autentiqueId } = body
+      if (!clienteId || !autentiqueId) {
+        return res.status(400).json({ error: 'Informe cliente e o id do documento' })
+      }
+      const { link, signedUrl, assinado } = await sincronizarDocumento(key, autentiqueId, signerEmail)
+      const contrato = await sbInsert({
+        cliente_id: clienteId,
+        titulo: titulo || 'Contrato',
+        autentique_id: autentiqueId,
+        status: assinado ? 'assinado' : 'enviado',
+        signatario_email: signerEmail || null,
+        link_assinatura: link,
+        arquivo_url: signedUrl || null,
+        signed_at: assinado ? new Date().toISOString() : null,
+      })
+      return res.status(200).json({ contrato })
+    }
+
     const { clienteId, titulo, signerEmail, fileBase64, fileName, createdBy, sandbox } = body
 
     if (!clienteId || !titulo || !signerEmail || !fileBase64) {
@@ -172,16 +200,24 @@ export default async function handler(req, res) {
     })
     const data = await r.json()
 
-    if (!r.ok || data.errors) {
+    // Só falha se o documento NÃO foi criado. Se veio com id, segue mesmo que o
+    // Autentique tenha retornado avisos (ex.: "without_action_in_document").
+    const doc = data?.data?.createDocument
+    if (!doc?.id) {
       const msg = data?.errors?.[0]?.message || 'Erro ao criar documento no Autentique'
       return res.status(502).json({ error: msg })
     }
 
-    const doc = data.data.createDocument
     const signature = (doc.signatures || []).find((s) => s.email === signerEmail) || doc.signatures?.[0]
     let link = signature?.link?.short_link || null
+    // Geração do link não pode derrubar o salvamento: se falhar, salva sem link
+    // (dá pra gerar depois com o botão "Gerar link").
     if (!link && signature?.public_id) {
-      link = await gerarLink(key, signature.public_id)
+      try {
+        link = await gerarLink(key, signature.public_id)
+      } catch {
+        link = null
+      }
     }
 
     const contrato = await sbInsert({
