@@ -11,15 +11,15 @@ export function ThemeProvider({ children }) {
 
     if (isDark) {
       // Dark mode: Cinza puro (sem azul)
-      document.documentElement.style.backgroundColor = '#09090f'
-      document.body.style.backgroundColor = '#09090f'
+      document.documentElement.style.backgroundColor = '#0a0b0e'
+      document.body.style.backgroundColor = '#0a0b0e'
       document.body.style.color = '#f1f5f9'
       if (root) {
-        root.style.backgroundColor = '#09090f'
+        root.style.backgroundColor = '#0a0b0e'
         root.style.color = '#f1f5f9'
       }
       // Adicionar CSS vars para contraste dinâmico
-      document.documentElement.style.setProperty('--bg-primary', '#09090f')
+      document.documentElement.style.setProperty('--bg-primary', '#0a0b0e')
       document.documentElement.style.setProperty('--text-primary', '#ffffff')
     } else {
       // Light mode: Branco/cinza claro

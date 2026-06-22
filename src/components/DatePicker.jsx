@@ -70,7 +70,7 @@ export default function DatePicker({ value, onChange, placeholder = 'Selecione a
       </button>
 
       {open && (
-        <div className="absolute z-30 mt-2 w-72 rounded-xl border border-white/10 bg-[#140f20]/95 backdrop-blur-2xl p-3 shadow-2xl shadow-black/60">
+        <div className="absolute z-30 mt-2 w-72 rounded-xl border border-border bg-surface p-3 shadow-2xl shadow-black/60">
           <div className="mb-2 flex items-center justify-between">
             <button
               type="button"

@@ -225,12 +225,12 @@ export default function AdminLayout() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-60 flex flex-col border-r border-white/10 bg-[#0f0b16] lg:bg-white/[0.03] backdrop-blur-xl transform transition-transform duration-200 lg:static lg:z-auto lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-60 flex flex-col border-r border-border bg-surface transform transition-transform duration-200 lg:static lg:z-auto lg:translate-x-0 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* Logo */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-border">
           <div>
             <UnionLogo size="sm" variant="light" />
             <p className="mt-2 text-xs font-normal text-neutral-400 uppercase tracking-widest opacity-70">
@@ -268,7 +268,7 @@ export default function AdminLayout() {
         </nav>
 
         {/* Footer */}
-        <div className="px-3 py-3 border-t border-white/10">
+        <div className="px-3 py-3 border-t border-border">
           <p className="text-xs text-neutral-600">v1.0</p>
         </div>
       </aside>
@@ -276,7 +276,7 @@ export default function AdminLayout() {
       {/* Main */}
       <main className="flex-1 flex flex-col min-w-0">
         {/* Header */}
-        <header className="relative z-30 border-b border-white/10 bg-white/[0.02] backdrop-blur-xl">
+        <header className="relative z-30 border-b border-border bg-white/[0.02]">
           <div className="flex items-center justify-between px-4 sm:px-6 py-3.5">
             <div className="flex items-center gap-3">
               <button
@@ -311,7 +311,7 @@ export default function AdminLayout() {
                   className="w-9 h-9 rounded-full object-cover flex-shrink-0 border-2 border-neutral-700"
                 />
               ) : (
-                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center flex-shrink-0 border border-white/10">
+                <div className="w-9 h-9 rounded-full bg-surface-2 flex items-center justify-center flex-shrink-0 border border-border">
                   <Users className="w-4 h-4 text-white" />
                 </div>
               )}
@@ -333,7 +333,7 @@ export default function AdminLayout() {
                 {showNotif && (
                   <>
                     <div className="fixed inset-0 z-40" onClick={() => setShowNotif(false)} />
-                    <div className="absolute right-0 z-50 mt-2 w-80 rounded-xl border border-white/10 bg-[#140f20] p-2 shadow-2xl shadow-black/60">
+                    <div className="absolute right-0 z-50 mt-2 w-80 rounded-xl border border-border bg-surface p-2 shadow-2xl shadow-black/60">
                       <p className="px-3 py-2 text-xs uppercase tracking-widest text-neutral-400">Notificações</p>
                       <div className="max-h-80 overflow-y-auto">
                         {notifications.length === 0 ? (
@@ -392,7 +392,7 @@ export default function AdminLayout() {
       {/* Settings Modal */}
       {showSettings && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
-          <div className="w-full max-w-md max-h-[90vh] overflow-y-auto bg-[#140f20]/80 backdrop-blur-2xl rounded-2xl border border-white/10 ring-1 ring-inset ring-white/5 p-8 shadow-2xl shadow-black/60">
+          <div className="w-full max-w-md max-h-[90vh] overflow-y-auto bg-surface rounded-2xl border border-border p-8 shadow-2xl shadow-black/60">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-2xl font-normal text-white">Configurações</h2>
               <button
@@ -559,7 +559,7 @@ export default function AdminLayout() {
                     type="button"
                     onClick={handleChangePassword}
                     disabled={saving}
-                    className="flex-1 px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50"
+                    className="flex-1 px-4 py-2 bg-accent hover:opacity-90 text-accent-foreground text-sm font-semibold rounded-lg transition-colors disabled:opacity-50"
                   >
                     {saving ? 'Alterando...' : 'Alterar senha'}
                   </button>

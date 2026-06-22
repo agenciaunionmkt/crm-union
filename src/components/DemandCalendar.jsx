@@ -163,7 +163,7 @@ export default function DemandCalendar({
                       <div className="mt-1.5 flex items-center justify-end">
                         {iniciais ? (
                           <span
-                            className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-violet-500 text-[10px] font-semibold text-white"
+                            className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-accent/15 text-[10px] font-semibold text-accent"
                             title={nome}
                           >
                             {iniciais}
@@ -214,7 +214,7 @@ export default function DemandCalendar({
               >
                 <span className="text-sm font-normal">{demand.titulo}</span>
                 {iniciaisDe(demand) && (
-                  <span className="inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-violet-500 text-[10px] font-semibold text-white">
+                  <span className="inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-accent/15 text-[10px] font-semibold text-accent">
                     {iniciaisDe(demand)}
                   </span>
                 )}

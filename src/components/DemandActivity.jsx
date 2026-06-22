@@ -187,7 +187,7 @@ export default function DemandActivity({ demandId, mode = 'admin', currentUser }
             <button
               type="submit"
               disabled={commentMutation.isPending || !message.trim()}
-              className="rounded-lg bg-violet-600 px-4 py-2 text-xs font-semibold text-white hover:bg-violet-700 disabled:opacity-60 transition-colors"
+              className="rounded-lg bg-accent px-4 py-2 text-xs font-semibold text-accent-foreground hover:opacity-90 disabled:opacity-60 transition-colors"
             >
               {commentMutation.isPending ? 'Enviando...' : 'Enviar'}
             </button>

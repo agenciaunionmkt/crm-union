@@ -77,11 +77,11 @@ export default function ClientLayout() {
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-60 flex-col border-r border-white/10 bg-[#0f0b16] lg:bg-white/[0.03] backdrop-blur-xl transform transition-transform duration-200 lg:static lg:z-auto lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-60 flex-col border-r border-border bg-surface transform transition-transform duration-200 lg:static lg:z-auto lg:translate-x-0 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex items-center justify-between px-5 py-5 border-b border-white/10">
+        <div className="flex items-center justify-between px-5 py-5 border-b border-border">
           <div>
             <UnionLogo size="sm" variant="light" />
             <p className="mt-2 text-xs text-neutral-400 uppercase tracking-widest opacity-70">
@@ -110,7 +110,7 @@ export default function ClientLayout() {
             </NavLink>
           ))}
         </nav>
-        <div className="border-t border-white/10 px-4 py-4">
+        <div className="border-t border-border px-4 py-4">
           <p className="truncate px-1 text-sm font-normal text-white">{profile?.nome ?? 'Cliente'}</p>
           <div className="mt-2 flex items-center gap-2">
             <button
@@ -130,7 +130,7 @@ export default function ClientLayout() {
       </aside>
 
       <main className="flex-1 flex flex-col min-w-0">
-        <header className="lg:hidden flex items-center gap-3 border-b border-white/10 bg-white/[0.02] backdrop-blur-xl px-4 py-3">
+        <header className="lg:hidden flex items-center gap-3 border-b border-border bg-white/[0.02] px-4 py-3">
           <button onClick={() => setSidebarOpen(true)} className="p-2 -ml-2 rounded-md text-neutral-300 hover:bg-white/10" aria-label="Abrir menu">
             <Menu className="w-5 h-5" />
           </button>
@@ -156,7 +156,7 @@ export default function ClientLayout() {
             {infoRow('Vencimento', cliente?.dia_vencimento ? `Dia ${cliente.dia_vencimento}` : '—')}
           </div>
 
-          <div className="border-t border-white/10 pt-4">
+          <div className="border-t border-border pt-4">
             <p className="mb-3 text-xs uppercase tracking-widest text-neutral-400">Alterar senha</p>
             <div className="space-y-3">
               <input type="password" value={novaSenha} onChange={(e) => setNovaSenha(e.target.value)} placeholder="Nova senha" className={inputClass} />

@@ -352,7 +352,7 @@ export default function AgenteConteudo() {
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="rounded-full bg-violet-500/20 px-2 py-0.5 text-[10px] uppercase text-violet-200">{p.tipo}</span>
+                      <span className="rounded-full bg-accent/15 px-2 py-0.5 text-[10px] uppercase text-accent">{p.tipo}</span>
                       <span className="text-xs text-neutral-400">Dia {p.dia}</span>
                     </div>
                     <p className="mt-1 text-sm font-normal text-white">{p.titulo}</p>

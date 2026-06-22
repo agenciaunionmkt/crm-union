@@ -33,7 +33,7 @@ export default function EmojiPicker({ onSelect, openUp = true }) {
       </button>
       {open && (
         <div
-          className={`absolute left-0 z-50 w-56 rounded-lg border border-white/10 bg-[#140f20] p-2 shadow-xl shadow-black/50 ${
+          className={`absolute left-0 z-50 w-56 rounded-lg border border-border bg-surface p-2 shadow-xl shadow-black/50 ${
             openUp ? 'bottom-full mb-2' : 'top-full mt-2'
           }`}
         >

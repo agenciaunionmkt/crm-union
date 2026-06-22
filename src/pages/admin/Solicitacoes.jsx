@@ -105,7 +105,7 @@ export default function Solicitacoes() {
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 text-xs text-neutral-400">
-                    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-violet-500/20 text-[10px] font-semibold text-violet-200">
+                    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-accent/15 text-[10px] font-semibold text-accent">
                       {(request.client?.nome ?? '?').charAt(0).toUpperCase()}
                     </span>
                     <span className="truncate">{request.client?.nome ?? 'Cliente'}</span>
@@ -138,7 +138,7 @@ export default function Solicitacoes() {
                   <button
                     onClick={() => triarComIA(request)}
                     disabled={triandoId === request.id}
-                    className="inline-flex items-center gap-1.5 rounded-lg bg-violet-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-violet-700 disabled:opacity-60 transition-colors"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3 py-1.5 text-xs font-semibold text-accent-foreground hover:opacity-90 disabled:opacity-60 transition-colors"
                   >
                     <Sparkles className="w-3.5 h-3.5" />
                     {triandoId === request.id ? 'Triando...' : 'Triar com IA'}

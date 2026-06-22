@@ -259,7 +259,7 @@ export default function Clientes() {
       {/* Modal - Confirmar Deleção */}
       {deleteConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4">
-          <div className="w-full max-w-sm bg-[#140f20]/80 backdrop-blur-2xl rounded-2xl border border-white/10 ring-1 ring-inset ring-white/5 p-6 shadow-2xl shadow-black/60">
+          <div className="w-full max-w-sm bg-surface rounded-2xl border border-border p-6 shadow-2xl shadow-black/60">
             <div className="mb-4 flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-900/30 border border-red-700/50">
                 <AlertCircle className="h-5 w-5 text-red-400" />
