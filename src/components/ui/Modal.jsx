@@ -46,12 +46,11 @@ export default function Modal({
           className={`
             w-full ${maxWidth}
             rounded-2xl
-            bg-[#140f20]/80 backdrop-blur-2xl
+            bg-surface
             shadow-2xl shadow-black/60
-            ring-1 ring-inset ring-white/5
             max-h-[90vh]
             overflow-y-auto
-            border border-white/10
+            border border-border
             focus:outline-none
             animate-in scale-in-95 fade-in duration-300 zoom-in-95
           `}
@@ -59,15 +58,15 @@ export default function Modal({
         >
           {/* Header */}
           {title && (
-            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/10 bg-[#140f20]/70 backdrop-blur-2xl px-6 py-5">
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-surface px-6 py-5">
               <div>
-                <h2 className="text-xl font-normal text-white">
+                <h2 className="font-display text-lg font-bold tracking-tight text-foreground">
                   {title}
                 </h2>
               </div>
               <button
                 onClick={onClose}
-                className="rounded-lg p-2 text-neutral-400 hover:bg-white/10 hover:text-white transition-colors hover:-rotate-90 duration-300"
+                className="rounded-lg p-2 text-muted hover:bg-white/5 hover:text-foreground transition-colors"
                 aria-label="Fechar modal"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -6,7 +6,7 @@ const Textarea = forwardRef(
     return (
       <div className="w-full">
         {label && (
-          <label className="mb-1.5 block text-sm font-normal text-neutral-300">{label}</label>
+          <label className="mb-1.5 block text-sm font-medium text-muted">{label}</label>
         )}
 
         <textarea

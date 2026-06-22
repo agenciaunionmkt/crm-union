@@ -1,88 +1,69 @@
-@import url('https://api.fontshare.com/v2/css?f[]=franie@400,500,600,700,800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 @import "tailwindcss";
 
-@theme {
-  --font-sans: 'Franie', system-ui, 'Segoe UI', Roboto, sans-serif;
-  --font-logo: 'Archivo Black', 'Franie', system-ui, sans-serif;
-
-  /* Paleta grayscale escura + acentos sofisticados (SEM AZUL) */
-  --color-brand-50: #f8fafc;
-  --color-brand-100: #f1f5f9;
-  --color-brand-200: #e2e8f0;
-  --color-brand-300: #cbd5e1;
-  --color-brand-400: #94a3b8;
-  --color-brand-500: #64748b;
-  --color-brand-600: #475569;
-  --color-brand-700: #334155;
-  --color-brand-800: #1e293b;
-  --color-brand-900: #0f172a;
-
-  /* Acentos sofisticados (sem azul) */
-  --color-primary-500: #a855f7;
-  --color-primary-600: #9333ea;
-  --color-secondary-500: #ec4899;
-  --color-secondary-600: #db2777;
-  --color-accent-green: #10b981;
-  --color-accent-cyan: #06b6d4;
-  --color-warning-500: #f59e0b;
-  --color-danger-500: #ef4444;
-}
-
+/* ── Design system flat (base painel-jr JR Almeida) — acento = amarelo Union ── */
 :root {
-  color-scheme: light;
+  /* superfícies (preto frio, em camadas) */
+  --background: #0a0b0e;
+  --surface: #161618;
+  --surface-2: #1e1e22;
 
-  /* Light mode colors */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-tertiary: #f1f5f9;
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
-  --text-tertiary: #94a3b8;
-  --border-color: #e2e8f0;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  /* texto */
+  --foreground: #f5f5f7;
+  --muted: #a1a1a6;
+  --subtle: #6e6e73;
+
+  /* acento = amarelo Union (texto escuro sobre ele) */
+  --accent: #facc15;
+  --accent-foreground: #0a0b0e;
+
+  /* bordas */
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+
+  /* semânticas */
+  --success: #2ecc71;
+  --warning: #f0b428;
+  --danger: #ff6b6b;
+
+  --ring: rgba(250, 204, 21, 0.55);
+  --radius: 0.75rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-ring: var(--ring);
 
-    /* Dark mode colors */
-    --bg-primary: #0f172a;
-    --bg-secondary: #1e293b;
-    --bg-tertiary: #334155;
-    --text-primary: #f1f5f9;
-    --text-secondary: #cbd5e1;
-    --text-tertiary: #94a3b8;
-    --border-color: #334155;
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-  }
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-display: 'Archivo', system-ui, sans-serif;
+  --font-logo: 'Archivo', system-ui, sans-serif;
+
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 0.25rem);
 }
 
-html.dark {
+html {
   color-scheme: dark;
-
-  /* Forçar dark mode quando classe 'dark' está presente */
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-tertiary: #334155;
-  --text-primary: #f1f5f9;
-  --text-secondary: #cbd5e1;
-  --text-tertiary: #94a3b8;
-  --border-color: #334155;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
 }
 
 body {
   margin: 0;
-  font-family: 'Franie', system-ui, 'Segoe UI', Roboto, sans-serif;
-  transition: background-color 0.3s, color 0.3s;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'DM Sans', system-ui, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 #root {
@@ -90,45 +71,44 @@ body {
 }
 
 /* ============================================================
-   Identidade visual Union — dark premium + atmosfera roxa
-   Ação = amarelo Union. Ambiente = roxo/violeta.
+   Compat: classes antigas remapeadas para o estilo flat
+   (sem glassmorphism, sem ambiência violeta)
    ============================================================ */
 
-/* Fundo ambiente: base quase-preta com glows roxos (estilo das referências) */
 .union-app-bg {
-  background-color: #09090f;
-  background-image:
-    radial-gradient(60% 55% at 88% -5%, rgba(124, 58, 237, 0.20), transparent 70%),
-    radial-gradient(55% 50% at -5% 105%, rgba(139, 92, 246, 0.22), transparent 70%),
-    radial-gradient(45% 45% at 105% 110%, rgba(217, 70, 239, 0.10), transparent 70%);
-  background-attachment: fixed;
+  background: var(--background);
 }
 
-/* Cartão de vidro (glassmorphism) */
+/* "glass" agora é superfície sólida em camadas */
 .glass {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: var(--surface);
+  border: 1px solid var(--border);
 }
-
 .glass-hover {
   transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
 }
 .glass-hover:hover {
-  border-color: rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--border-strong);
+  background: var(--surface-2);
 }
 
-/* Chip de ícone com leve realce roxo */
+/* chip de ícone neutro */
 .union-icon-chip {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(217, 70, 239, 0.15));
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
 }
 
-/* Realce de seleção/ação amarelo Union */
+/* estado ativo = acento (amarelo) suave */
 .union-active {
   background: rgba(250, 204, 21, 0.10);
   border: 1px solid rgba(250, 204, 21, 0.30);
-  color: #fde047;
+  color: var(--accent);
 }
+
+/* Scrollbar discreta alinhada ao tema escuro */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.12); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.22); }
+
+::selection { background: rgba(250, 204, 21, 0.22); }

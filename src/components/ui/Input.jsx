@@ -1,12 +1,12 @@
 import { forwardRef } from 'react'
 
 export const fieldBase =
-  'w-full rounded-lg border bg-white/5 px-3 py-2.5 text-sm font-normal text-white placeholder-neutral-500 transition-colors focus:outline-none focus:ring-2 disabled:opacity-60 disabled:cursor-not-allowed'
+  'w-full rounded-xl border bg-surface px-3.5 py-2.5 text-sm text-foreground placeholder:text-subtle transition-colors outline-none disabled:opacity-60 disabled:cursor-not-allowed'
 
 export function fieldBorder(error) {
   return error
-    ? 'border-red-400/60 focus:border-red-400/60 focus:ring-red-500/20'
-    : 'border-white/15 focus:border-yellow-400/50 focus:ring-yellow-400/20'
+    ? 'border-danger focus:border-danger'
+    : 'border-border focus:border-accent'
 }
 
 const Input = forwardRef(
@@ -14,12 +14,12 @@ const Input = forwardRef(
     return (
       <div className="w-full">
         {label && (
-          <label className="mb-1.5 block text-sm font-normal text-neutral-300">{label}</label>
+          <label className="mb-1.5 block text-sm font-medium text-muted">{label}</label>
         )}
 
         <div className="relative flex items-center">
           {leftIcon && (
-            <span className="absolute left-3 text-neutral-400">{leftIcon}</span>
+            <span className="absolute left-3 text-subtle">{leftIcon}</span>
           )}
 
           <input
@@ -29,12 +29,12 @@ const Input = forwardRef(
           />
 
           {rightIcon && (
-            <span className="absolute right-3 text-neutral-400">{rightIcon}</span>
+            <span className="absolute right-3 text-subtle">{rightIcon}</span>
           )}
         </div>
 
-        {error && <p className="mt-1 text-xs text-red-400">{error}</p>}
-        {helpText && !error && <p className="mt-1 text-xs text-neutral-400">{helpText}</p>}
+        {error && <p className="mt-1 text-xs text-danger">{error}</p>}
+        {helpText && !error && <p className="mt-1 text-xs text-muted">{helpText}</p>}
       </div>
     )
   }
