@@ -15,3 +15,12 @@ export async function uploadPublicFile(file, prefix = 'diversos') {
 export function isImageUrl(value) {
   return /\.(png|jpe?g|gif|webp|avif|bmp|svg)$/i.test(value || '')
 }
+
+// Remove o arquivo do bucket a partir da URL pública.
+export async function removePublicFile(url) {
+  const marker = `/${BUCKET}/`
+  const idx = (url || '').lastIndexOf(marker)
+  if (idx === -1) return
+  const path = decodeURIComponent(url.slice(idx + marker.length))
+  await supabase.storage.from(BUCKET).remove([path])
+}

@@ -19,6 +19,7 @@ import PlanForm from '../../components/PlanForm'
 import ChatWindow from '../../components/ChatWindow'
 import ContractsPanel from '../../components/ContractsPanel'
 import AsaasPanel from '../../components/AsaasPanel'
+import MateriaisPanel from '../../components/MateriaisPanel'
 
 function formatCurrency(value) {
   if (value === null || value === undefined) return '—'
@@ -301,6 +302,17 @@ export default function ClienteDetalhe() {
             )}
           </div>
         </form>
+      </div>
+
+      {/* Materiais do cliente */}
+      <div className="mt-6 glass rounded-2xl p-6">
+        <h2 className="text-base font-normal text-white">Materiais</h2>
+        <p className="mt-1 text-xs text-neutral-400">
+          Logo, fotos, PDFs e outros materiais enviados pelo cliente (ou pela equipe).
+        </p>
+        <div className="mt-4">
+          <MateriaisPanel clienteId={id} currentUser={profile} />
+        </div>
       </div>
 
       {/* Contratos */}
