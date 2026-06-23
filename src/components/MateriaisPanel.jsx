@@ -9,7 +9,7 @@ function formatDate(value) {
   return new Date(value).toLocaleDateString('pt-BR')
 }
 
-export default function MateriaisPanel({ clienteId, currentUser }) {
+export default function MateriaisPanel({ clienteId, currentUser, canUpload = true }) {
   const queryClient = useQueryClient()
   const fileRef = useRef(null)
   const [expandImg, setExpandImg] = useState(null)
@@ -50,13 +50,17 @@ export default function MateriaisPanel({ clienteId, currentUser }) {
 
   return (
     <div>
-      {/* Envio */}
-      <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-border-strong bg-surface px-4 py-5 text-sm text-muted hover:bg-white/5 transition-colors">
-        {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-        <span>{uploading ? 'Enviando...' : 'Enviar materiais (logo, fotos, PDFs...)'}</span>
-        <input ref={fileRef} type="file" multiple className="hidden" onChange={handlePick} disabled={uploading} />
-      </label>
-      {erro && <p className="mt-2 text-xs text-danger">{erro}</p>}
+      {/* Envio (só onde permitido — ex.: portal do cliente) */}
+      {canUpload && (
+        <>
+          <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-border-strong bg-surface px-4 py-5 text-sm text-muted hover:bg-white/5 transition-colors">
+            {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+            <span>{uploading ? 'Enviando...' : 'Enviar materiais (logo, fotos, PDFs...)'}</span>
+            <input ref={fileRef} type="file" multiple className="hidden" onChange={handlePick} disabled={uploading} />
+          </label>
+          {erro && <p className="mt-2 text-xs text-danger">{erro}</p>}
+        </>
+      )}
 
       {isLoading && <p className="mt-4 text-sm text-muted">Carregando...</p>}
       {!isLoading && itens.length === 0 && (

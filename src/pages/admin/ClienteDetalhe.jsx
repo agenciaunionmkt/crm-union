@@ -308,10 +308,10 @@ export default function ClienteDetalhe() {
       <div className="mt-6 glass rounded-2xl p-6">
         <h2 className="text-base font-normal text-white">Materiais</h2>
         <p className="mt-1 text-xs text-neutral-400">
-          Logo, fotos, PDFs e outros materiais enviados pelo cliente (ou pela equipe).
+          Logo, fotos, PDFs e outros materiais enviados pelo cliente.
         </p>
         <div className="mt-4">
-          <MateriaisPanel clienteId={id} currentUser={profile} />
+          <MateriaisPanel clienteId={id} currentUser={profile} canUpload={false} />
         </div>
       </div>
 
