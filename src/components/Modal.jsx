@@ -10,8 +10,7 @@ export default function Modal({ open, title, onClose, children, maxWidth = 'max-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
       <div
-        className="absolute inset-0 bg-black/75 backdrop-blur-md"
-        onClick={onClose}
+        className="absolute inset-0 bg-black/75"
         role="presentation"
       />
       <div
