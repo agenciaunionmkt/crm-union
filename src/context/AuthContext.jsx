@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 
 const AuthContext = createContext(null)
@@ -8,6 +8,9 @@ export function AuthProvider({ children }) {
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
   const [passwordRecovery, setPasswordRecovery] = useState(false)
+  // Guarda o id do usuário cujo perfil já foi carregado, para não recarregar
+  // (nem mostrar "Carregando") a cada refresh de token ao focar a janela.
+  const loadedUserId = useRef(null)
 
   useEffect(() => {
     let active = true
@@ -28,11 +31,18 @@ export function AuthProvider({ children }) {
       }
 
       setSession(newSession)
-      if (newSession?.user) {
-        loadProfile(newSession.user.id)
-      } else {
+
+      if (!newSession?.user) {
         setProfile(null)
+        loadedUserId.current = null
         setLoading(false)
+        return
+      }
+
+      // Só recarrega o perfil quando o usuário realmente muda (login novo).
+      // Em TOKEN_REFRESHED / foco da janela, mantém o que já está — sem desmontar a tela.
+      if (loadedUserId.current !== newSession.user.id) {
+        loadProfile(newSession.user.id)
       }
     })
 
@@ -53,8 +63,10 @@ export function AuthProvider({ children }) {
     if (error) {
       console.error('Erro ao carregar perfil do usuário:', error.message)
       setProfile(null)
+      loadedUserId.current = null
     } else {
       setProfile(data)
+      loadedUserId.current = userId
     }
     setLoading(false)
   }
