@@ -67,6 +67,17 @@ export default function Demandas() {
     },
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['demands'] })
+      // Notifica o cliente por e-mail quando o conteúdo vira "Aguardando aprovação"
+      if (variables.notifyEntregue && data?.cliente_id) {
+        const cliente = (clientsQuery.data ?? []).find((c) => c.id === data.cliente_id)
+        if (cliente?.contato_email) {
+          fetch('/api/notificar-demanda', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: cliente.contato_email, nome: cliente.nome, titulo: data.titulo }),
+          }).catch(() => {})
+        }
+      }
       if (variables.id) {
         closeForm()
         setSuccessMessage('Demanda atualizada!')
@@ -119,7 +130,8 @@ export default function Demandas() {
   }
 
   function handleSubmit(values) {
-    saveMutation.mutate({ id: editingDemand?.id ?? null, payload: values, tagIds: [] })
+    const virouEntregue = values.status === 'entregue' && editingDemand?.status !== 'entregue'
+    saveMutation.mutate({ id: editingDemand?.id ?? null, payload: values, tagIds: [], notifyEntregue: virouEntregue })
   }
 
   function handleDelete() {
