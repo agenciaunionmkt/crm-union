@@ -32,7 +32,7 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: 'Union Marketing <contato@agenciaunionmkt.com.br>',
+        from: 'Union Marketing <acesso@agenciaunionmkt.com.br>',
         to: [email],
         subject: `Conteúdo aguardando aprovação: ${titulo}`,
         html,
