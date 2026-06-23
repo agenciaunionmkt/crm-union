@@ -19,6 +19,7 @@ export const statusOptions = [
   { value: 'em_andamento', label: 'Em andamento' },
   { value: 'entregue', label: 'Aguardando aprovação' },
   { value: 'aprovado', label: 'Aprovado' },
+  { value: 'concluido', label: 'Concluído' },
 ]
 
 export default function DemandForm({
@@ -177,6 +178,7 @@ export default function DemandForm({
               em_revisao: 'bg-yellow-400/20 text-yellow-200 border-yellow-400/50',
               entregue: 'bg-blue-500/20 text-blue-200 border-blue-500/50',
               aprovado: 'bg-emerald-500/20 text-emerald-200 border-emerald-500/50',
+              concluido: 'bg-green-500/30 text-green-100 border-green-500/60',
             }[option.value]
             return (
               <button

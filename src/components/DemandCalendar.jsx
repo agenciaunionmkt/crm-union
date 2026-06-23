@@ -39,17 +39,20 @@ export default function DemandCalendar({
     return (
       demand.prazo &&
       demand.prazo < hojeStr &&
-      demand.status !== 'entregue' &&
-      demand.status !== 'aprovado'
+      !['entregue', 'aprovado', 'concluido'].includes(demand.status)
     )
   }
   function isDone(demand) {
     return demand.status === 'aprovado'
   }
+  function isConcluido(demand) {
+    return demand.status === 'concluido'
+  }
   function isAwaiting(demand) {
     return demand.status === 'entregue'
   }
   function toneFor(demand) {
+    if (isConcluido(demand)) return 'bg-green-500/25 text-green-200 border-green-500/50'
     if (isDone(demand)) return 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40'
     if (isAwaiting(demand)) return 'bg-blue-500/15 text-blue-300 border-blue-500/40'
     if (isOverdue(demand)) return 'bg-red-500/15 text-red-300 border-red-500/40'
@@ -124,21 +127,18 @@ export default function DemandCalendar({
                   {items.slice(0, 3).map((demand) => {
                     const overdue = isOverdue(demand)
                     const done = isDone(demand)
+                    const concluido = isConcluido(demand)
                     const awaiting = isAwaiting(demand)
-                    const tone = done
-                      ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40'
-                      : awaiting
-                        ? 'bg-blue-500/15 text-blue-300 border-blue-500/40'
-                        : overdue
-                          ? 'bg-red-500/15 text-red-300 border-red-500/40'
-                          : 'bg-white/5 text-neutral-200 border-white/10'
-                    const hover = done
-                      ? 'hover:bg-emerald-500/25'
-                      : awaiting
-                        ? 'hover:bg-blue-500/25'
-                        : overdue
-                          ? 'hover:bg-red-500/25'
-                          : 'hover:bg-white/10 hover:border-white/20'
+                    const tone = toneFor(demand)
+                    const hover = concluido
+                      ? 'hover:bg-green-500/35'
+                      : done
+                        ? 'hover:bg-emerald-500/25'
+                        : awaiting
+                          ? 'hover:bg-blue-500/25'
+                          : overdue
+                            ? 'hover:bg-red-500/25'
+                            : 'hover:bg-white/10 hover:border-white/20'
                     const nome = demand.responsavel?.nome
                     const iniciais = nome
                       ? nome.trim().split(/\s+/).slice(0, 2).map((p) => p[0]).join('').toUpperCase()
@@ -157,7 +157,7 @@ export default function DemandCalendar({
                       className={`rounded-lg border px-2.5 py-2 ${tone} ${
                         onCardClick ? `${hover} cursor-pointer transition-colors` : ''
                       }`}
-                      title={done ? `${demand.titulo} — aprovada` : awaiting ? `${demand.titulo} — aguardando aprovação` : overdue ? `${demand.titulo} — atrasada` : demand.titulo}
+                      title={concluido ? `${demand.titulo} — concluída` : done ? `${demand.titulo} — aprovada` : awaiting ? `${demand.titulo} — aguardando aprovação` : overdue ? `${demand.titulo} — atrasada` : demand.titulo}
                     >
                       <p className="text-xs font-normal leading-snug line-clamp-2">{demand.titulo}</p>
                       <div className="mt-1.5 flex items-center justify-end">
