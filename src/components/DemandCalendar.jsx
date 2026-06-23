@@ -194,6 +194,32 @@ export default function DemandCalendar({
         </div>
       </div>
 
+      {/* Demandas sem prazo (não aparecem no grid; ficam aqui para abrir/editar/remover) */}
+      {demands.some((d) => !d.prazo) && (
+        <div className="mt-4">
+          <p className="mb-2 text-xs uppercase tracking-widest text-subtle">Sem prazo definido</p>
+          <div className="flex flex-wrap gap-2">
+            {demands
+              .filter((d) => !d.prazo)
+              .map((demand) => (
+                <button
+                  key={demand.id}
+                  type="button"
+                  onClick={() => onCardClick?.(demand)}
+                  className={`inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-left text-xs transition-colors ${toneFor(demand)} ${onCardClick ? 'cursor-pointer hover:brightness-110' : ''}`}
+                >
+                  <span>{demand.titulo}</span>
+                  {iniciaisDe(demand) && (
+                    <span className="inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-accent/15 text-[10px] font-semibold text-accent">
+                      {iniciaisDe(demand)}
+                    </span>
+                  )}
+                </button>
+              ))}
+          </div>
+        </div>
+      )}
+
       <Modal
         open={!!dayModal}
         title={dayModal ? format(dayModal, "dd 'de' MMMM", { locale: ptBR }) : ''}
