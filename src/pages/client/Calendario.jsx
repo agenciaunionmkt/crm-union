@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { CheckCircle2 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
-import { listDemandsByClient, updateDemandStatus } from '../../lib/api/demands'
+import { listDemandsByClient, updateDemandStatus, updateDemand } from '../../lib/api/demands'
 import { listAttachments } from '../../lib/api/attachments'
 import { notifyTeam } from '../../lib/api/notifications'
 import DemandCalendar from '../../components/DemandCalendar'
@@ -26,6 +26,11 @@ export default function ClientCalendario() {
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const [detalhe, setDetalhe] = useState(null)
   const [expandImg, setExpandImg] = useState(null)
+  const [descricaoEdit, setDescricaoEdit] = useState('')
+
+  useEffect(() => {
+    setDescricaoEdit(detalhe?.descricao ?? '')
+  }, [detalhe?.id])
 
   const { data: demands = [], isLoading } = useQuery({
     queryKey: ['client-demands', profile?.cliente_id],
@@ -41,6 +46,19 @@ export default function ClientCalendario() {
       notifyTeam({
         titulo: 'Publicação aprovada',
         mensagem: `${profile?.nome ?? 'Cliente'} aprovou "${data?.titulo ?? 'uma publicação'}"`,
+        link: '/admin/demandas',
+      }).catch(() => {})
+    },
+  })
+
+  const salvarDescricaoMutation = useMutation({
+    mutationFn: () => updateDemand(detalhe.id, { descricao: descricaoEdit }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['client-demands', profile?.cliente_id] })
+      setDetalhe((prev) => (prev ? { ...prev, descricao: descricaoEdit } : prev))
+      notifyTeam({
+        titulo: 'Conteúdo editado pelo cliente',
+        mensagem: `${profile?.nome ?? 'Cliente'} ajustou "${detalhe?.titulo ?? 'um conteúdo'}"`,
         link: '/admin/demandas',
       }).catch(() => {})
     },
@@ -84,6 +102,31 @@ export default function ClientCalendario() {
                   </span>
                 )}
                 <span>Data: {formatDate(detalhe.prazo)}</span>
+              </div>
+            </div>
+
+            {/* Descrição (cliente pode editar para sugerir mudanças) */}
+            <div>
+              <p className="mb-2 text-xs uppercase tracking-widest text-neutral-500">Descrição</p>
+              <textarea
+                rows={4}
+                value={descricaoEdit}
+                onChange={(e) => setDescricaoEdit(e.target.value)}
+                placeholder="Detalhes do conteúdo. Você pode editar para sugerir mudanças."
+                className="w-full rounded-xl border border-border bg-surface px-3.5 py-2.5 text-sm text-foreground placeholder:text-subtle outline-none transition-colors focus:border-accent resize-y"
+              />
+              <div className="mt-2 flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => salvarDescricaoMutation.mutate()}
+                  disabled={salvarDescricaoMutation.isPending || descricaoEdit === (detalhe.descricao ?? '')}
+                  className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground hover:opacity-90 disabled:opacity-50 transition-colors"
+                >
+                  {salvarDescricaoMutation.isPending ? 'Salvando...' : 'Salvar alterações'}
+                </button>
+                {salvarDescricaoMutation.isSuccess && descricaoEdit === (detalhe.descricao ?? '') && (
+                  <span className="text-xs text-emerald-400">Alterações enviadas à agência.</span>
+                )}
               </div>
             </div>
 

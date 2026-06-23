@@ -84,31 +84,28 @@ export async function getFinancialSummary() {
   if (error) throw error
 
   const summary = {
-    totalEntradas: 0,
-    totalSaidas: 0,
-    pagos: 0,
-    pendentes: 0,
-    vencidos: 0,
-    saldo: 0,
+    totalEntradas: 0,   // tudo faturado (entradas, qualquer status)
+    totalSaidas: 0,     // todas as saídas
+    recebido: 0,        // entradas efetivamente pagas
+    aReceber: 0,        // entradas pendentes/vencidas (faturado, não recebido)
+    saidasPagas: 0,
+    saldo: 0,           // caixa real: recebido - saídas pagas
   }
 
   entries?.forEach((entry) => {
+    const v = entry.valor || 0
     if (entry.tipo === 'entrada') {
-      summary.totalEntradas += entry.valor || 0
+      summary.totalEntradas += v
+      if (entry.status === 'pago') summary.recebido += v
+      else summary.aReceber += v
     } else {
-      summary.totalSaidas += entry.valor || 0
-    }
-
-    if (entry.status === 'pago') {
-      summary.pagos += entry.valor || 0
-    } else if (entry.status === 'pendente') {
-      summary.pendentes += entry.valor || 0
-    } else if (entry.status === 'vencido') {
-      summary.vencidos += entry.valor || 0
+      summary.totalSaidas += v
+      if (entry.status === 'pago') summary.saidasPagas += v
     }
   })
 
-  summary.saldo = summary.totalEntradas - summary.totalSaidas
+  // Saldo reflete apenas o que entrou de fato menos o que saiu de fato
+  summary.saldo = summary.recebido - summary.saidasPagas
 
   return summary
 }

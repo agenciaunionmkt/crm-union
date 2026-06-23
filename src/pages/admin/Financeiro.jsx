@@ -139,23 +139,23 @@ export default function Financeiro() {
       {summary && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
           <div className="glass glass-hover rounded-2xl p-6">
-            <p className="text-xs uppercase tracking-widest text-neutral-500">Saldo</p>
+            <p className="text-xs uppercase tracking-widest text-neutral-500">Saldo (recebido − pago)</p>
             <p className="text-2xl font-normal text-white">R$ {summary.saldo.toFixed(2)}</p>
           </div>
 
           <div className="glass glass-hover rounded-2xl p-6">
-            <p className="text-xs uppercase tracking-widest text-neutral-500">Entradas</p>
-            <p className="text-2xl font-normal text-emerald-400">R$ {summary.totalEntradas.toFixed(2)}</p>
+            <p className="text-xs uppercase tracking-widest text-neutral-500">Recebido</p>
+            <p className="text-2xl font-normal text-emerald-400">R$ {summary.recebido.toFixed(2)}</p>
           </div>
 
           <div className="glass glass-hover rounded-2xl p-6">
-            <p className="text-xs uppercase tracking-widest text-neutral-500">Saídas</p>
-            <p className="text-2xl font-normal text-red-400">R$ {summary.totalSaidas.toFixed(2)}</p>
+            <p className="text-xs uppercase tracking-widest text-neutral-500">A receber</p>
+            <p className="text-2xl font-normal text-orange-400">R$ {summary.aReceber.toFixed(2)}</p>
           </div>
 
           <div className="glass glass-hover rounded-2xl p-6">
-            <p className="text-xs uppercase tracking-widest text-neutral-500">Pendentes</p>
-            <p className="text-2xl font-normal text-orange-400">R$ {summary.pendentes.toFixed(2)}</p>
+            <p className="text-xs uppercase tracking-widest text-neutral-500">Saídas pagas</p>
+            <p className="text-2xl font-normal text-red-400">R$ {summary.saidasPagas.toFixed(2)}</p>
           </div>
         </div>
       )}

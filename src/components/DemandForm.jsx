@@ -17,7 +17,6 @@ const emptyForm = {
 export const statusOptions = [
   { value: 'a_fazer', label: 'A fazer' },
   { value: 'em_andamento', label: 'Em andamento' },
-  { value: 'em_revisao', label: 'Em revisão' },
   { value: 'entregue', label: 'Aguardando aprovação' },
   { value: 'aprovado', label: 'Aprovado' },
 ]

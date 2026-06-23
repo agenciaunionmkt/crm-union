@@ -91,10 +91,6 @@ export async function updateDemand(id, payload, tagIds) {
     await setDemandTags(id, tagIds)
   }
 
-  if (payload.status === 'em_revisao') {
-    await ensurePendingApproval(id)
-  }
-
   return data
 }
 
@@ -107,10 +103,6 @@ export async function updateDemandStatus(id, status) {
     .single()
 
   if (error) throw error
-
-  if (status === 'em_revisao') {
-    await ensurePendingApproval(id)
-  }
 
   return normalizeDemand(data)
 }
