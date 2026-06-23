@@ -34,8 +34,15 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         from: 'Union Marketing <acesso@agenciaunionmkt.com.br>',
         to: [email],
+        reply_to: 'contato@agenciaunionmkt.com.br',
         subject: `Conteúdo aguardando aprovação: ${titulo}`,
         html,
+        // Versão texto melhora a entregabilidade (evita cair em spam)
+        text:
+          `Olá ${nome || ''},\n\n` +
+          `Um novo conteúdo está aguardando a sua aprovação: ${titulo}.\n\n` +
+          `Acesse o portal para visualizar e aprovar: ${portalUrl}\n\n` +
+          `Union Marketing`,
       }),
     })
     const data = await r.json()
