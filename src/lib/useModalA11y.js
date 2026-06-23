@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 const SELECTOR =
   'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'
@@ -6,6 +6,11 @@ const SELECTOR =
 // Acessibilidade de modal: ESC fecha, Tab fica preso dentro, foco inicial e
 // retorno do foco ao elemento anterior quando fecha.
 export function useModalA11y(open, containerRef, onClose) {
+  // Mantém o onClose atual em um ref para o efeito não depender da sua identidade
+  // (senão re-executa a cada render e rouba o foco do campo sendo digitado).
+  const onCloseRef = useRef(onClose)
+  onCloseRef.current = onClose
+
   useEffect(() => {
     if (!open) return
     const prevFocused = document.activeElement
@@ -19,7 +24,7 @@ export function useModalA11y(open, containerRef, onClose) {
 
     function onKey(e) {
       if (e.key === 'Escape') {
-        onClose?.()
+        onCloseRef.current?.()
         return
       }
       if (e.key !== 'Tab') return
@@ -42,5 +47,5 @@ export function useModalA11y(open, containerRef, onClose) {
       document.removeEventListener('keydown', onKey)
       prevFocused?.focus?.()
     }
-  }, [open, containerRef, onClose])
+  }, [open, containerRef])
 }

@@ -65,7 +65,7 @@ function App() {
         {/* Portal do cliente */}
         <Route element={<ProtectedRoute allowedRoles={['cliente']} />}>
           <Route path="/portal" element={<ClientLayout />}>
-            <Route index element={<Navigate to="/portal/solicitacoes" replace />} />
+            <Route index element={<Navigate to="/portal/calendario" replace />} />
             <Route path="calendario" element={<ClientCalendario />} />
             <Route path="demandas" element={<ClientDemandas />} />
             <Route path="contratos" element={<ClientContratos />} />
