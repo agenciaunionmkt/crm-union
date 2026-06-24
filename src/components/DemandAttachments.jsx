@@ -24,7 +24,11 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
   })
 
   const uploadMutation = useMutation({
-    mutationFn: (file) => uploadAttachment(demandId, file, currentUser?.id),
+    mutationFn: async (files) => {
+      for (const file of files) {
+        await uploadAttachment(demandId, file, currentUser?.id)
+      }
+    },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['attachments', demandId] }),
   })
 
@@ -34,8 +38,8 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
   })
 
   function handlePick(e) {
-    const file = e.target.files?.[0]
-    if (file) uploadMutation.mutate(file)
+    const files = Array.from(e.target.files || [])
+    if (files.length) uploadMutation.mutate(files)
     e.target.value = ''
   }
 
@@ -113,7 +117,7 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
             <>+ Adicionar arquivo</>
           )}
         </button>
-        <input ref={fileRef} type="file" onChange={handlePick} className="hidden" />
+        <input ref={fileRef} type="file" multiple onChange={handlePick} className="hidden" />
       </div>
 
       {uploadMutation.error && (
