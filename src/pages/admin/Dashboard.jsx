@@ -35,10 +35,12 @@ export default function AdminDashboard() {
 
   const clientesRecorrentes = clients.filter(c => c.tipo_cliente === 'recorrente').length
 
-  // Demandas atrasadas: prazo já passou e ainda não foram entregues
+  // Demandas atrasadas: têm prazo definido, o prazo já passou e ainda não foram
+  // concluídas (entregue/aprovado/concluído contam como feitas).
   const hojeStr = hoje.toISOString().split('T')[0]
+  const FEITAS = ['entregue', 'aprovado', 'concluido']
   const demandasAtrasadas = demands.filter(
-    (d) => d.prazo && d.prazo < hojeStr && d.status !== 'entregue'
+    (d) => d.prazo && d.prazo < hojeStr && !FEITAS.includes(d.status)
   ).length
 
   // Contagem por status (dados reais)
