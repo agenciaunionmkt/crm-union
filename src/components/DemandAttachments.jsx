@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Paperclip, Trash2, Loader2, ExternalLink } from 'lucide-react'
 import { listAttachments, uploadAttachment, deleteAttachment } from '../lib/api/attachments'
+import ImageLightbox from './ui/ImageLightbox'
 
 function isImagem(att) {
   return /\.(png|jpe?g|gif|webp|avif|bmp|svg)$/i.test(att.nome_arquivo || att.arquivo_url || '')
@@ -11,6 +12,7 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
   const fileRef = useRef(null)
   const pendingRef = useRef(null)
   const [pending, setPending] = useState([])
+  const [lightbox, setLightbox] = useState(null)
   const queryClient = useQueryClient()
 
   useEffect(() => {
@@ -140,14 +142,19 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
                   key={att.id}
                   className="group relative aspect-square overflow-hidden rounded-lg border border-white/10 bg-white/5"
                 >
-                  <a href={att.arquivo_url} target="_blank" rel="noopener noreferrer" title={att.nome_arquivo}>
+                  <button
+                    type="button"
+                    onClick={() => setLightbox(att)}
+                    title={att.nome_arquivo}
+                    className="h-full w-full"
+                  >
                     <img
                       src={att.arquivo_url}
                       alt={att.nome_arquivo || 'anexo'}
                       loading="lazy"
                       className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105"
                     />
-                  </a>
+                  </button>
                   <button
                     type="button"
                     onClick={() => deleteMutation.mutate(att)}
@@ -194,6 +201,12 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
           )}
         </div>
       )}
+
+      <ImageLightbox
+        url={lightbox?.arquivo_url}
+        nome={lightbox?.nome_arquivo}
+        onClose={() => setLightbox(null)}
+      />
     </div>
   )
 }

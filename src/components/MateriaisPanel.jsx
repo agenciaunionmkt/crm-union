@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Upload, FileText, Trash2, Download, Loader2 } from 'lucide-react'
 import { listMateriais, createMaterial, deleteMaterial } from '../lib/api/materiais'
 import { isImageUrl } from '../lib/api/storage'
+import ImageLightbox from './ui/ImageLightbox'
 
 function formatDate(value) {
   if (!value) return ''
@@ -74,7 +75,7 @@ export default function MateriaisPanel({ clienteId, currentUser, canUpload = tru
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {imagens.map((m) => (
               <div key={m.id} className="group relative aspect-square overflow-hidden rounded-xl border border-border bg-surface-2">
-                <button type="button" onClick={() => setExpandImg(m.arquivo_url)} className="h-full w-full" title="Ampliar">
+                <button type="button" onClick={() => setExpandImg(m)} className="h-full w-full" title="Ampliar">
                   <img src={m.arquivo_url} alt={m.nome_arquivo} loading="lazy" className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105" />
                 </button>
                 <button
@@ -126,15 +127,11 @@ export default function MateriaisPanel({ clienteId, currentUser, canUpload = tru
         </div>
       )}
 
-      {/* Lightbox */}
-      {expandImg && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 p-4" onClick={() => setExpandImg(null)} role="presentation">
-          <img src={expandImg} alt="Material ampliado" className="max-h-[90vh] max-w-full rounded-lg object-contain" onClick={(e) => e.stopPropagation()} />
-          <button type="button" onClick={() => setExpandImg(null)} className="absolute right-4 top-4 rounded-lg bg-white/10 px-3 py-1.5 text-sm text-white hover:bg-white/20">
-            Fechar
-          </button>
-        </div>
-      )}
+      <ImageLightbox
+        url={expandImg?.arquivo_url}
+        nome={expandImg?.nome_arquivo}
+        onClose={() => setExpandImg(null)}
+      />
     </div>
   )
 }

@@ -7,6 +7,7 @@ import { listAttachments } from '../../lib/api/attachments'
 import { notifyTeam } from '../../lib/api/notifications'
 import DemandCalendar from '../../components/DemandCalendar'
 import DemandActivity from '../../components/DemandActivity'
+import ImageLightbox from '../../components/ui/ImageLightbox'
 import Modal from '../../components/Modal'
 import { demandStatusLabels, demandStatusStyles } from '../../lib/status'
 
@@ -141,7 +142,7 @@ export default function ClientCalendario() {
                     <button
                       key={img.id}
                       type="button"
-                      onClick={() => setExpandImg(img.arquivo_url)}
+                      onClick={() => setExpandImg(img)}
                       className="group relative aspect-square overflow-hidden rounded-lg border border-white/10 bg-white/5"
                       title="Clique para ampliar"
                     >
@@ -189,28 +190,11 @@ export default function ClientCalendario() {
         )}
       </Modal>
 
-      {/* Lightbox de imagem ampliada */}
-      {expandImg && (
-        <div
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 p-4"
-          onClick={() => setExpandImg(null)}
-          role="presentation"
-        >
-          <img
-            src={expandImg}
-            alt="Conteúdo ampliado"
-            className="max-h-[90vh] max-w-full rounded-lg object-contain"
-            onClick={(e) => e.stopPropagation()}
-          />
-          <button
-            type="button"
-            onClick={() => setExpandImg(null)}
-            className="absolute right-4 top-4 rounded-lg bg-white/10 px-3 py-1.5 text-sm text-white hover:bg-white/20"
-          >
-            Fechar
-          </button>
-        </div>
-      )}
+      <ImageLightbox
+        url={expandImg?.arquivo_url}
+        nome={expandImg?.nome_arquivo}
+        onClose={() => setExpandImg(null)}
+      />
     </div>
   )
 }
