@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Users, ListTodo, Mail, TrendingUp, DollarSign, MessageSquare, Sparkles, Wand2, Bell, Menu, Sun, Moon, Settings, LogOut, X, AlertCircle, CheckCircle } from 'lucide-react'
+import { LayoutDashboard, Users, ListTodo, Mail, TrendingUp, DollarSign, MessageSquare, Sparkles, Wand2, CalendarClock, Bell, Menu, Sun, Moon, Settings, LogOut, X, AlertCircle, CheckCircle } from 'lucide-react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '../context/AuthContext'
 import { useTheme } from '../context/ThemeContext'
@@ -9,6 +9,7 @@ import { listConversations } from '../lib/api/chat'
 import { listNotifications, markAllNotificationsRead } from '../lib/api/notifications'
 import UnionLogo from '../components/UnionLogo'
 import PhotoCropModal from '../components/PhotoCropModal'
+import MeetingAlarm from '../components/MeetingAlarm'
 
 const links = [
   { to: '/admin', label: 'Dashboard', Icon: LayoutDashboard, end: true },
@@ -18,6 +19,7 @@ const links = [
   { to: '/admin/assistente', label: 'Assistente IA', Icon: Sparkles },
   { to: '/admin/agente-conteudo', label: 'Agente de conteúdo', Icon: Wand2 },
   { to: '/admin/solicitacoes', label: 'Solicitações', Icon: Mail },
+  { to: '/admin/reunioes', label: 'Reuniões', Icon: CalendarClock },
   { to: '/admin/relatorios', label: 'Relatórios', Icon: TrendingUp },
   { to: '/admin/financeiro', label: 'Financeiro', Icon: DollarSign },
 ]
@@ -218,6 +220,7 @@ export default function AdminLayout() {
 
   return (
     <div className="flex min-h-screen union-app-bg text-white">
+      <MeetingAlarm />
       {/* Overlay (mobile) */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-40 bg-black/60 lg:hidden" onClick={() => setSidebarOpen(false)} />

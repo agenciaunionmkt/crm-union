@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { Mail, MessageSquare, CalendarDays, FileSignature, Wallet, FolderOpen, Menu, X, Settings } from 'lucide-react'
+import { Mail, MessageSquare, CalendarDays, FileSignature, Wallet, FolderOpen, CalendarClock, Menu, X, Settings } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabaseClient'
 import { getClient } from '../lib/api/clients'
 import { labelDoPlano, postsDoCliente } from '../lib/plans'
 import UnionLogo from '../components/UnionLogo'
 import Modal from '../components/Modal'
+import MeetingAlarm from '../components/MeetingAlarm'
 
 const links = [
   { to: '/portal/calendario', label: 'Calendário', Icon: CalendarDays },
@@ -15,6 +16,7 @@ const links = [
   { to: '/portal/materiais', label: 'Materiais', Icon: FolderOpen },
   { to: '/portal/contratos', label: 'Contratos', Icon: FileSignature },
   { to: '/portal/pagamentos', label: 'Pagamentos', Icon: Wallet },
+  { to: '/portal/reunioes', label: 'Reuniões', Icon: CalendarClock },
   { to: '/portal/chat', label: 'Chat com a agência', Icon: MessageSquare },
 ]
 
@@ -73,6 +75,7 @@ export default function ClientLayout() {
 
   return (
     <div className="flex min-h-screen union-app-bg text-white">
+      <MeetingAlarm />
       {sidebarOpen && (
         <div className="fixed inset-0 z-40 bg-black/60 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}

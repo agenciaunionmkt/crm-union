@@ -19,6 +19,7 @@ const Assistente = lazy(() => import('./pages/admin/Assistente'))
 const AgenteConteudo = lazy(() => import('./pages/admin/AgenteConteudo'))
 const Relatorios = lazy(() => import('./pages/admin/Relatorios'))
 const Financeiro = lazy(() => import('./pages/admin/Financeiro'))
+const Reunioes = lazy(() => import('./pages/admin/Reunioes'))
 const ClientDemandas = lazy(() => import('./pages/client/Demandas'))
 const ClientCalendario = lazy(() => import('./pages/client/Calendario'))
 const ClientSolicitacoes = lazy(() => import('./pages/client/Solicitacoes'))
@@ -27,6 +28,7 @@ const ClientChat = lazy(() => import('./pages/client/Chat'))
 const ClientContratos = lazy(() => import('./pages/client/Contratos'))
 const ClientPagamentos = lazy(() => import('./pages/client/Pagamentos'))
 const ClientMateriais = lazy(() => import('./pages/client/Materiais'))
+const ClientReunioes = lazy(() => import('./pages/client/Reunioes'))
 
 function Carregando() {
   return (
@@ -59,6 +61,7 @@ function App() {
             <Route path="solicitacoes" element={<Solicitacoes />} />
             <Route path="relatorios" element={<Relatorios />} />
             <Route path="financeiro" element={<Financeiro />} />
+            <Route path="reunioes" element={<Reunioes />} />
           </Route>
         </Route>
 
@@ -71,6 +74,7 @@ function App() {
             <Route path="contratos" element={<ClientContratos />} />
             <Route path="pagamentos" element={<ClientPagamentos />} />
             <Route path="materiais" element={<ClientMateriais />} />
+            <Route path="reunioes" element={<ClientReunioes />} />
             <Route path="solicitacoes" element={<ClientSolicitacoes />} />
             <Route path="historico" element={<ClientHistorico />} />
             <Route path="chat" element={<ClientChat />} />
