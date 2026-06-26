@@ -15,6 +15,8 @@ import {
   updateDemandStatus,
 } from '../../lib/api/demands'
 import { uploadAttachment } from '../../lib/api/attachments'
+import { notifyTeam } from '../../lib/api/notifications'
+import { playSound } from '../../lib/sound'
 import Modal from '../../components/ui/Modal'
 import DemandForm from '../../components/DemandForm'
 import DemandCalendar from '../../components/DemandCalendar'
@@ -67,6 +69,25 @@ export default function Demandas() {
     },
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['demands'] })
+
+      // Feedback: som + sininho ao criar e ao concluir demanda
+      if (!variables.id) {
+        playSound('new')
+        notifyTeam({
+          titulo: 'Nova demanda',
+          mensagem: data?.titulo ?? 'Demanda criada',
+          link: '/admin/demandas',
+        }).catch(() => {})
+      }
+      if (variables.virouConcluido) {
+        playSound('done')
+        notifyTeam({
+          titulo: 'Demanda concluída',
+          mensagem: data?.titulo ?? 'Uma demanda foi concluída',
+          link: '/admin/demandas',
+        }).catch(() => {})
+      }
+
       // Notifica o cliente por e-mail quando o conteúdo vira "Aguardando aprovação"
       if (variables.notifyEntregue && data?.cliente_id) {
         const cliente = (clientsQuery.data ?? []).find((c) => c.id === data.cliente_id)
@@ -131,7 +152,14 @@ export default function Demandas() {
 
   function handleSubmit(values) {
     const virouEntregue = values.status === 'entregue' && editingDemand?.status !== 'entregue'
-    saveMutation.mutate({ id: editingDemand?.id ?? null, payload: values, tagIds: [], notifyEntregue: virouEntregue })
+    const virouConcluido = values.status === 'concluido' && editingDemand?.status !== 'concluido'
+    saveMutation.mutate({
+      id: editingDemand?.id ?? null,
+      payload: values,
+      tagIds: [],
+      notifyEntregue: virouEntregue,
+      virouConcluido,
+    })
   }
 
   function handleDelete() {
