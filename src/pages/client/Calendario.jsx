@@ -4,6 +4,7 @@ import { CheckCircle2 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { listDemandsByClient, updateDemandStatus, updateDemand } from '../../lib/api/demands'
 import { listAttachments } from '../../lib/api/attachments'
+import { listCommentsFeed } from '../../lib/api/demandActivity'
 import { notifyTeam } from '../../lib/api/notifications'
 import DemandCalendar from '../../components/DemandCalendar'
 import DemandActivity from '../../components/DemandActivity'
@@ -38,6 +39,26 @@ export default function ClientCalendario() {
     queryFn: () => listDemandsByClient(profile.cliente_id),
     enabled: !!profile?.cliente_id,
   })
+
+  // Indicador de comentário novo da agência nas demandas
+  const { data: commentsFeed = [] } = useQuery({
+    queryKey: ['comments-feed'],
+    queryFn: () => listCommentsFeed(),
+    enabled: !!profile?.cliente_id,
+  })
+  const [lastSeenComents] = useState(() => {
+    try { return localStorage.getItem('comentariosClienteLastSeen') } catch { return null }
+  })
+  useEffect(() => {
+    try { localStorage.setItem('comentariosClienteLastSeen', new Date().toISOString()) } catch { /* ignore */ }
+  }, [])
+  const comentadasIds = [
+    ...new Set(
+      commentsFeed
+        .filter((c) => c.autor?.papel !== 'cliente' && (!lastSeenComents || c.created_at > lastSeenComents))
+        .map((c) => c.demand_id)
+    ),
+  ]
 
   const aprovarMutation = useMutation({
     mutationFn: (id) => updateDemandStatus(id, 'aprovado'),
@@ -87,6 +108,7 @@ export default function ClientCalendario() {
             currentMonth={currentMonth}
             onMonthChange={setCurrentMonth}
             onCardClick={(d) => setDetalhe(d)}
+            commentDemandIds={comentadasIds}
           />
         )}
       </div>
@@ -184,7 +206,7 @@ export default function ClientCalendario() {
 
             {/* Comentários do cliente nesta demanda */}
             <div className="border-t border-white/10 pt-4">
-              <DemandActivity demandId={detalhe.id} mode="cliente" currentUser={profile} />
+              <DemandActivity demandId={detalhe.id} mode="cliente" currentUser={profile} demandTitulo={detalhe.titulo} />
             </div>
           </div>
         )}

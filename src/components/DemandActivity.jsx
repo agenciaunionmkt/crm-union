@@ -9,6 +9,7 @@ import {
   listComments,
   uploadAttachment,
 } from '../lib/api/demandActivity'
+import { notifyTeam, notifyClient } from '../lib/api/notifications'
 
 function formatDateTime(value) {
   if (!value) return '—'
@@ -21,7 +22,7 @@ function formatDateTime(value) {
  * mode = 'admin'  -> vê e pode marcar comentários internos, pode enviar/excluir anexos
  * mode = 'cliente' -> vê apenas comentários externos, anexos somente leitura
  */
-export default function DemandActivity({ demandId, mode = 'admin', currentUser }) {
+export default function DemandActivity({ demandId, mode = 'admin', currentUser, demandTitulo = '', clienteId = null }) {
   const queryClient = useQueryClient()
   const [message, setMessage] = useState('')
   const [interno, setInterno] = useState(mode === 'admin')
@@ -43,9 +44,25 @@ export default function DemandActivity({ demandId, mode = 'admin', currentUser }
 
   const commentMutation = useMutation({
     mutationFn: (payload) => createComment(payload),
-    onSuccess: () => {
+    onSuccess: (novo) => {
       queryClient.invalidateQueries({ queryKey: ['comments', demandId] })
       setMessage('')
+      const trecho = (novo?.mensagem || '').slice(0, 80)
+      if (!isAdmin) {
+        // Cliente comentou -> avisa a equipe (sininho)
+        notifyTeam({
+          titulo: 'Novo comentário do cliente',
+          mensagem: demandTitulo ? `${demandTitulo}: ${trecho}` : trecho,
+          link: '/admin/comentarios',
+        }).catch(() => {})
+      } else if (!novo?.interno && clienteId) {
+        // Agência respondeu (comentário externo) -> avisa o cliente
+        notifyClient(clienteId, {
+          titulo: 'Resposta da agência',
+          mensagem: demandTitulo ? `${demandTitulo}: ${trecho}` : trecho,
+          link: '/portal/calendario',
+        }).catch(() => {})
+      }
     },
   })
 

@@ -15,6 +15,7 @@ import {
   updateDemandStatus,
 } from '../../lib/api/demands'
 import { uploadAttachment } from '../../lib/api/attachments'
+import { listCommentsFeed } from '../../lib/api/demandActivity'
 import { notifyTeam } from '../../lib/api/notifications'
 import { playSound } from '../../lib/sound'
 import Modal from '../../components/ui/Modal'
@@ -52,6 +53,17 @@ export default function Demandas() {
   const demandsQuery = useQuery({ queryKey: ['demands'], queryFn: () => listDemands() })
   const clientsQuery = useQuery({ queryKey: ['clients'], queryFn: listClients })
   const teamQuery = useQuery({ queryKey: ['team-users'], queryFn: listTeamUsers })
+  const commentsFeedQuery = useQuery({ queryKey: ['comments-feed'], queryFn: () => listCommentsFeed(), refetchInterval: 30000 })
+
+  // Demandas com comentário de cliente ainda não visto (ponto no card)
+  const comentariosLastSeen = localStorage.getItem('comentariosLastSeen')
+  const comentadasIds = [
+    ...new Set(
+      (commentsFeedQuery.data ?? [])
+        .filter((c) => c.autor?.papel === 'cliente' && (!comentariosLastSeen || c.created_at > comentariosLastSeen))
+        .map((c) => c.demand_id)
+    ),
+  ]
 
   const saveMutation = useMutation({
     mutationFn: async ({ id, payload, tagIds }) => {
@@ -272,6 +284,7 @@ export default function Demandas() {
               onMonthChange={setCurrentMonth}
               onDayClick={openNewDemand}
               onCardClick={openEditDemand}
+              commentDemandIds={comentadasIds}
             />
           )}
         </div>
@@ -313,7 +326,7 @@ export default function Demandas() {
 
         {editingDemand && (
           <div className="mt-6 border-t border-white/10 pt-4">
-            <DemandActivity demandId={editingDemand.id} mode="admin" currentUser={profile} />
+            <DemandActivity demandId={editingDemand.id} mode="admin" currentUser={profile} demandTitulo={editingDemand.titulo} clienteId={editingDemand.cliente_id} />
           </div>
         )}
 

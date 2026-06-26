@@ -21,19 +21,26 @@ export async function createNotification({ userId, titulo, mensagem, link }) {
 }
 
 // Cria uma notificação para toda a equipe (admin + equipe).
+// Usa RPC SECURITY DEFINER para funcionar mesmo quando quem dispara é o cliente (RLS).
 export async function notifyTeam({ titulo, mensagem, link }) {
-  const { data: team, error } = await supabase
-    .from('users')
-    .select('id')
-    .in('papel', ['admin', 'equipe'])
-  if (error || !team?.length) return
-  const rows = team.map((u) => ({
-    user_id: u.id,
-    titulo,
-    mensagem: mensagem ?? null,
-    link: link ?? null,
-  }))
-  await supabase.from('notifications').insert(rows)
+  const { error } = await supabase.rpc('notify_team', {
+    p_titulo: titulo,
+    p_mensagem: mensagem ?? null,
+    p_link: link ?? null,
+  })
+  if (error) console.warn('notify_team:', error.message)
+}
+
+// Cria uma notificação para os usuários (portal) de um cliente.
+export async function notifyClient(clienteId, { titulo, mensagem, link }) {
+  if (!clienteId) return
+  const { error } = await supabase.rpc('notify_client', {
+    p_cliente_id: clienteId,
+    p_titulo: titulo,
+    p_mensagem: mensagem ?? null,
+    p_link: link ?? null,
+  })
+  if (error) console.warn('notify_client:', error.message)
 }
 
 export async function markAllNotificationsRead(userId) {

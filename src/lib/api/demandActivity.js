@@ -25,6 +25,23 @@ export async function listComments(demandId, { onlyExternal = false } = {}) {
   return data
 }
 
+// Feed de comentários (para inbox e indicadores). RLS: equipe vê todos;
+// cliente vê os externos das próprias demandas.
+const COMMENT_FEED_SELECT = `
+  id, mensagem, interno, created_at, demand_id,
+  autor:users ( id, nome, papel ),
+  demand:demands ( id, titulo, cliente_id, client:clients ( nome ) )
+`
+export async function listCommentsFeed({ limit = 80 } = {}) {
+  const { data, error } = await supabase
+    .from('comments')
+    .select(COMMENT_FEED_SELECT)
+    .order('created_at', { ascending: false })
+    .limit(limit)
+  if (error) throw error
+  return data
+}
+
 export async function createComment({ demandId, autorId, mensagem, interno = true }) {
   const { data, error } = await supabase
     .from('comments')

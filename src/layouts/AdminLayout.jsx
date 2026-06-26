@@ -1,12 +1,13 @@
 import { useState, useRef, useEffect } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Users, ListTodo, Mail, TrendingUp, DollarSign, MessageSquare, Sparkles, Wand2, CalendarClock, Bell, Menu, Sun, Moon, Settings, LogOut, X, AlertCircle, CheckCircle } from 'lucide-react'
+import { LayoutDashboard, Users, ListTodo, Mail, TrendingUp, DollarSign, MessageSquare, MessageCircle, Sparkles, Wand2, CalendarClock, Bell, Menu, Sun, Moon, Settings, LogOut, X, AlertCircle, CheckCircle } from 'lucide-react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '../context/AuthContext'
 import { useTheme } from '../context/ThemeContext'
 import { supabase } from '../lib/supabaseClient'
 import { listConversations } from '../lib/api/chat'
 import { listNotifications, markAllNotificationsRead } from '../lib/api/notifications'
+import { listCommentsFeed } from '../lib/api/demandActivity'
 import UnionLogo from '../components/UnionLogo'
 import PhotoCropModal from '../components/PhotoCropModal'
 import MeetingAlarm from '../components/MeetingAlarm'
@@ -19,6 +20,7 @@ const links = [
   { to: '/admin/assistente', label: 'Assistente IA', Icon: Sparkles },
   { to: '/admin/agente-conteudo', label: 'Agente de conteúdo', Icon: Wand2 },
   { to: '/admin/solicitacoes', label: 'Solicitações', Icon: Mail },
+  { to: '/admin/comentarios', label: 'Comentários', Icon: MessageCircle },
   { to: '/admin/reunioes', label: 'Reuniões', Icon: CalendarClock },
   { to: '/admin/relatorios', label: 'Relatórios', Icon: TrendingUp },
   { to: '/admin/financeiro', label: 'Financeiro', Icon: DollarSign },
@@ -43,6 +45,17 @@ export default function AdminLayout() {
   const lastSeen = localStorage.getItem('chatLastSeen')
   const unreadChat = conversas.some(
     (c) => c.ultimoAutorPapel === 'cliente' && (!lastSeen || c.ultimaData > lastSeen)
+  )
+
+  // Comentários de clientes não lidos
+  const { data: commentsFeed = [] } = useQuery({
+    queryKey: ['comments-feed'],
+    queryFn: () => listCommentsFeed(),
+    refetchInterval: 30000,
+  })
+  const comentariosLastSeen = localStorage.getItem('comentariosLastSeen')
+  const unreadComentarios = commentsFeed.some(
+    (c) => c.autor?.papel === 'cliente' && (!comentariosLastSeen || c.created_at > comentariosLastSeen)
   )
 
   // Central de notificações
@@ -264,6 +277,9 @@ export default function AdminLayout() {
               <link.Icon className="w-4 h-4" strokeWidth={2} />
               <span className="text-xs">{link.label}</span>
               {link.to === '/admin/mensagens' && unreadChat && (
+                <span className="ml-auto h-2 w-2 rounded-full bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.7)]" />
+              )}
+              {link.to === '/admin/comentarios' && unreadComentarios && (
                 <span className="ml-auto h-2 w-2 rounded-full bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.7)]" />
               )}
             </NavLink>

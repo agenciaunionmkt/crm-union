@@ -23,7 +23,9 @@ export default function DemandCalendar({
   onMonthChange,
   onDayClick,
   onCardClick,
+  commentDemandIds = [],
 }) {
+  const comentadas = new Set(commentDemandIds)
   const monthStart = startOfMonth(currentMonth)
   const monthEnd = endOfMonth(currentMonth)
   const gridStart = startOfWeek(monthStart)
@@ -154,11 +156,17 @@ export default function DemandCalendar({
                             }
                           : undefined
                       }
-                      className={`rounded-lg border px-2.5 py-2 ${tone} ${
+                      className={`relative rounded-lg border px-2.5 py-2 ${tone} ${
                         onCardClick ? `${hover} cursor-pointer transition-colors` : ''
                       }`}
                       title={concluido ? `${demand.titulo} — concluída` : done ? `${demand.titulo} — aprovada` : awaiting ? `${demand.titulo} — aguardando aprovação` : overdue ? `${demand.titulo} — atrasada` : demand.titulo}
                     >
+                      {comentadas.has(demand.id) && (
+                        <span
+                          className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-yellow-400 ring-2 ring-[#161618]"
+                          title="Novo comentário"
+                        />
+                      )}
                       <p className="text-xs font-normal leading-snug line-clamp-2">{demand.titulo}</p>
                       <div className="mt-1.5 flex items-center justify-end">
                         {iniciais ? (
