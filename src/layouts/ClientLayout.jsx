@@ -167,13 +167,13 @@ export default function ClientLayout() {
               <input type="password" value={confirmar} onChange={(e) => setConfirmar(e.target.value)} placeholder="Confirmar senha" className={inputClass} />
             </div>
             {msg.text && (
-              <p className={`mt-2 text-xs ${msg.type === 'success' ? 'text-emerald-400' : 'text-red-400'}`}>{msg.text}</p>
+              <p className={`mt-2 text-xs ${msg.type === 'success' ? 'text-emerald-400' : 'text-danger'}`}>{msg.text}</p>
             )}
             <div className="mt-4 flex justify-end">
               <button
                 onClick={trocarSenha}
                 disabled={saving || !novaSenha}
-                className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
+                className="rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
               >
                 {saving ? 'Salvando...' : 'Alterar senha'}
               </button>

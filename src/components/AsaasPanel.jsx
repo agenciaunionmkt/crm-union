@@ -70,14 +70,14 @@ export default function AsaasPanel({ cliente }) {
                 type="button"
                 onClick={() => assinaturaMut.mutate()}
                 disabled={assinaturaMut.isPending || semCnpj || !cliente.valor_servico}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3 py-2 text-xs font-semibold text-gray-900 hover:opacity-90 disabled:opacity-50 transition-colors"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-accent px-3 py-2 text-xs font-semibold text-gray-900 hover:opacity-90 disabled:opacity-50 transition-colors"
               >
                 {assinaturaMut.isPending ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : null}
                 Criar assinatura
               </button>
             )}
           </div>
-          {assinaturaMut.error && <p className="mt-2 text-xs text-red-400">{assinaturaMut.error.message}</p>}
+          {assinaturaMut.error && <p className="mt-2 text-xs text-danger">{assinaturaMut.error.message}</p>}
         </div>
       )}
 
@@ -94,11 +94,11 @@ export default function AsaasPanel({ cliente }) {
             type="button"
             onClick={() => cobrancaMut.mutate()}
             disabled={cobrancaMut.isPending || semCnpj || !valor}
-            className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-50 transition-colors"
+            className="rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-50 transition-colors"
           >
             {cobrancaMut.isPending ? 'Gerando...' : 'Gerar cobrança'}
           </button>
-          {cobrancaMut.error && <span className="text-xs text-red-400">{cobrancaMut.error.message}</span>}
+          {cobrancaMut.error && <span className="text-xs text-danger">{cobrancaMut.error.message}</span>}
         </div>
 
         {link && (

@@ -143,7 +143,7 @@ export default function ClientCalendario() {
                   type="button"
                   onClick={() => salvarDescricaoMutation.mutate()}
                   disabled={salvarDescricaoMutation.isPending || descricaoEdit === (detalhe.descricao ?? '')}
-                  className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground hover:opacity-90 disabled:opacity-50 transition-colors"
+                  className="rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground hover:opacity-90 disabled:opacity-50 transition-colors"
                 >
                   {salvarDescricaoMutation.isPending ? 'Salvando...' : 'Salvar alterações'}
                 </button>

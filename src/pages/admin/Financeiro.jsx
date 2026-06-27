@@ -128,7 +128,7 @@ export default function Financeiro() {
             setEditingId(null)
             setShowForm(true)
           }}
-          className="inline-flex items-center gap-2 rounded-lg bg-accent text-accent-foreground px-4 py-2 text-xs font-semibold hover:opacity-90 transition-colors"
+          className="inline-flex items-center gap-2 rounded-xl bg-accent text-accent-foreground px-4 py-2 text-xs font-semibold hover:opacity-90 transition-colors"
         >
           <span>+</span>
           <span>Nova Transação</span>
@@ -155,7 +155,7 @@ export default function Financeiro() {
 
           <div className="glass glass-hover rounded-2xl p-6">
             <p className="text-xs uppercase tracking-widest text-muted">Saídas pagas</p>
-            <p className="text-2xl font-normal text-red-400">R$ {summary.saidasPagas.toFixed(2)}</p>
+            <p className="text-2xl font-normal text-danger">R$ {summary.saidasPagas.toFixed(2)}</p>
           </div>
         </div>
       )}
@@ -205,7 +205,7 @@ export default function Financeiro() {
 
           {error && (
             <TableRow>
-              <TableCell colSpan={7} className="text-center py-8 text-red-600 dark:text-red-400">
+              <TableCell colSpan={7} className="text-center py-8 text-danger">
                 Erro ao carregar: {error.message}
               </TableCell>
             </TableRow>
@@ -213,7 +213,7 @@ export default function Financeiro() {
 
           {!isLoading && filtered.length === 0 && (
             <TableRow>
-              <TableCell colSpan={7} className="text-center py-8 text-muted dark:text-muted">
+              <TableCell colSpan={7} className="text-center py-8 text-muted">
                 Nenhuma transação encontrada
               </TableCell>
             </TableRow>
@@ -226,7 +226,7 @@ export default function Financeiro() {
                 {entry.nome}
               </TableCell>
               <TableCell>
-                <span className={entry.tipo === 'entrada' ? 'text-green-600 dark:text-green-400 font-medium' : 'text-red-600 dark:text-red-400 font-medium'}>
+                <span className={entry.tipo === 'entrada' ? 'text-green-600 dark:text-success font-medium' : 'text-danger font-medium'}>
                   {entry.tipo === 'entrada' ? '+' : '-'} R$ {entry.valor.toFixed(2)}
                 </span>
               </TableCell>
@@ -266,14 +266,14 @@ export default function Financeiro() {
                   )}
                   <button
                     onClick={() => handleEdit(entry)}
-                    className="p-1.5 rounded text-muted dark:text-muted hover:bg-neutral-200/50 dark:hover:bg-neutral-700/40 transition-colors"
+                    className="p-1.5 rounded text-muted transition-colors"
                     title="Editar transação"
                   >
                     <Edit className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => handleDelete(entry)}
-                    className="p-1.5 rounded text-muted dark:text-muted hover:bg-neutral-200/50 dark:hover:bg-neutral-700/40 transition-colors"
+                    className="p-1.5 rounded text-muted transition-colors"
                     title="Remover transação"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -301,7 +301,7 @@ export default function Financeiro() {
           onSubmit={handleSubmit}
         />
         {(createMutation.error || updateMutation.error) && (
-          <div className="mt-4 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-sm text-red-600 dark:text-red-400">
+          <div className="mt-4 p-3 rounded-lg bg-red-50 dark:bg-danger/10 border border-red-200 text-sm text-danger">
             {createMutation.error?.message || updateMutation.error?.message}
           </div>
         )}

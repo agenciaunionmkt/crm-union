@@ -89,7 +89,7 @@ export default function Solicitacoes() {
 
       {requestsQuery.isLoading && <p className="mt-6 text-sm text-muted">Carregando...</p>}
       {requestsQuery.error && (
-        <p className="mt-6 text-sm text-red-400">Erro ao carregar solicitações: {requestsQuery.error.message}</p>
+        <p className="mt-6 text-sm text-danger">Erro ao carregar solicitações: {requestsQuery.error.message}</p>
       )}
       {!requestsQuery.isLoading && requests.length === 0 && (
         <p className="mt-6 rounded-2xl border border-dashed border-white/15 p-6 text-sm text-muted">
@@ -138,7 +138,7 @@ export default function Solicitacoes() {
                   <button
                     onClick={() => triarComIA(request)}
                     disabled={triandoId === request.id}
-                    className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3 py-1.5 text-xs font-semibold text-accent-foreground hover:opacity-90 disabled:opacity-60 transition-colors"
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-accent px-3 py-1.5 text-xs font-semibold text-accent-foreground hover:opacity-90 disabled:opacity-60 transition-colors"
                   >
                     <Sparkles className="w-3.5 h-3.5" />
                     {triandoId === request.id ? 'Triando...' : 'Triar com IA'}
@@ -159,7 +159,7 @@ export default function Solicitacoes() {
                   )}
                   <button
                     onClick={() => handleRecusar(request)}
-                    className="ml-auto rounded-lg border border-red-500/30 px-3 py-1.5 text-xs font-normal text-red-400 hover:bg-red-500/10 transition-colors"
+                    className="ml-auto rounded-lg border border-danger/30 px-3 py-1.5 text-xs font-normal text-danger hover:bg-danger/10 transition-colors"
                   >
                     Recusar
                   </button>
@@ -196,7 +196,7 @@ export default function Solicitacoes() {
           />
         )}
         {convertMutation.error && (
-          <p className="mt-3 text-sm text-red-400">{convertMutation.error.message}</p>
+          <p className="mt-3 text-sm text-danger">{convertMutation.error.message}</p>
         )}
       </Modal>
     </div>

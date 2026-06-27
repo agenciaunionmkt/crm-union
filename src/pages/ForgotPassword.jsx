@@ -79,19 +79,19 @@ export default function ForgotPassword() {
           </div>
 
           {success && (
-            <div className="mb-4 rounded-lg bg-green-900/20 border border-green-700/50 px-4 py-3">
+            <div className="mb-4 rounded-lg bg-success/10 border border-success/30 px-4 py-3">
               <div className="flex items-start gap-3">
-                <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
+                <CheckCircle className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm font-semibold text-green-400">Link enviado!</p>
-                  <p className="text-xs text-green-300 mt-1">Verifique seu e-mail e clique no link para acessar sua conta.</p>
+                  <p className="text-sm font-semibold text-success">Link enviado!</p>
+                  <p className="text-xs text-success mt-1">Verifique seu e-mail e clique no link para acessar sua conta.</p>
                 </div>
               </div>
             </div>
           )}
 
           {error && (
-            <p className="mb-4 rounded-lg bg-red-900/20 border border-red-700/50 px-3 py-2 text-sm text-red-400">
+            <p className="mb-4 rounded-lg bg-danger/10 border border-danger/30 px-3 py-2 text-sm text-danger">
               {error}
             </p>
           )}
@@ -99,7 +99,7 @@ export default function ForgotPassword() {
           <button
             type="submit"
             disabled={loading || success}
-            className="w-full rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-all"
+            className="w-full rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-all"
           >
             {loading ? 'Enviando link...' : 'Enviar link de acesso'}
           </button>

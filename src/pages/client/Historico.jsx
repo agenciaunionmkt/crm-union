@@ -29,7 +29,7 @@ export default function Historico() {
       <div className="mt-6 overflow-hidden rounded-xl border border-gray-200 bg-white">
         {demandsQuery.isLoading && <p className="p-6 text-sm text-gray-400">Carregando...</p>}
         {demandsQuery.error && (
-          <p className="p-6 text-sm text-red-600">Erro ao carregar histórico: {demandsQuery.error.message}</p>
+          <p className="p-6 text-sm text-danger">Erro ao carregar histórico: {demandsQuery.error.message}</p>
         )}
         {!demandsQuery.isLoading && delivered.length === 0 && (
           <p className="p-6 text-sm text-gray-400">Nenhuma entrega concluída ainda.</p>

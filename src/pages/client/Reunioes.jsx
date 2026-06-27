@@ -29,7 +29,7 @@ export default function ClientReunioes() {
         <div className="space-y-2">
           {proximas.map((r) => (
             <div key={r.id} className="flex items-center gap-3 rounded-xl border border-border bg-surface px-4 py-3">
-              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-accent/15 text-accent">
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-accent/15 text-accent">
                 <Calendar className="h-5 w-5" />
               </div>
               <div className="min-w-0 flex-1">
@@ -42,7 +42,7 @@ export default function ClientReunioes() {
                   href={r.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3 py-2 text-xs font-semibold text-accent-foreground hover:opacity-90 transition-colors"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-accent px-3 py-2 text-xs font-semibold text-accent-foreground hover:opacity-90 transition-colors"
                 >
                   <Video className="h-3.5 w-3.5" /> Meet
                 </a>

@@ -233,7 +233,7 @@ export default function Assistente() {
           <div ref={bottomRef} />
         </div>
 
-        {error && <p className="mt-2 text-xs text-red-400">{error}</p>}
+        {error && <p className="mt-2 text-xs text-danger">{error}</p>}
 
         <form onSubmit={handleSubmit} className="mt-3 flex items-center gap-2 border-t border-white/10 pt-3">
           <input
@@ -246,7 +246,7 @@ export default function Assistente() {
           <button
             type="submit"
             disabled={loading || !input.trim()}
-            className="shrink-0 inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
+            className="shrink-0 inline-flex items-center gap-1.5 rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
           >
             <Send className="w-4 h-4" /> Enviar
           </button>

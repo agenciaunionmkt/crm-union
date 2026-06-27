@@ -52,7 +52,7 @@ export default function Comentarios() {
             className="block rounded-xl border border-border bg-surface px-4 py-3 hover:border-border-strong transition-colors"
           >
             <div className="flex items-start gap-3">
-              <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-accent/15 text-accent">
+              <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-accent/15 text-accent">
                 <MessageSquare className="h-4 w-4" />
               </div>
               <div className="min-w-0 flex-1">

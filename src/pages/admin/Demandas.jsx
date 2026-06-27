@@ -213,9 +213,9 @@ export default function Demandas() {
     <div>
       {/* Success Message */}
       {successMessage && (
-        <div className="mb-6 flex items-center gap-3 rounded-lg bg-green-900/20 border border-green-700/50 px-4 py-3">
-          <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
-          <p className="text-sm font-normal text-green-400">{successMessage}</p>
+        <div className="mb-6 flex items-center gap-3 rounded-lg bg-success/10 border border-success/30 px-4 py-3">
+          <CheckCircle className="w-5 h-5 text-success flex-shrink-0" />
+          <p className="text-sm font-normal text-success">{successMessage}</p>
         </div>
       )}
 
@@ -231,7 +231,7 @@ export default function Demandas() {
         </div>
         <button
           onClick={() => openNewDemand()}
-          className="inline-flex items-center gap-2 rounded-lg bg-accent text-accent-foreground px-4 py-2 text-xs font-semibold hover:opacity-90 transition-colors active:scale-95"
+          className="inline-flex items-center gap-2 rounded-xl bg-accent text-accent-foreground px-4 py-2 text-xs font-semibold hover:opacity-90 transition-colors active:scale-95"
         >
           <span>+</span>
           <span>Nova demanda</span>
@@ -239,7 +239,7 @@ export default function Demandas() {
       </div>
 
       {demandsQuery.error && (
-        <div className="rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-4 text-sm text-red-600 dark:text-red-400">
+        <div className="rounded-lg bg-red-50 dark:bg-danger/10 border border-red-200 p-4 text-sm text-danger">
           Erro ao carregar demandas: {demandsQuery.error.message}
         </div>
       )}
@@ -283,7 +283,7 @@ export default function Demandas() {
         <div>
           {isLoading && (
             <div className="text-center py-12">
-              <p className="text-muted dark:text-muted">Carregando demandas...</p>
+              <p className="text-muted">Carregando demandas...</p>
             </div>
           )}
           {!isLoading && (
@@ -344,7 +344,7 @@ export default function Demandas() {
         )}
 
         {(saveMutation.error || deleteMutation.error) && (
-          <p className="mt-4 text-sm text-red-400">
+          <p className="mt-4 text-sm text-danger">
             {saveMutation.error?.message || deleteMutation.error?.message}
           </p>
         )}
@@ -355,7 +355,7 @@ export default function Demandas() {
             <button
               type="button"
               onClick={handleDelete}
-              className="rounded-lg border border-red-500/40 px-3 py-2 text-xs font-normal text-red-400 hover:bg-red-500/10 transition-colors"
+              className="rounded-lg border border-danger/40 px-3 py-2 text-xs font-normal text-danger hover:bg-danger/10 transition-colors"
             >
               Excluir demanda
             </button>
@@ -374,7 +374,7 @@ export default function Demandas() {
               type="submit"
               form="demanda-form"
               disabled={saveMutation.isPending}
-              className="rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
+              className="rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
             >
               {saveMutation.isPending ? 'Salvando...' : 'Salvar demanda'}
             </button>

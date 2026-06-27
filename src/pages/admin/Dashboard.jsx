@@ -68,8 +68,8 @@ export default function AdminDashboard() {
       value: atrasadas.length,
       hint: 'prazo vencido',
       icon: AlertTriangle,
-      tone: 'text-red-300',
-      bg: 'bg-red-500/10',
+      tone: 'text-danger',
+      bg: 'bg-danger/10',
     },
     {
       label: 'Clientes ativos',
@@ -153,7 +153,7 @@ export default function AdminDashboard() {
                   key={d.id}
                   className="flex items-center gap-3 rounded-xl border border-border bg-surface px-4 py-3"
                 >
-                  <span className={`h-2 w-2 flex-shrink-0 rounded-full ${feita ? 'bg-emerald-400' : 'bg-yellow-400'}`} />
+                  <span className={`h-2 w-2 flex-shrink-0 rounded-full ${feita ? 'bg-emerald-400' : 'bg-accent'}`} />
                   <div className="min-w-0 flex-1">
                     <p className={`truncate text-sm ${feita ? 'text-muted line-through' : 'text-foreground'}`}>
                       {d.titulo}
@@ -170,8 +170,8 @@ export default function AdminDashboard() {
 
           {/* Atrasadas (alerta) */}
           {atrasadas.length > 0 && (
-            <div className="mt-5 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3">
-              <p className="flex items-center gap-2 text-sm text-red-300">
+            <div className="mt-5 rounded-xl border border-danger/30 bg-danger/10 px-4 py-3">
+              <p className="flex items-center gap-2 text-sm text-danger">
                 <AlertTriangle className="h-4 w-4" />
                 {atrasadas.length} demanda(s) atrasada(s) — revise no cronograma.
               </p>

@@ -151,7 +151,7 @@ export default function Reunioes() {
   function ReuniaoItem({ r }) {
     return (
       <div className="flex items-center gap-3 rounded-xl border border-border bg-surface px-4 py-3">
-        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-accent/15 text-accent">
+        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-accent/15 text-accent">
           <Calendar className="h-5 w-5" />
         </div>
         <div className="min-w-0 flex-1">
@@ -165,7 +165,7 @@ export default function Reunioes() {
             href={r.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3 py-1.5 text-xs font-semibold text-accent-foreground hover:opacity-90 transition-colors"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-accent px-3 py-1.5 text-xs font-semibold text-accent-foreground hover:opacity-90 transition-colors"
           >
             <Video className="h-3.5 w-3.5" /> Meet
           </a>
@@ -192,7 +192,7 @@ export default function Reunioes() {
         <button
           type="button"
           onClick={() => setShowForm(true)}
-          className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground hover:opacity-90 transition-colors active:scale-95"
+          className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground hover:opacity-90 transition-colors active:scale-95"
         >
           <Plus className="h-4 w-4" />
           Agendar reunião

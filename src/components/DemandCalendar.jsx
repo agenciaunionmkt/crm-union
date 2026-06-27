@@ -163,7 +163,7 @@ export default function DemandCalendar({
                     >
                       {comentadas.has(demand.id) && (
                         <span
-                          className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-yellow-400 ring-2 ring-[#161618]"
+                          className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-accent ring-2 ring-[#161618]"
                           title="Novo comentário"
                         />
                       )}

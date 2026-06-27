@@ -206,7 +206,7 @@ export default function AgenteConteudo() {
           </button>
         </div>
 
-        {pedidoErro && <p className="mt-2 text-xs text-red-400">{pedidoErro}</p>}
+        {pedidoErro && <p className="mt-2 text-xs text-danger">{pedidoErro}</p>}
         {pedidoMsg && (
           <div className="mt-3 flex items-center gap-2 rounded-lg bg-emerald-500/15 border border-emerald-500/30 px-3 py-2">
             <CheckCircle className="w-4 h-4 text-emerald-400" />
@@ -266,7 +266,7 @@ export default function AgenteConteudo() {
               <button
                 onClick={criarDemandaPedido}
                 disabled={criandoPedido}
-                className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
+                className="rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
               >
                 {criandoPedido ? 'Criando...' : 'Criar demanda'}
               </button>
@@ -315,14 +315,14 @@ export default function AgenteConteudo() {
         <button
           onClick={gerar}
           disabled={loading || !clienteId}
-          className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
+          className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
         >
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />}
           {loading ? 'Gerando...' : 'Gerar'}
         </button>
       </div>
 
-      {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
+      {error && <p className="mt-3 text-sm text-danger">{error}</p>}
       {done && (
         <div className="mt-3 flex items-center gap-2 rounded-lg bg-emerald-500/15 border border-emerald-500/30 px-4 py-3">
           <CheckCircle className="w-5 h-5 text-emerald-400" />
@@ -341,7 +341,7 @@ export default function AgenteConteudo() {
             <button
               onClick={criarDemandas}
               disabled={creating}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
             >
               {creating ? 'Criando...' : 'Criar demandas no cronograma'}
             </button>
@@ -361,7 +361,7 @@ export default function AgenteConteudo() {
                   </div>
                   <button
                     onClick={() => removerPost(i)}
-                    className="flex-shrink-0 p-1.5 rounded text-muted hover:text-red-500 hover:bg-red-900/20 transition-colors"
+                    className="flex-shrink-0 p-1.5 rounded text-muted hover:text-red-500 hover:bg-danger/10 transition-colors"
                     title="Remover"
                   >
                     <Trash2 className="w-4 h-4" />

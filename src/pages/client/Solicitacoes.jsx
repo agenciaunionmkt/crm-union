@@ -114,7 +114,7 @@ export default function ClientSolicitacoes() {
               <button
                 type="button"
                 onClick={() => setArquivo(null)}
-                className="flex-shrink-0 rounded p-1 text-muted hover:text-red-400"
+                className="flex-shrink-0 rounded p-1 text-muted hover:text-danger"
                 title="Remover"
               >
                 <X className="w-4 h-4" />
@@ -145,7 +145,7 @@ export default function ClientSolicitacoes() {
           <button
             type="submit"
             disabled={createMutation.isPending || uploading || semVinculo}
-            className="rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
+            className="rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
           >
             {uploading ? 'Anexando...' : createMutation.isPending ? 'Enviando...' : 'Enviar solicitação'}
           </button>
@@ -153,7 +153,7 @@ export default function ClientSolicitacoes() {
             <span className="text-xs text-emerald-400">Solicitação enviada.</span>
           )}
           {createMutation.error && (
-            <span className="text-xs text-red-400">{createMutation.error.message}</span>
+            <span className="text-xs text-danger">{createMutation.error.message}</span>
           )}
         </div>
       </form>

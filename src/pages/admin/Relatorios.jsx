@@ -125,7 +125,7 @@ export default function Relatorios() {
       )}
 
       {clienteId && reportQuery.error && (
-        <p className="mt-6 text-sm text-red-400">Erro ao carregar relatório: {reportQuery.error.message}</p>
+        <p className="mt-6 text-sm text-danger">Erro ao carregar relatório: {reportQuery.error.message}</p>
       )}
 
       {report && (

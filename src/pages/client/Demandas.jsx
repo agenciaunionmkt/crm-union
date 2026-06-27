@@ -31,7 +31,7 @@ export default function ClientDemandas() {
       <div className="mt-6 overflow-hidden rounded-xl border border-gray-200 bg-white">
         {demandsQuery.isLoading && <p className="p-6 text-sm text-gray-400">Carregando...</p>}
         {demandsQuery.error && (
-          <p className="p-6 text-sm text-red-600">Erro ao carregar demandas: {demandsQuery.error.message}</p>
+          <p className="p-6 text-sm text-danger">Erro ao carregar demandas: {demandsQuery.error.message}</p>
         )}
         {!demandsQuery.isLoading && demands.length === 0 && (
           <p className="p-6 text-sm text-gray-400">Nenhuma demanda registrada ainda.</p>

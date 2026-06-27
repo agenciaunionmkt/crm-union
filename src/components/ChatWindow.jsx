@@ -197,13 +197,13 @@ export default function ChatWindow({ clienteId, currentUser }) {
         <button
           type="submit"
           disabled={sendMutation.isPending || !message.trim()}
-          className="shrink-0 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
+          className="shrink-0 rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
         >
           Enviar
         </button>
       </form>
       {sendMutation.error && (
-        <p className="mt-1 text-xs text-red-400">{sendMutation.error.message}</p>
+        <p className="mt-1 text-xs text-danger">{sendMutation.error.message}</p>
       )}
     </div>
   )

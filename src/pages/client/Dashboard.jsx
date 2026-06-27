@@ -24,7 +24,7 @@ export default function ClientDashboard() {
       <div className="mt-6">
         {demandsQuery.isLoading && <p className="text-sm text-gray-400">Carregando...</p>}
         {demandsQuery.error && (
-          <p className="text-sm text-red-600">Erro ao carregar cronograma: {demandsQuery.error.message}</p>
+          <p className="text-sm text-danger">Erro ao carregar cronograma: {demandsQuery.error.message}</p>
         )}
         {!demandsQuery.isLoading && !demandsQuery.error && (
           <DemandCalendar

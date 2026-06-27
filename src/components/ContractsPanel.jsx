@@ -7,7 +7,7 @@ import Input from './ui/Input'
 const statusStyles = {
   enviado: 'bg-accent/15 text-accent',
   assinado: 'bg-emerald-500/20 text-emerald-300',
-  recusado: 'bg-red-500/20 text-red-300',
+  recusado: 'bg-danger/15 text-danger',
 }
 const statusLabels = {
   enviado: 'Aguardando assinatura',
@@ -121,12 +121,12 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
             <button
               type="submit"
               disabled={createMutation.isPending || !titulo.trim() || !signerEmail.trim() || !file}
-              className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {createMutation.isPending ? 'Enviando...' : 'Enviar contrato'}
             </button>
             {createMutation.error && (
-              <span className="text-xs text-red-400">{createMutation.error.message}</span>
+              <span className="text-xs text-danger">{createMutation.error.message}</span>
             )}
           </div>
         </form>
@@ -142,7 +142,7 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
         )}
 
         {isAdmin && refreshMutation.error && (
-          <p className="mb-2 text-xs text-red-400">{refreshMutation.error.message}</p>
+          <p className="mb-2 text-xs text-danger">{refreshMutation.error.message}</p>
         )}
 
         <div className="space-y-2">
@@ -169,7 +169,7 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
                   href={c.link_assinatura}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3 py-1.5 text-xs font-semibold text-gray-900 hover:opacity-90 transition-colors"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-accent px-3 py-1.5 text-xs font-semibold text-gray-900 hover:opacity-90 transition-colors"
                 >
                   Assinar <ExternalLink className="w-3.5 h-3.5" />
                 </a>
@@ -242,7 +242,7 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
                   }}
                   title="Remover do painel"
                   aria-label="Remover do painel"
-                  className="rounded-lg p-1.5 text-muted hover:bg-white/5 hover:text-red-400 transition-colors"
+                  className="rounded-lg p-1.5 text-muted hover:bg-white/5 hover:text-danger transition-colors"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>

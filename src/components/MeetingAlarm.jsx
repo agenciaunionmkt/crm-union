@@ -109,7 +109,7 @@ export default function MeetingAlarm() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setAlerta(null)}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3 py-1.5 text-xs font-semibold text-accent-foreground hover:opacity-90 transition-colors"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-accent px-3 py-1.5 text-xs font-semibold text-accent-foreground hover:opacity-90 transition-colors"
           >
             <Video className="h-3.5 w-3.5" /> Entrar
           </a>

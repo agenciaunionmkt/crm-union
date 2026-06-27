@@ -165,7 +165,7 @@ export default function DemandActivity({ demandId, mode = 'admin', currentUser, 
                         type="button"
                         onClick={() => deleteCommentMutation.mutate(comment.id)}
                         disabled={deleteCommentMutation.isPending}
-                        className="text-muted hover:text-red-400 transition-colors disabled:opacity-50"
+                        className="text-muted hover:text-danger transition-colors disabled:opacity-50"
                         title="Excluir comentário"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -204,15 +204,15 @@ export default function DemandActivity({ demandId, mode = 'admin', currentUser, 
             <button
               type="submit"
               disabled={commentMutation.isPending || !message.trim()}
-              className="rounded-lg bg-accent px-4 py-2 text-xs font-semibold text-accent-foreground hover:opacity-90 disabled:opacity-60 transition-colors"
+              className="rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-accent-foreground hover:opacity-90 disabled:opacity-60 transition-colors"
             >
               {commentMutation.isPending ? 'Enviando...' : 'Enviar'}
             </button>
           </div>
           {commentMutation.error && (
-            <div className="flex items-center gap-2 rounded-lg bg-red-900/20 border border-red-700/50 px-3 py-2">
-              <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0" />
-              <p className="text-xs text-red-400">{commentMutation.error.message}</p>
+            <div className="flex items-center gap-2 rounded-lg bg-danger/10 border border-danger/30 px-3 py-2">
+              <AlertCircle className="w-4 h-4 text-danger flex-shrink-0" />
+              <p className="text-xs text-danger">{commentMutation.error.message}</p>
             </div>
           )}
         </form>

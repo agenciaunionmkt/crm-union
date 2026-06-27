@@ -107,7 +107,7 @@ export const TableCell = forwardRef(
       ref={ref}
       className={`
         px-4 py-3
-        text-neutral-700 dark:text-muted
+        text-neutral-700
         ${className}
       `}
       {...props}

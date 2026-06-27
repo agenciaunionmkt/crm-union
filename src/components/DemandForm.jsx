@@ -203,7 +203,7 @@ export default function DemandForm({
           <div>
             {confirmDelete ? (
               <div className="flex items-center gap-2">
-                <p className="text-xs font-normal text-red-400">Tem certeza?</p>
+                <p className="text-xs font-normal text-danger">Tem certeza?</p>
                 <button
                   type="button"
                   onClick={() => {
@@ -217,7 +217,7 @@ export default function DemandForm({
                 <button
                   type="button"
                   onClick={() => setConfirmDelete(false)}
-                  className="rounded-lg border border-red-500/40 px-3 py-1.5 text-xs font-normal text-red-400 hover:bg-red-500/10 transition-colors"
+                  className="rounded-lg border border-danger/40 px-3 py-1.5 text-xs font-normal text-danger hover:bg-danger/10 transition-colors"
                 >
                   Cancelar
                 </button>

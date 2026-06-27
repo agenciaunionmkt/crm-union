@@ -47,7 +47,7 @@ function ApprovalCard({ approval, onReview, onOpen, submitting }) {
         <button
           disabled={submitting}
           onClick={() => onReview(approval.id, 'aprovado', null)}
-          className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
+          className="rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
         >
           Aprovar
         </button>
@@ -100,7 +100,7 @@ export default function Aprovacoes() {
 
       {approvalsQuery.isLoading && <p className="mt-6 text-sm text-muted">Carregando...</p>}
       {approvalsQuery.error && (
-        <p className="mt-6 text-sm text-red-400">Erro ao carregar aprovações: {approvalsQuery.error.message}</p>
+        <p className="mt-6 text-sm text-danger">Erro ao carregar aprovações: {approvalsQuery.error.message}</p>
       )}
 
       {!approvalsQuery.isLoading && (

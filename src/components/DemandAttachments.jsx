@@ -86,7 +86,7 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
                 <button
                   type="button"
                   onClick={() => setPending((p) => p.filter((_, idx) => idx !== i))}
-                  className="flex-shrink-0 p-1.5 rounded text-muted hover:text-red-500 hover:bg-red-900/20 transition-colors"
+                  className="flex-shrink-0 p-1.5 rounded text-muted hover:text-danger hover:bg-danger/10 transition-colors"
                   title="Remover"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -123,13 +123,13 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
       </div>
 
       {uploadMutation.error && (
-        <p className="mb-2 text-xs text-red-500">{uploadMutation.error.message}</p>
+        <p className="mb-2 text-xs text-danger">{uploadMutation.error.message}</p>
       )}
 
       {isLoading ? (
-        <p className="text-xs text-muted dark:text-muted">Carregando anexos...</p>
+        <p className="text-xs text-muted">Carregando anexos...</p>
       ) : items.length === 0 ? (
-        <p className="rounded-lg border border-dashed border-neutral-300 dark:border-neutral-700 px-3 py-4 text-center text-xs text-muted dark:text-muted">
+        <p className="rounded-lg border border-dashed border-neutral-300 dark:border-neutral-700 px-3 py-4 text-center text-xs text-muted">
           Nenhum arquivo anexado.
         </p>
       ) : (
@@ -159,7 +159,7 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
                     type="button"
                     onClick={() => deleteMutation.mutate(att)}
                     disabled={deleteMutation.isPending}
-                    className="absolute right-1 top-1 rounded-md bg-black/60 p-1 text-subtle opacity-0 hover:text-red-400 group-hover:opacity-100 transition-opacity disabled:opacity-60"
+                    className="absolute right-1 top-1 rounded-md bg-black/60 p-1 text-subtle opacity-0 hover:text-danger group-hover:opacity-100 transition-opacity disabled:opacity-60"
                     title="Remover anexo"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -190,7 +190,7 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
                     type="button"
                     onClick={() => deleteMutation.mutate(att)}
                     disabled={deleteMutation.isPending}
-                    className="flex-shrink-0 p-1.5 rounded text-muted hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-60"
+                    className="flex-shrink-0 p-1.5 rounded text-muted hover:text-danger hover:bg-danger/10 transition-colors disabled:opacity-60"
                     title="Remover anexo"
                   >
                     <Trash2 className="w-4 h-4" />

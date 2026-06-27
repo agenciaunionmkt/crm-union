@@ -157,7 +157,7 @@ export default function ClienteDetalhe() {
 
   if (clientQuery.error) {
     return (
-      <p className="text-sm text-red-400">
+      <p className="text-sm text-danger">
         Erro ao carregar cliente: {clientQuery.error.message}
       </p>
     )
@@ -191,7 +191,7 @@ export default function ClienteDetalhe() {
           onSubmit={(values) => updateClientMutation.mutate(values)}
         />
         {updateClientMutation.error && (
-          <p className="mt-3 text-sm text-red-400">{updateClientMutation.error.message}</p>
+          <p className="mt-3 text-sm text-danger">{updateClientMutation.error.message}</p>
         )}
       </div>
 
@@ -216,7 +216,7 @@ export default function ClienteDetalhe() {
             type="button"
             onClick={() => inviteMutation.mutate()}
             disabled={inviteMutation.isPending || !acessoEmail.trim()}
-            className="rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
+            className="rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
           >
             {inviteMutation.isPending ? 'Enviando...' : 'Enviar acesso'}
           </button>
@@ -225,7 +225,7 @@ export default function ClienteDetalhe() {
           <p className="mt-2 text-xs text-emerald-400">Link de acesso enviado para o e-mail.</p>
         )}
         {inviteMutation.error && (
-          <p className="mt-2 text-xs text-red-400">{inviteMutation.error.message}</p>
+          <p className="mt-2 text-xs text-danger">{inviteMutation.error.message}</p>
         )}
       </div>
 
@@ -290,7 +290,7 @@ export default function ClienteDetalhe() {
             <button
               type="submit"
               disabled={briefingMutation.isPending}
-              className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
+              className="rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
             >
               {briefingMutation.isPending ? 'Salvando...' : 'Salvar briefing'}
             </button>
@@ -298,7 +298,7 @@ export default function ClienteDetalhe() {
               <span className="text-xs text-emerald-400">Briefing salvo.</span>
             )}
             {briefingMutation.error && (
-              <span className="text-xs text-red-400">{briefingMutation.error.message}</span>
+              <span className="text-xs text-danger">{briefingMutation.error.message}</span>
             )}
           </div>
         </form>

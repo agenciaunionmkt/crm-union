@@ -11,7 +11,7 @@ const statusLabels = {
 const statusStyles = {
   pendente: 'bg-accent/15 text-accent border border-accent/30',
   pago: 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30',
-  vencido: 'bg-red-500/15 text-red-300 border border-red-500/30',
+  vencido: 'bg-red-500/15 text-red-300 border border-danger/30',
 }
 
 function formatBRL(v) {
@@ -89,7 +89,7 @@ export default function ClientPagamentos() {
                         href={c.link_pagamento}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3 py-1.5 text-xs font-semibold text-gray-900 hover:opacity-90 transition-colors"
+                        className="inline-flex items-center gap-1.5 rounded-xl bg-accent px-3 py-1.5 text-xs font-semibold text-gray-900 hover:opacity-90 transition-colors"
                       >
                         Pagar <ExternalLink className="w-3.5 h-3.5" />
                       </a>

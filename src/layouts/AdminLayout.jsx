@@ -277,10 +277,10 @@ export default function AdminLayout() {
               <link.Icon className="w-4 h-4" strokeWidth={2} />
               <span className="text-xs">{link.label}</span>
               {link.to === '/admin/mensagens' && unreadChat && (
-                <span className="ml-auto h-2 w-2 rounded-full bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.7)]" />
+                <span className="ml-auto h-2 w-2 rounded-full bg-accent shadow-[0_0_8px_rgba(250,204,21,0.7)]" />
               )}
               {link.to === '/admin/comentarios' && unreadComentarios && (
-                <span className="ml-auto h-2 w-2 rounded-full bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.7)]" />
+                <span className="ml-auto h-2 w-2 rounded-full bg-accent shadow-[0_0_8px_rgba(250,204,21,0.7)]" />
               )}
             </NavLink>
           ))}
@@ -305,7 +305,7 @@ export default function AdminLayout() {
               >
                 <Menu className="w-5 h-5" />
               </button>
-              <p className="hidden sm:block text-xs font-normal text-muted dark:text-muted uppercase tracking-widest opacity-70">
+              <p className="hidden sm:block text-xs font-normal text-muted uppercase tracking-widest opacity-70">
                 {new Date().toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'short' })}
               </p>
             </div>
@@ -317,7 +317,7 @@ export default function AdminLayout() {
                 <p className="text-xs font-normal text-foreground">
                   {profile?.nome ?? 'Usuário'}
                 </p>
-                <p className="text-xs capitalize text-muted dark:text-muted opacity-70">
+                <p className="text-xs capitalize text-muted opacity-70">
                   {profile?.papel ?? 'gestor'}
                 </p>
               </div>
@@ -393,7 +393,7 @@ export default function AdminLayout() {
               {/* Logout */}
               <button
                 onClick={signOut}
-                className="rounded-md px-3 py-1.5 text-xs font-normal text-muted dark:text-subtle border border-neutral-400/50 dark:border-neutral-600 hover:bg-neutral-200/50 dark:hover:bg-neutral-700/40 transition-colors flex items-center gap-1.5"
+                className="rounded-md px-3 py-1.5 text-xs font-normal text-muted dark:text-subtle border border-neutral-400/50 dark:border-neutral-600 transition-colors flex items-center gap-1.5"
               >
                 <LogOut className="w-3.5 h-3.5" />
                 <span>Sair</span>
@@ -462,7 +462,7 @@ export default function AdminLayout() {
                           if (photoKey) localStorage.removeItem(photoKey)
                           setUserPhoto(null)
                         }}
-                        className="px-4 py-2 bg-transparent border border-red-700/50 text-red-400 text-sm rounded-lg hover:bg-red-900/20 transition-colors"
+                        className="px-4 py-2 bg-transparent border border-danger/30 text-danger text-sm rounded-lg hover:bg-danger/10 transition-colors"
                       >
                         Remover
                       </button>
@@ -539,16 +539,16 @@ export default function AdminLayout() {
               {message.text && (
                 <div className={`flex items-center gap-2 rounded-lg border px-3 py-2 ${
                   message.type === 'success'
-                    ? 'bg-green-900/20 border-green-700/50'
-                    : 'bg-red-900/20 border-red-700/50'
+                    ? 'bg-success/10 border-success/30'
+                    : 'bg-danger/10 border-danger/30'
                 }`}>
                   {message.type === 'success' ? (
-                    <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0" />
+                    <CheckCircle className="w-4 h-4 text-success flex-shrink-0" />
                   ) : (
-                    <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0" />
+                    <AlertCircle className="w-4 h-4 text-danger flex-shrink-0" />
                   )}
                   <p className={`text-xs ${
-                    message.type === 'success' ? 'text-green-400' : 'text-red-400'
+                    message.type === 'success' ? 'text-success' : 'text-danger'
                   }`}>
                     {message.text}
                   </p>
@@ -569,7 +569,7 @@ export default function AdminLayout() {
                   type="button"
                   onClick={handleSaveProfile}
                   disabled={saving}
-                  className="flex-1 px-4 py-2 bg-yellow-400 hover:opacity-90 text-gray-900 text-sm font-semibold rounded-lg transition-colors disabled:opacity-50"
+                  className="flex-1 px-4 py-2 bg-accent hover:opacity-90 text-accent-foreground text-sm font-semibold rounded-xl transition-colors disabled:opacity-50"
                 >
                   {saving ? 'Salvando...' : 'Salvar perfil'}
                 </button>
@@ -578,7 +578,7 @@ export default function AdminLayout() {
                     type="button"
                     onClick={handleChangePassword}
                     disabled={saving}
-                    className="flex-1 px-4 py-2 bg-accent hover:opacity-90 text-accent-foreground text-sm font-semibold rounded-lg transition-colors disabled:opacity-50"
+                    className="flex-1 px-4 py-2 bg-accent hover:opacity-90 text-accent-foreground text-sm font-semibold rounded-xl transition-colors disabled:opacity-50"
                   >
                     {saving ? 'Alterando...' : 'Alterar senha'}
                   </button>

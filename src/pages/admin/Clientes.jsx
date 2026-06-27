@@ -120,9 +120,9 @@ export default function Clientes() {
     <div>
       {/* Success Message */}
       {successMessage && (
-        <div className="mb-6 flex items-center gap-3 rounded-lg bg-green-900/20 border border-green-700/50 px-4 py-3">
-          <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
-          <p className="text-sm font-normal text-green-400">{successMessage}</p>
+        <div className="mb-6 flex items-center gap-3 rounded-lg bg-success/10 border border-success/30 px-4 py-3">
+          <CheckCircle className="w-5 h-5 text-success flex-shrink-0" />
+          <p className="text-sm font-normal text-success">{successMessage}</p>
         </div>
       )}
 
@@ -138,7 +138,7 @@ export default function Clientes() {
         </div>
         <button
           onClick={() => setShowForm(true)}
-          className="inline-flex items-center gap-2 rounded-lg bg-accent text-accent-foreground px-4 py-2 text-xs font-semibold hover:opacity-90 transition-colors"
+          className="inline-flex items-center gap-2 rounded-xl bg-accent text-accent-foreground px-4 py-2 text-xs font-semibold hover:opacity-90 transition-colors"
         >
           <span>+</span>
           <span>Novo cliente</span>
@@ -177,7 +177,7 @@ export default function Clientes() {
 
           {error && (
             <TableRow>
-              <TableCell colSpan={5} className="text-center py-8 text-red-600 dark:text-red-400">
+              <TableCell colSpan={5} className="text-center py-8 text-danger">
                 Erro ao carregar clientes: {error.message}
               </TableCell>
             </TableRow>
@@ -185,7 +185,7 @@ export default function Clientes() {
 
           {!isLoading && filtered.length === 0 && (
             <TableRow>
-              <TableCell colSpan={5} className="text-center py-8 text-muted dark:text-muted">
+              <TableCell colSpan={5} className="text-center py-8 text-muted">
                 Nenhum cliente encontrado
               </TableCell>
             </TableRow>
@@ -203,7 +203,7 @@ export default function Clientes() {
               </TableCell>
               <TableCell>
                 {client.segmento ? (
-                  <span className="text-muted dark:text-muted">{client.segmento}</span>
+                  <span className="text-muted">{client.segmento}</span>
                 ) : (
                   <span className="text-muted">—</span>
                 )}
@@ -214,7 +214,7 @@ export default function Clientes() {
                 </Badge>
               </TableCell>
               <TableCell>
-                <span className="text-sm text-muted dark:text-muted">
+                <span className="text-sm text-muted">
                   {client.contato_email || client.contato_telefone || '—'}
                 </span>
               </TableCell>
@@ -222,14 +222,14 @@ export default function Clientes() {
                 <div className="flex items-center justify-end gap-3">
                   <Link
                     to={`/admin/clientes/${client.id}`}
-                    className="p-1.5 rounded text-muted dark:text-muted hover:bg-neutral-200/50 dark:hover:bg-neutral-700/40 transition-colors"
+                    className="p-1.5 rounded text-muted transition-colors"
                     title="Ver cliente"
                   >
                     <Eye className="w-4 h-4" />
                   </Link>
                   <button
                     onClick={() => handleDelete(client)}
-                    className="p-1.5 rounded text-muted dark:text-muted hover:bg-neutral-200/50 dark:hover:bg-neutral-700/40 transition-colors"
+                    className="p-1.5 rounded text-muted transition-colors"
                     title="Remover cliente"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -249,9 +249,9 @@ export default function Clientes() {
           onSubmit={(values, access) => createMutation.mutate({ clientData: values, access })}
         />
         {createMutation.error && (
-          <div className="mt-4 flex items-center gap-2 rounded-lg bg-red-900/20 border border-red-700/50 px-3 py-2">
-            <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0" />
-            <p className="text-xs text-red-400">{createMutation.error.message}</p>
+          <div className="mt-4 flex items-center gap-2 rounded-lg bg-danger/10 border border-danger/30 px-3 py-2">
+            <AlertCircle className="w-4 h-4 text-danger flex-shrink-0" />
+            <p className="text-xs text-danger">{createMutation.error.message}</p>
           </div>
         )}
       </Modal>
@@ -261,8 +261,8 @@ export default function Clientes() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4">
           <div className="w-full max-w-sm bg-surface rounded-2xl border border-border p-6 shadow-2xl shadow-black/60">
             <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-900/30 border border-red-700/50">
-                <AlertCircle className="h-5 w-5 text-red-400" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-900/30 border border-danger/30">
+                <AlertCircle className="h-5 w-5 text-danger" />
               </div>
               <h3 className="text-lg font-normal text-foreground">Remover cliente?</h3>
             </div>
@@ -279,7 +279,7 @@ export default function Clientes() {
               <button
                 onClick={confirmDelete}
                 disabled={deleteMutation.isPending}
-                className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50"
+                className="flex-1 px-4 py-2 bg-danger hover:opacity-90 text-foreground text-sm font-semibold rounded-lg transition-colors disabled:opacity-50"
               >
                 {deleteMutation.isPending ? 'Removendo...' : 'Remover'}
               </button>
