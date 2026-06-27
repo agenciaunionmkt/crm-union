@@ -161,7 +161,7 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
           ))}
         </Select>
         {form.plano && form.plano !== 'personalizado' && (
-          <p className="mt-1 text-xs text-neutral-400">
+          <p className="mt-1 text-xs text-muted">
             Gera {postsDoPlano(form.plano)} posts por mês no Agente de conteúdo.
           </p>
         )}
@@ -195,7 +195,7 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
               <option key={d} value={d}>Dia {d}</option>
             ))}
           </Select>
-          <p className="mt-1 text-xs text-neutral-400">
+          <p className="mt-1 text-xs text-muted">
             Todo mês a cobrança vence neste dia (gerada no Financeiro).
           </p>
         </div>
@@ -225,10 +225,10 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
               className="mt-0.5 h-4 w-4 rounded border-white/20 bg-white/5 accent-yellow-400"
             />
             <span>
-              <span className="block text-sm font-normal text-neutral-300">
+              <span className="block text-sm font-normal text-subtle">
                 Dar acesso ao portal do cliente
               </span>
-              <span className="block text-xs text-neutral-400">
+              <span className="block text-xs text-muted">
                 Enviaremos um e-mail para o cliente criar a própria senha.
               </span>
             </span>

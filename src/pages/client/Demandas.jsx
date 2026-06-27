@@ -25,7 +25,7 @@ export default function ClientDemandas() {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold text-gray-900">Status das demandas</h1>
+      <h1 className="text-2xl font-black tracking-tight text-foreground">Status das demandas</h1>
       <p className="mt-1 text-sm text-gray-500">Acompanhe o progresso de cada entrega</p>
 
       <div className="mt-6 overflow-hidden rounded-xl border border-gray-200 bg-white">
@@ -63,7 +63,7 @@ export default function ClientDemandas() {
                         {(demand.tags ?? []).map((tag) => (
                           <span
                             key={tag.id}
-                            className="rounded-full px-2 py-0.5 text-[10px] font-medium text-white"
+                            className="rounded-full px-2 py-0.5 text-[10px] font-medium text-foreground"
                             style={{ backgroundColor: tag.cor }}
                           >
                             {tag.nome}

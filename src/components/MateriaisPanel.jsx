@@ -81,7 +81,7 @@ export default function MateriaisPanel({ clienteId, currentUser, canUpload = tru
                 <button
                   type="button"
                   onClick={() => deleteMutation.mutate(m)}
-                  className="absolute right-1 top-1 rounded-md bg-black/60 p-1 text-neutral-200 opacity-0 hover:text-danger group-hover:opacity-100 transition-opacity"
+                  className="absolute right-1 top-1 rounded-md bg-black/60 p-1 text-subtle opacity-0 hover:text-danger group-hover:opacity-100 transition-opacity"
                   title="Remover"
                 >
                   <Trash2 className="w-3.5 h-3.5" />

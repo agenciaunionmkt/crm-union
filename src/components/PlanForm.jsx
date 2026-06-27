@@ -10,7 +10,7 @@ const emptyForm = {
 
 const fieldClass =
   'w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20'
-const labelClass = 'mb-1.5 block text-sm font-normal text-neutral-300'
+const labelClass = 'mb-1.5 block text-sm font-normal text-subtle'
 
 export default function PlanForm({ initialValues, onSubmit, onCancel, submitting }) {
   const [form, setForm] = useState({ ...emptyForm, ...initialValues })
@@ -80,7 +80,7 @@ export default function PlanForm({ initialValues, onSubmit, onCancel, submitting
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-lg border border-white/15 px-4 py-2 text-sm font-normal text-neutral-300 hover:bg-white/5 transition-colors"
+          className="rounded-lg border border-white/15 px-4 py-2 text-sm font-normal text-subtle hover:bg-white/5 transition-colors"
         >
           Cancelar
         </button>

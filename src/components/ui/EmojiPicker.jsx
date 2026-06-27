@@ -27,7 +27,7 @@ export default function EmojiPicker({ onSelect, openUp = true }) {
         type="button"
         onClick={() => setOpen((o) => !o)}
         title="Emoji"
-        className="inline-flex items-center justify-center rounded-lg border border-white/15 px-2.5 py-2.5 text-neutral-300 hover:bg-white/5 transition-colors"
+        className="inline-flex items-center justify-center rounded-lg border border-white/15 px-2.5 py-2.5 text-subtle hover:bg-white/5 transition-colors"
       >
         <Smile className="w-4 h-4" />
       </button>

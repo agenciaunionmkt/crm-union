@@ -71,8 +71,8 @@ export default function ClientSolicitacoes() {
 
   return (
     <div>
-      <h1 className="text-2xl font-normal text-white">Nova solicitação</h1>
-      <p className="mt-1 text-sm text-neutral-400">Envie um novo pedido para a agência</p>
+      <h1 className="text-2xl font-black tracking-tight text-foreground">Nova solicitação</h1>
+      <p className="mt-1 text-sm text-muted">Envie um novo pedido para a agência</p>
 
       {semVinculo && (
         <div className="mt-4 rounded-lg border border-yellow-400/30 bg-yellow-400/10 px-4 py-3 text-sm text-yellow-200">
@@ -82,7 +82,7 @@ export default function ClientSolicitacoes() {
 
       <form onSubmit={handleSubmit} className="mt-6 max-w-xl glass rounded-2xl p-6">
         <div className="mb-4">
-          <label className="mb-1.5 block text-sm font-normal text-neutral-300">Título</label>
+          <label className="mb-1.5 block text-sm font-normal text-subtle">Título</label>
           <input
             required
             value={titulo}
@@ -93,7 +93,7 @@ export default function ClientSolicitacoes() {
         </div>
         <div className="mb-4">
           <div className="mb-1.5 flex items-center justify-between">
-            <label className="block text-sm font-normal text-neutral-300">Descrição</label>
+            <label className="block text-sm font-normal text-subtle">Descrição</label>
             <EmojiPicker openUp={false} onSelect={(e) => setDescricao((d) => d + e)} />
           </div>
           <textarea
@@ -107,14 +107,14 @@ export default function ClientSolicitacoes() {
 
         {/* Anexo */}
         <div className="mb-4">
-          <label className="mb-1.5 block text-sm font-normal text-neutral-300">Anexo (opcional)</label>
+          <label className="mb-1.5 block text-sm font-normal text-subtle">Anexo (opcional)</label>
           {arquivo ? (
             <div className="flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2">
-              <span className="truncate text-sm text-neutral-300">{arquivo.name}</span>
+              <span className="truncate text-sm text-subtle">{arquivo.name}</span>
               <button
                 type="button"
                 onClick={() => setArquivo(null)}
-                className="flex-shrink-0 rounded p-1 text-neutral-400 hover:text-red-400"
+                className="flex-shrink-0 rounded p-1 text-muted hover:text-red-400"
                 title="Remover"
               >
                 <X className="w-4 h-4" />
@@ -124,7 +124,7 @@ export default function ClientSolicitacoes() {
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
-              className="inline-flex items-center gap-2 rounded-lg border border-dashed border-white/20 bg-white/5 px-4 py-2.5 text-sm text-neutral-300 hover:bg-white/10 transition-colors"
+              className="inline-flex items-center gap-2 rounded-lg border border-dashed border-white/20 bg-white/5 px-4 py-2.5 text-sm text-subtle hover:bg-white/10 transition-colors"
             >
               <Paperclip className="w-4 h-4" /> Anexar arquivo (imagem, material...)
             </button>
@@ -159,15 +159,15 @@ export default function ClientSolicitacoes() {
       </form>
 
       <div className="mt-8">
-        <h2 className="text-sm font-normal uppercase tracking-widest text-neutral-400">Suas solicitações</h2>
+        <h2 className="text-sm font-normal uppercase tracking-widest text-muted">Suas solicitações</h2>
         <div className="mt-3 glass rounded-2xl overflow-hidden">
-          {requestsQuery.isLoading && <p className="p-6 text-sm text-neutral-400">Carregando...</p>}
+          {requestsQuery.isLoading && <p className="p-6 text-sm text-muted">Carregando...</p>}
           {!requestsQuery.isLoading && requests.length === 0 && (
-            <p className="p-6 text-sm text-neutral-400">Você ainda não enviou nenhuma solicitação.</p>
+            <p className="p-6 text-sm text-muted">Você ainda não enviou nenhuma solicitação.</p>
           )}
           {requests.length > 0 && (
             <table className="w-full text-left text-sm">
-              <thead className="border-b border-white/10 bg-white/5 text-xs uppercase text-neutral-400">
+              <thead className="border-b border-white/10 bg-white/5 text-xs uppercase text-muted">
                 <tr>
                   <th className="px-4 py-3 font-normal">Solicitação</th>
                   <th className="px-4 py-3 font-normal">Enviado em</th>
@@ -178,9 +178,9 @@ export default function ClientSolicitacoes() {
                 {requests.map((request) => (
                   <tr key={request.id} className="border-b border-white/5 last:border-0">
                     <td className="px-4 py-3">
-                      <p className="font-normal text-white">{request.titulo}</p>
+                      <p className="font-black tracking-tight text-foreground">{request.titulo}</p>
                       {request.descricao && (
-                        <p className="mt-1 max-w-md text-xs text-neutral-400">{request.descricao}</p>
+                        <p className="mt-1 max-w-md text-xs text-muted">{request.descricao}</p>
                       )}
                       {request.arquivo_url && (
                         <a
@@ -194,7 +194,7 @@ export default function ClientSolicitacoes() {
                         </a>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-neutral-400">{formatDate(request.created_at)}</td>
+                    <td className="px-4 py-3 text-muted">{formatDate(request.created_at)}</td>
                     <td className="px-4 py-3">
                       <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-normal ${statusStyles[request.status]}`}>
                         {statusLabels[request.status]}

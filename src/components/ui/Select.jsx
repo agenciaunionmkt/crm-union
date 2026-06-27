@@ -17,8 +17,8 @@ const Select = forwardRef(
           {children}
         </select>
 
-        {error && <p className="mt-1 text-xs text-red-400">{error}</p>}
-        {helpText && !error && <p className="mt-1 text-xs text-neutral-400">{helpText}</p>}
+        {error && <p className="mt-1 text-xs text-danger">{error}</p>}
+        {helpText && !error && <p className="mt-1 text-xs text-muted">{helpText}</p>}
       </div>
     )
   }

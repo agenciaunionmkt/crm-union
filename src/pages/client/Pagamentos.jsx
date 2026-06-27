@@ -41,29 +41,29 @@ export default function ClientPagamentos() {
 
   return (
     <div>
-      <h1 className="text-2xl font-normal text-white">Pagamentos</h1>
-      <p className="mt-1 text-sm text-neutral-400">Acompanhe suas cobranças e faça o pagamento por PIX ou boleto</p>
+      <h1 className="text-2xl font-black tracking-tight text-foreground">Pagamentos</h1>
+      <p className="mt-1 text-sm text-muted">Acompanhe suas cobranças e faça o pagamento por PIX ou boleto</p>
 
       {/* Resumo */}
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="glass rounded-2xl p-5">
-          <p className="text-xs uppercase tracking-widest text-neutral-500">Em aberto</p>
+          <p className="text-xs uppercase tracking-widest text-muted">Em aberto</p>
           <p className="text-2xl font-normal text-yellow-300">{formatBRL(aPagar)}</p>
         </div>
         <div className="glass rounded-2xl p-5">
-          <p className="text-xs uppercase tracking-widest text-neutral-500">Total pago</p>
+          <p className="text-xs uppercase tracking-widest text-muted">Total pago</p>
           <p className="text-2xl font-normal text-emerald-400">{formatBRL(totalPago)}</p>
         </div>
       </div>
 
       <div className="mt-6 glass rounded-2xl overflow-hidden">
-        {isLoading && <p className="p-6 text-sm text-neutral-400">Carregando...</p>}
+        {isLoading && <p className="p-6 text-sm text-muted">Carregando...</p>}
         {!isLoading && cobrancas.length === 0 && (
-          <p className="p-6 text-sm text-neutral-400">Você ainda não tem cobranças.</p>
+          <p className="p-6 text-sm text-muted">Você ainda não tem cobranças.</p>
         )}
         {cobrancas.length > 0 && (
           <table className="w-full text-left text-sm">
-            <thead className="border-b border-white/10 bg-white/5 text-xs uppercase text-neutral-400">
+            <thead className="border-b border-white/10 bg-white/5 text-xs uppercase text-muted">
               <tr>
                 <th className="px-4 py-3 font-normal">Descrição</th>
                 <th className="px-4 py-3 font-normal">Vencimento</th>
@@ -76,8 +76,8 @@ export default function ClientPagamentos() {
               {cobrancas.map((c) => (
                 <tr key={c.id} className="border-b border-white/5 last:border-0">
                   <td className="px-4 py-3 text-white">{c.nome}</td>
-                  <td className="px-4 py-3 text-neutral-300">{formatDate(c.vencimento)}</td>
-                  <td className="px-4 py-3 text-neutral-300">{formatBRL(c.valor)}</td>
+                  <td className="px-4 py-3 text-subtle">{formatDate(c.vencimento)}</td>
+                  <td className="px-4 py-3 text-subtle">{formatBRL(c.valor)}</td>
                   <td className="px-4 py-3">
                     <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-normal ${statusStyles[c.status]}`}>
                       {statusLabels[c.status] || c.status}
@@ -96,7 +96,7 @@ export default function ClientPagamentos() {
                     ) : c.status === 'pago' ? (
                       <span className="text-xs text-emerald-400">Pago</span>
                     ) : (
-                      <span className="text-xs text-neutral-500">—</span>
+                      <span className="text-xs text-muted">—</span>
                     )}
                   </td>
                 </tr>

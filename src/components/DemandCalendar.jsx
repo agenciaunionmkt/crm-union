@@ -58,7 +58,7 @@ export default function DemandCalendar({
     if (isDone(demand)) return 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40'
     if (isAwaiting(demand)) return 'bg-blue-500/15 text-blue-300 border-blue-500/40'
     if (isOverdue(demand)) return 'bg-red-500/15 text-red-300 border-red-500/40'
-    return 'bg-white/5 text-neutral-200 border-white/10'
+    return 'bg-white/5 text-subtle border-white/10'
   }
   function iniciaisDe(demand) {
     const nome = demand.responsavel?.nome
@@ -70,26 +70,26 @@ export default function DemandCalendar({
   return (
     <div>
       <div className="mb-4 flex items-center justify-center py-4 px-6 relative">
-        <h2 className="text-lg font-normal capitalize text-neutral-900 dark:text-white">
+        <h2 className="text-lg font-normal capitalize text-foreground">
           {format(currentMonth, 'MMMM yyyy', { locale: ptBR })}
         </h2>
         <div className="flex gap-3 absolute right-6">
           <button
             onClick={() => onMonthChange(subMonths(currentMonth, 1))}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 px-3.5 py-2 text-xs font-normal text-neutral-300 hover:bg-white/5 active:scale-95 transition-all"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 px-3.5 py-2 text-xs font-normal text-subtle hover:bg-white/5 active:scale-95 transition-all"
           >
             <ChevronLeft className="w-4 h-4" />
             <span>Anterior</span>
           </button>
           <button
             onClick={() => onMonthChange(new Date())}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 px-3.5 py-2 text-xs font-normal text-neutral-300 hover:bg-white/5 active:scale-95 transition-all"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 px-3.5 py-2 text-xs font-normal text-subtle hover:bg-white/5 active:scale-95 transition-all"
           >
             <span>Hoje</span>
           </button>
           <button
             onClick={() => onMonthChange(addMonths(currentMonth, 1))}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 px-3.5 py-2 text-xs font-normal text-neutral-300 hover:bg-white/5 active:scale-95 transition-all"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 px-3.5 py-2 text-xs font-normal text-subtle hover:bg-white/5 active:scale-95 transition-all"
           >
             <span>Próximo</span>
             <ChevronRight className="w-4 h-4" />
@@ -100,7 +100,7 @@ export default function DemandCalendar({
       <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.02] backdrop-blur-xl">
         <div className="grid grid-cols-7 gap-0 min-w-[700px]">
           {weekDays.map((day) => (
-            <div key={day} className="px-3 py-3 text-center text-xs font-normal text-neutral-400 border-b border-white/10">
+            <div key={day} className="px-3 py-3 text-center text-xs font-normal text-muted border-b border-white/10">
               {day}
             </div>
           ))}
@@ -115,12 +115,12 @@ export default function DemandCalendar({
                 key={day.toISOString()}
                 onClick={onDayClick ? () => onDayClick(day) : undefined}
                 className={`min-h-32 border-b border-r border-white/10 p-3 ${onDayClick ? 'cursor-pointer hover:bg-white/5 transition-colors' : ''} ${
-                  inMonth ? 'bg-transparent' : 'bg-black/20 text-neutral-600'
+                  inMonth ? 'bg-transparent' : 'bg-black/20 text-muted'
                 }`}
               >
                 <p
                   className={`mb-2 inline-flex h-6 w-6 items-center justify-center rounded-full text-xs font-normal ${
-                    isToday ? 'bg-yellow-400 text-gray-900 font-semibold' : 'text-neutral-400'
+                    isToday ? 'bg-yellow-400 text-gray-900 font-semibold' : 'text-muted'
                   }`}
                 >
                   {format(day, 'd')}
@@ -177,7 +177,7 @@ export default function DemandCalendar({
                             {iniciais}
                           </span>
                         ) : (
-                          <span className="text-[10px] text-neutral-500">Sem responsável</span>
+                          <span className="text-[10px] text-muted">Sem responsável</span>
                         )}
                       </div>
                     </div>
@@ -190,7 +190,7 @@ export default function DemandCalendar({
                         e.stopPropagation()
                         setDayModal(day)
                       }}
-                      className="w-full rounded-md px-2 py-1 text-left text-[11px] text-neutral-400 hover:bg-white/5 hover:text-white transition-colors"
+                      className="w-full rounded-md px-2 py-1 text-left text-[11px] text-muted hover:bg-white/5 hover:text-foreground transition-colors"
                     >
                       +{items.length - 3} mais
                     </button>

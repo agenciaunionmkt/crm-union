@@ -89,7 +89,7 @@ export const TableHeader = forwardRef(
       ref={ref}
       className={`
         px-4 py-3.5 text-left text-xs font-normal
-        text-neutral-700 dark:text-neutral-300
+        text-neutral-700 dark:text-subtle
         ${className}
       `}
       {...props}
@@ -107,7 +107,7 @@ export const TableCell = forwardRef(
       ref={ref}
       className={`
         px-4 py-3
-        text-neutral-700 dark:text-neutral-400
+        text-neutral-700 dark:text-muted
         ${className}
       `}
       {...props}

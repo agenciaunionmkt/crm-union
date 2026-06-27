@@ -99,7 +99,7 @@ export default function ResetPassword() {
       <div className="flex min-h-screen items-center justify-center union-app-bg">
         <div className="text-center">
           <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-neutral-700 border-t-yellow-400"></div>
-          <p className="mt-4 text-sm text-neutral-400">Carregando...</p>
+          <p className="mt-4 text-sm text-muted">Carregando...</p>
         </div>
       </div>
     )
@@ -110,7 +110,7 @@ export default function ResetPassword() {
       <div className="w-full max-w-sm">
         <button
           onClick={() => navigate('/login')}
-          className="mb-8 flex items-center gap-2 text-sm text-neutral-400 hover:text-neutral-300 transition-colors"
+          className="mb-8 flex items-center gap-2 text-sm text-muted hover:text-subtle transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Voltar
@@ -118,7 +118,7 @@ export default function ResetPassword() {
 
         <div className="mb-8 flex flex-col items-center text-center">
           <UnionLogo size="lg" variant="light" />
-          <p className="mt-3 text-sm text-neutral-400">Defina uma nova senha</p>
+          <p className="mt-3 text-sm text-muted">Defina uma nova senha</p>
         </div>
 
         <form
@@ -126,7 +126,7 @@ export default function ResetPassword() {
           className="rounded-xl border border-neutral-700/50 bg-neutral-900/50 backdrop-blur-xl p-6 shadow-lg"
         >
           <div className="mb-4">
-            <label htmlFor="password" className="mb-1.5 block text-sm font-normal text-neutral-300">
+            <label htmlFor="password" className="mb-1.5 block text-sm font-normal text-subtle">
               Nova Senha
             </label>
             <div className="relative">
@@ -136,7 +136,7 @@ export default function ResetPassword() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-lg border border-neutral-600 bg-transparent px-4 py-2.5 pr-10 text-sm font-normal text-white placeholder-neutral-500 focus:border-neutral-500 focus:outline-none"
+                className="w-full rounded-lg border border-border-strong bg-transparent px-4 py-2.5 pr-10 text-sm font-normal text-foreground placeholder:text-subtle focus:border-accent focus:outline-none"
                 style={{ transition: 'background-color 5000s ease-in-out 0s' }}
                 placeholder="••••••••"
                 autoComplete="off"
@@ -144,7 +144,7 @@ export default function ResetPassword() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-300"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-subtle"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -152,7 +152,7 @@ export default function ResetPassword() {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="confirmPassword" className="mb-1.5 block text-sm font-normal text-neutral-300">
+            <label htmlFor="confirmPassword" className="mb-1.5 block text-sm font-normal text-subtle">
               Confirmar Senha
             </label>
             <div className="relative">
@@ -162,7 +162,7 @@ export default function ResetPassword() {
                 required
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full rounded-lg border border-neutral-600 bg-transparent px-4 py-2.5 pr-10 text-sm font-normal text-white placeholder-neutral-500 focus:border-neutral-500 focus:outline-none"
+                className="w-full rounded-lg border border-border-strong bg-transparent px-4 py-2.5 pr-10 text-sm font-normal text-foreground placeholder:text-subtle focus:border-accent focus:outline-none"
                 style={{ transition: 'background-color 5000s ease-in-out 0s' }}
                 placeholder="••••••••"
                 autoComplete="off"
@@ -170,7 +170,7 @@ export default function ResetPassword() {
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-300"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-subtle"
               >
                 {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>

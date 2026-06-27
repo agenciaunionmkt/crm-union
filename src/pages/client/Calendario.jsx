@@ -96,12 +96,12 @@ export default function ClientCalendario() {
 
   return (
     <div>
-      <h1 className="text-2xl font-normal text-white">Calendário de conteúdo</h1>
-      <p className="mt-1 text-sm text-neutral-400">Planejamento de publicações do mês</p>
+      <h1 className="text-2xl font-black tracking-tight text-foreground">Calendário de conteúdo</h1>
+      <p className="mt-1 text-sm text-muted">Planejamento de publicações do mês</p>
 
       <div className="mt-6">
         {isLoading ? (
-          <p className="text-sm text-neutral-400">Carregando...</p>
+          <p className="text-sm text-muted">Carregando...</p>
         ) : (
           <DemandCalendar
             demands={demands}
@@ -117,8 +117,8 @@ export default function ClientCalendario() {
         {detalhe && (
           <div className="space-y-5">
             <div>
-              <p className="text-lg font-normal text-white">{detalhe.titulo}</p>
-              <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-neutral-400">
+              <p className="text-lg font-black tracking-tight text-foreground">{detalhe.titulo}</p>
+              <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-muted">
                 {detalhe.status && (
                   <span className={`inline-flex rounded-full px-2.5 py-1 ${demandStatusStyles[detalhe.status]}`}>
                     {demandStatusLabels[detalhe.status]}
@@ -130,7 +130,7 @@ export default function ClientCalendario() {
 
             {/* Descrição (cliente pode editar para sugerir mudanças) */}
             <div>
-              <p className="mb-2 text-xs uppercase tracking-widest text-neutral-500">Descrição</p>
+              <p className="mb-2 text-xs uppercase tracking-widest text-muted">Descrição</p>
               <textarea
                 rows={4}
                 value={descricaoEdit}
@@ -155,9 +155,9 @@ export default function ClientCalendario() {
 
             {/* Conteúdo (imagens em miniatura, clique para ampliar) */}
             <div>
-              <p className="mb-2 text-xs uppercase tracking-widest text-neutral-500">Conteúdo</p>
+              <p className="mb-2 text-xs uppercase tracking-widest text-muted">Conteúdo</p>
               {imagens.length === 0 ? (
-                <p className="text-sm text-neutral-400">Conteúdo ainda não disponível.</p>
+                <p className="text-sm text-muted">Conteúdo ainda não disponível.</p>
               ) : (
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                   {imagens.map((img) => (
@@ -188,7 +188,7 @@ export default function ClientCalendario() {
                   type="button"
                   onClick={() => aprovarMutation.mutate(detalhe.id)}
                   disabled={aprovarMutation.isPending}
-                  className="mt-3 inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600 disabled:opacity-60 transition-colors"
+                  className="mt-3 inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-foreground hover:bg-emerald-600 disabled:opacity-60 transition-colors"
                 >
                   <CheckCircle2 className="w-4 h-4" />
                   {aprovarMutation.isPending ? 'Aprovando...' : 'Aprovar publicação'}

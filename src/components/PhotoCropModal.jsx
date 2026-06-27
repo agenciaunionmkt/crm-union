@@ -94,7 +94,7 @@ export default function PhotoCropModal({ src, onCancel, onApply }) {
         </div>
 
         <div className="mt-5 flex items-center gap-3">
-          <span className="text-xs text-neutral-400">Zoom</span>
+          <span className="text-xs text-muted">Zoom</span>
           <input
             type="range"
             min="1"
@@ -110,7 +110,7 @@ export default function PhotoCropModal({ src, onCancel, onApply }) {
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-lg border border-white/15 px-4 py-2 text-sm text-neutral-300 hover:bg-white/5 transition-colors"
+            className="rounded-lg border border-white/15 px-4 py-2 text-sm text-subtle hover:bg-white/5 transition-colors"
           >
             Cancelar
           </button>

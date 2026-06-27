@@ -81,18 +81,18 @@ export default function Solicitacoes() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-normal text-white">Solicitações</h1>
-        <p className="mt-1 text-sm text-neutral-400">
+        <h1 className="text-2xl font-black tracking-tight text-foreground">Solicitações</h1>
+        <p className="mt-1 text-sm text-muted">
           Fila de pedidos enviados pelos clientes — triagem e organização em demandas
         </p>
       </div>
 
-      {requestsQuery.isLoading && <p className="mt-6 text-sm text-neutral-400">Carregando...</p>}
+      {requestsQuery.isLoading && <p className="mt-6 text-sm text-muted">Carregando...</p>}
       {requestsQuery.error && (
         <p className="mt-6 text-sm text-red-400">Erro ao carregar solicitações: {requestsQuery.error.message}</p>
       )}
       {!requestsQuery.isLoading && requests.length === 0 && (
-        <p className="mt-6 rounded-2xl border border-dashed border-white/15 p-6 text-sm text-neutral-400">
+        <p className="mt-6 rounded-2xl border border-dashed border-white/15 p-6 text-sm text-muted">
           Nenhuma solicitação enviada ainda.
         </p>
       )}
@@ -104,17 +104,17 @@ export default function Solicitacoes() {
             <div key={request.id} className="glass rounded-2xl p-5">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <div className="flex items-center gap-2 text-xs text-neutral-400">
+                  <div className="flex items-center gap-2 text-xs text-muted">
                     <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-accent/15 text-[10px] font-semibold text-accent">
                       {(request.client?.nome ?? '?').charAt(0).toUpperCase()}
                     </span>
                     <span className="truncate">{request.client?.nome ?? 'Cliente'}</span>
-                    <span className="text-neutral-600">·</span>
+                    <span className="text-muted">·</span>
                     <span>{formatDate(request.created_at)}</span>
                   </div>
-                  <p className="mt-2 font-normal text-white">{request.titulo}</p>
+                  <p className="mt-2 font-black tracking-tight text-foreground">{request.titulo}</p>
                   {request.descricao && (
-                    <p className="mt-1 max-w-xl text-sm text-neutral-400">{request.descricao}</p>
+                    <p className="mt-1 max-w-xl text-sm text-muted">{request.descricao}</p>
                   )}
                   {request.arquivo_url && (
                     <a
@@ -152,7 +152,7 @@ export default function Solicitacoes() {
                   {request.status === 'pendente' && (
                     <button
                       onClick={() => handleEmAnalise(request)}
-                      className="rounded-lg border border-white/15 px-3 py-1.5 text-xs font-normal text-neutral-300 hover:bg-white/5 transition-colors"
+                      className="rounded-lg border border-white/15 px-3 py-1.5 text-xs font-normal text-subtle hover:bg-white/5 transition-colors"
                     >
                       Marcar em análise
                     </button>

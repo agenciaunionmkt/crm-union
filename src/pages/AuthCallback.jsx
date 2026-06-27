@@ -35,7 +35,7 @@ export default function AuthCallback() {
     <div className="flex min-h-screen items-center justify-center bg-neutral-900">
       <div className="text-center">
         <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-neutral-700 border-t-yellow-400"></div>
-        <p className="mt-4 text-sm text-neutral-400">Autenticando...</p>
+        <p className="mt-4 text-sm text-muted">Autenticando...</p>
       </div>
     </div>
   )

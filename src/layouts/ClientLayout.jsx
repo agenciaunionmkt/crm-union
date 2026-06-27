@@ -68,7 +68,7 @@ export default function ClientLayout() {
     'w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20'
   const infoRow = (label, value) => (
     <div className="flex items-center justify-between border-b border-white/5 py-2">
-      <span className="text-xs text-neutral-400">{label}</span>
+      <span className="text-xs text-muted">{label}</span>
       <span className="text-sm text-white text-right">{value}</span>
     </div>
   )
@@ -88,11 +88,11 @@ export default function ClientLayout() {
         <div className="flex items-center justify-between px-5 py-5 border-b border-border">
           <div>
             <UnionLogo size="sm" variant="light" />
-            <p className="mt-2 text-xs text-neutral-400 uppercase tracking-widest opacity-70">
+            <p className="mt-2 text-xs text-muted uppercase tracking-widest opacity-70">
               Portal do cliente
             </p>
           </div>
-          <button onClick={() => setSidebarOpen(false)} className="lg:hidden p-1 text-neutral-400 hover:text-white">
+          <button onClick={() => setSidebarOpen(false)} className="lg:hidden p-1 text-muted hover:text-foreground">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -105,7 +105,7 @@ export default function ClientLayout() {
               onClick={() => setSidebarOpen(false)}
               className={({ isActive }) =>
                 `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-normal transition-all duration-200 ${
-                  isActive ? 'union-active' : 'text-neutral-400 hover:bg-white/5 hover:text-white'
+                  isActive ? 'union-active' : 'text-muted hover:bg-white/5 hover:text-foreground'
                 }`
               }
             >
@@ -119,13 +119,13 @@ export default function ClientLayout() {
           <div className="mt-2 flex items-center gap-2">
             <button
               onClick={() => { setShowConfig(true); setSidebarOpen(false) }}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 px-3 py-1.5 text-xs text-neutral-300 hover:bg-white/5 transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 px-3 py-1.5 text-xs text-subtle hover:bg-white/5 transition-colors"
             >
               <Settings className="w-3.5 h-3.5" /> Configurações
             </button>
             <button
               onClick={signOut}
-              className="text-xs font-normal text-neutral-400 hover:text-yellow-300 transition-colors"
+              className="text-xs font-normal text-muted hover:text-yellow-300 transition-colors"
             >
               Sair
             </button>
@@ -135,7 +135,7 @@ export default function ClientLayout() {
 
       <main className="flex-1 flex flex-col min-w-0">
         <header className="lg:hidden flex items-center gap-3 border-b border-border bg-white/[0.02] px-4 py-3">
-          <button onClick={() => setSidebarOpen(true)} className="p-2 -ml-2 rounded-md text-neutral-300 hover:bg-white/10" aria-label="Abrir menu">
+          <button onClick={() => setSidebarOpen(true)} className="p-2 -ml-2 rounded-md text-subtle hover:bg-white/10" aria-label="Abrir menu">
             <Menu className="w-5 h-5" />
           </button>
           <UnionLogo size="sm" variant="light" />
@@ -148,7 +148,7 @@ export default function ClientLayout() {
       <Modal open={showConfig} title="Configurações" onClose={() => setShowConfig(false)}>
         <div className="space-y-6">
           <div>
-            <p className="mb-2 text-xs uppercase tracking-widest text-neutral-400">Seus dados</p>
+            <p className="mb-2 text-xs uppercase tracking-widest text-muted">Seus dados</p>
             {infoRow('Nome', cliente?.nome ?? profile?.nome ?? '—')}
             {infoRow('E-mail de acesso', profile?.email ?? '—')}
             {infoRow('E-mail de contato', cliente?.contato_email ?? '—')}
@@ -161,7 +161,7 @@ export default function ClientLayout() {
           </div>
 
           <div className="border-t border-border pt-4">
-            <p className="mb-3 text-xs uppercase tracking-widest text-neutral-400">Alterar senha</p>
+            <p className="mb-3 text-xs uppercase tracking-widest text-muted">Alterar senha</p>
             <div className="space-y-3">
               <input type="password" value={novaSenha} onChange={(e) => setNovaSenha(e.target.value)} placeholder="Nova senha" className={inputClass} />
               <input type="password" value={confirmar} onChange={(e) => setConfirmar(e.target.value)} placeholder="Confirmar senha" className={inputClass} />

@@ -112,14 +112,14 @@ export default function DemandForm({
       {/* Descrição */}
       <div>
         <div className="flex items-center justify-between mb-1.5">
-          <label className="block text-sm font-normal text-neutral-300">
+          <label className="block text-sm font-normal text-subtle">
             Descrição
           </label>
           <button
             type="button"
             onClick={generateDescriptionWithAI}
             disabled={loadingAI || !form.titulo}
-            className="text-xs font-normal text-yellow-300 hover:text-yellow-200 disabled:text-neutral-500 transition-colors"
+            className="text-xs font-normal text-yellow-300 hover:text-yellow-200 disabled:text-muted transition-colors"
           >
             {loadingAI ? 'Gerando...' : 'Sugerir com IA'}
           </button>
@@ -154,7 +154,7 @@ export default function DemandForm({
 
       {/* Prazo */}
       <div>
-        <label className="mb-1.5 block text-sm font-normal text-neutral-300">
+        <label className="mb-1.5 block text-sm font-normal text-subtle">
           Prazo
         </label>
         <DatePicker
@@ -166,7 +166,7 @@ export default function DemandForm({
 
       {/* Status (seletor de pílulas) */}
       <div>
-        <label className="mb-1.5 block text-sm font-normal text-neutral-300">
+        <label className="mb-1.5 block text-sm font-normal text-subtle">
           Status
         </label>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -186,7 +186,7 @@ export default function DemandForm({
                 key={option.value}
                 onClick={() => setForm((prev) => ({ ...prev, status: option.value }))}
                 className={`rounded-lg border px-3 py-2 text-xs font-normal transition-colors ${
-                  active ? activeTone : 'border-white/15 text-neutral-300 hover:bg-white/5'
+                  active ? activeTone : 'border-white/15 text-subtle hover:bg-white/5'
                 }`}
               >
                 {option.label}

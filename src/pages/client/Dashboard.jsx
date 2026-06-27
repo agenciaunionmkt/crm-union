@@ -16,7 +16,7 @@ export default function ClientDashboard() {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold text-gray-900">
+      <h1 className="text-2xl font-black tracking-tight text-foreground">
         Olá, {profile?.nome ?? 'bem-vindo(a)'}
       </h1>
       <p className="mt-1 text-sm text-gray-500">Cronograma do mês</p>

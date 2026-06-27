@@ -222,10 +222,10 @@ export default function Demandas() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-normal text-white">
+          <h1 className="text-2xl font-black tracking-tight text-foreground">
             Demandas
           </h1>
-          <p className="mt-1 text-sm text-neutral-400">
+          <p className="mt-1 text-sm text-muted">
             Cronograma e gestão de demandas do seu time
           </p>
         </div>
@@ -247,12 +247,12 @@ export default function Demandas() {
       <div className="mt-6 grid grid-cols-1 lg:grid-cols-[230px_1fr] gap-4">
         {/* Lista de cronogramas (clientes) */}
         <aside className="glass rounded-2xl p-2 h-fit lg:sticky lg:top-4">
-          <p className="px-3 py-2 text-xs uppercase tracking-widest text-neutral-400">Cronogramas</p>
+          <p className="px-3 py-2 text-xs uppercase tracking-widest text-muted">Cronogramas</p>
           <button
             type="button"
             onClick={() => setClientFilter(null)}
             className={`flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${
-              clientFilter === null ? 'union-active' : 'text-neutral-300 hover:bg-white/5'
+              clientFilter === null ? 'union-active' : 'text-subtle hover:bg-white/5'
             }`}
           >
             <span>Todos os clientes</span>
@@ -267,7 +267,7 @@ export default function Demandas() {
                 type="button"
                 onClick={() => setClientFilter(c.id)}
                 className={`flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${
-                  clientFilter === c.id ? 'union-active' : 'text-neutral-300 hover:bg-white/5'
+                  clientFilter === c.id ? 'union-active' : 'text-subtle hover:bg-white/5'
                 }`}
               >
                 <span className="truncate">{c.nome}</span>
@@ -283,7 +283,7 @@ export default function Demandas() {
         <div>
           {isLoading && (
             <div className="text-center py-12">
-              <p className="text-neutral-500 dark:text-neutral-400">Carregando demandas...</p>
+              <p className="text-muted dark:text-muted">Carregando demandas...</p>
             </div>
           )}
           {!isLoading && (
@@ -366,7 +366,7 @@ export default function Demandas() {
             <button
               type="button"
               onClick={closeForm}
-              className="rounded-lg border border-white/15 px-4 py-2.5 text-sm font-normal text-neutral-300 hover:bg-white/5 transition-colors"
+              className="rounded-lg border border-white/15 px-4 py-2.5 text-sm font-normal text-subtle hover:bg-white/5 transition-colors"
             >
               Cancelar
             </button>

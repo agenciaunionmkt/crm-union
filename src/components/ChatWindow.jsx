@@ -115,11 +115,11 @@ export default function ChatWindow({ clienteId, currentUser }) {
   return (
     <div className="flex h-full flex-col">
       <div ref={listRef} className="flex-1 space-y-3 overflow-y-auto px-1 py-2">
-        {messagesQuery.isLoading && <p className="text-xs text-neutral-400">Carregando...</p>}
+        {messagesQuery.isLoading && <p className="text-xs text-muted">Carregando...</p>}
         {!messagesQuery.isLoading && messages.length === 0 && (
           <div className="flex h-full flex-col items-center justify-center text-center">
-            <p className="text-sm text-neutral-400">Nenhuma mensagem ainda.</p>
-            <p className="text-xs text-neutral-500">Envie a primeira mensagem para começar a conversa.</p>
+            <p className="text-sm text-muted">Nenhuma mensagem ainda.</p>
+            <p className="text-xs text-muted">Envie a primeira mensagem para começar a conversa.</p>
           </div>
         )}
         {messages.map((msg) => {
@@ -130,7 +130,7 @@ export default function ChatWindow({ clienteId, currentUser }) {
                 className={`max-w-[78%] rounded-2xl px-3.5 py-2.5 text-sm ${
                   isMe
                     ? 'bg-yellow-400 text-gray-900 rounded-br-sm'
-                    : 'bg-white/8 text-neutral-100 border border-white/10 rounded-bl-sm'
+                    : 'bg-white/8 text-foreground border border-white/10 rounded-bl-sm'
                 }`}
               >
                 {msg.mensagem && <p className="whitespace-pre-wrap">{msg.mensagem}</p>}
@@ -155,7 +155,7 @@ export default function ChatWindow({ clienteId, currentUser }) {
                     </a>
                   )
                 )}
-                <p className={`mt-1 text-[10px] ${isMe ? 'text-gray-800/70' : 'text-neutral-500'}`}>
+                <p className={`mt-1 text-[10px] ${isMe ? 'text-gray-800/70' : 'text-muted'}`}>
                   {msg.autor?.nome ?? 'Usuário'} · {formatDateTime(msg.created_at)}
                 </p>
               </div>
@@ -171,7 +171,7 @@ export default function ChatWindow({ clienteId, currentUser }) {
             onClick={sugerirResposta}
             disabled={suggesting || messages.length === 0}
             title="Sugerir resposta com IA"
-            className="shrink-0 inline-flex items-center justify-center rounded-lg border border-white/15 px-2.5 py-2.5 text-neutral-300 hover:bg-white/5 disabled:opacity-50 transition-colors"
+            className="shrink-0 inline-flex items-center justify-center rounded-lg border border-white/15 px-2.5 py-2.5 text-subtle hover:bg-white/5 disabled:opacity-50 transition-colors"
           >
             {suggesting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
           </button>
@@ -182,7 +182,7 @@ export default function ChatWindow({ clienteId, currentUser }) {
           onClick={() => fileRef.current?.click()}
           disabled={uploading}
           title="Anexar arquivo"
-          className="shrink-0 inline-flex items-center justify-center rounded-lg border border-white/15 px-2.5 py-2.5 text-neutral-300 hover:bg-white/5 disabled:opacity-60 transition-colors"
+          className="shrink-0 inline-flex items-center justify-center rounded-lg border border-white/15 px-2.5 py-2.5 text-subtle hover:bg-white/5 disabled:opacity-60 transition-colors"
         >
           {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Paperclip className="w-4 h-4" />}
         </button>

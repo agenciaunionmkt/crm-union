@@ -52,13 +52,13 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
     return (
       <div>
         <div className="flex items-center justify-between mb-3">
-          <h3 className="flex items-center gap-2 text-sm font-normal text-neutral-300">
+          <h3 className="flex items-center gap-2 text-sm font-normal text-subtle">
             <Paperclip className="w-4 h-4" /> Anexos
           </h3>
           <button
             type="button"
             onClick={() => pendingRef.current?.click()}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 text-neutral-200 px-3 py-1.5 text-xs font-normal hover:bg-white/5 transition-colors"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 text-subtle px-3 py-1.5 text-xs font-normal hover:bg-white/5 transition-colors"
           >
             + Adicionar arquivo
           </button>
@@ -75,18 +75,18 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
           />
         </div>
         {pending.length === 0 ? (
-          <p className="rounded-lg border border-dashed border-white/15 px-3 py-4 text-center text-xs text-neutral-400">
+          <p className="rounded-lg border border-dashed border-white/15 px-3 py-4 text-center text-xs text-muted">
             Os arquivos serão enviados quando você salvar a demanda.
           </p>
         ) : (
           <ul className="space-y-2">
             {pending.map((f, i) => (
               <li key={i} className="flex items-center justify-between gap-3 rounded-lg border border-white/10 px-3 py-2">
-                <span className="truncate text-sm text-neutral-300">{f.name}</span>
+                <span className="truncate text-sm text-subtle">{f.name}</span>
                 <button
                   type="button"
                   onClick={() => setPending((p) => p.filter((_, idx) => idx !== i))}
-                  className="flex-shrink-0 p-1.5 rounded text-neutral-400 hover:text-red-500 hover:bg-red-900/20 transition-colors"
+                  className="flex-shrink-0 p-1.5 rounded text-muted hover:text-red-500 hover:bg-red-900/20 transition-colors"
                   title="Remover"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -102,14 +102,14 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
   return (
     <div>
       <div className="flex items-center justify-between mb-3">
-        <h3 className="flex items-center gap-2 text-sm font-normal text-neutral-700 dark:text-neutral-300">
+        <h3 className="flex items-center gap-2 text-sm font-normal text-neutral-700 dark:text-subtle">
           <Paperclip className="w-4 h-4" /> Anexos
         </h3>
         <button
           type="button"
           onClick={() => fileRef.current?.click()}
           disabled={uploadMutation.isPending}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 text-neutral-200 px-3 py-1.5 text-xs font-normal hover:bg-white/5 transition-colors disabled:opacity-60"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 text-subtle px-3 py-1.5 text-xs font-normal hover:bg-white/5 transition-colors disabled:opacity-60"
         >
           {uploadMutation.isPending ? (
             <>
@@ -127,9 +127,9 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
       )}
 
       {isLoading ? (
-        <p className="text-xs text-neutral-500 dark:text-neutral-400">Carregando anexos...</p>
+        <p className="text-xs text-muted dark:text-muted">Carregando anexos...</p>
       ) : items.length === 0 ? (
-        <p className="rounded-lg border border-dashed border-neutral-300 dark:border-neutral-700 px-3 py-4 text-center text-xs text-neutral-500 dark:text-neutral-400">
+        <p className="rounded-lg border border-dashed border-neutral-300 dark:border-neutral-700 px-3 py-4 text-center text-xs text-muted dark:text-muted">
           Nenhum arquivo anexado.
         </p>
       ) : (
@@ -159,7 +159,7 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
                     type="button"
                     onClick={() => deleteMutation.mutate(att)}
                     disabled={deleteMutation.isPending}
-                    className="absolute right-1 top-1 rounded-md bg-black/60 p-1 text-neutral-200 opacity-0 hover:text-red-400 group-hover:opacity-100 transition-opacity disabled:opacity-60"
+                    className="absolute right-1 top-1 rounded-md bg-black/60 p-1 text-subtle opacity-0 hover:text-red-400 group-hover:opacity-100 transition-opacity disabled:opacity-60"
                     title="Remover anexo"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -181,7 +181,7 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
                     href={att.arquivo_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex min-w-0 items-center gap-2 text-sm text-neutral-700 dark:text-neutral-300 hover:text-yellow-300 transition-colors"
+                    className="flex min-w-0 items-center gap-2 text-sm text-neutral-700 dark:text-subtle hover:text-yellow-300 transition-colors"
                   >
                     <ExternalLink className="w-3.5 h-3.5 flex-shrink-0" />
                     <span className="truncate">{att.nome_arquivo || 'arquivo'}</span>
@@ -190,7 +190,7 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
                     type="button"
                     onClick={() => deleteMutation.mutate(att)}
                     disabled={deleteMutation.isPending}
-                    className="flex-shrink-0 p-1.5 rounded text-neutral-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-60"
+                    className="flex-shrink-0 p-1.5 rounded text-muted hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-60"
                     title="Remover anexo"
                   >
                     <Trash2 className="w-4 h-4" />

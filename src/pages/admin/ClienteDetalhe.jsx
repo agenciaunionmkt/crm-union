@@ -152,7 +152,7 @@ export default function ClienteDetalhe() {
   }
 
   if (clientQuery.isLoading) {
-    return <p className="text-sm text-neutral-400">Carregando...</p>
+    return <p className="text-sm text-muted">Carregando...</p>
   }
 
   if (clientQuery.error) {
@@ -167,19 +167,19 @@ export default function ClienteDetalhe() {
 
   return (
     <div>
-      <Link to="/admin/clientes" className="text-sm text-neutral-400 hover:text-white transition-colors">
+      <Link to="/admin/clientes" className="text-sm text-muted hover:text-foreground transition-colors">
         ← Voltar para clientes
       </Link>
 
       <div className="mt-3">
-        <h1 className="text-2xl font-normal text-white">{client.nome}</h1>
-        <p className="mt-1 text-sm text-neutral-400">{client.segmento || 'Sem segmento definido'}</p>
+        <h1 className="text-2xl font-black tracking-tight text-foreground">{client.nome}</h1>
+        <p className="mt-1 text-sm text-muted">{client.segmento || 'Sem segmento definido'}</p>
       </div>
 
       {/* Dados do cliente (edição inline) */}
       <div className="mt-6 glass rounded-2xl p-6">
         <div className="mb-4 flex items-center justify-between gap-3">
-          <h2 className="text-base font-normal text-white">Dados do cliente</h2>
+          <h2 className="text-base font-black tracking-tight text-foreground">Dados do cliente</h2>
           {updateClientMutation.isSuccess && (
             <span className="text-xs text-emerald-400">Dados salvos</span>
           )}
@@ -197,19 +197,19 @@ export default function ClienteDetalhe() {
 
       {/* Acesso ao portal */}
       <div className="mt-6 glass rounded-2xl p-6">
-        <h2 className="text-base font-normal text-white">Acesso ao portal</h2>
-        <p className="mt-1 text-xs text-neutral-400">
+        <h2 className="text-base font-black tracking-tight text-foreground">Acesso ao portal</h2>
+        <p className="mt-1 text-xs text-muted">
           Envie ao cliente um link para ele criar a senha e acessar o portal. Use também para reenviar o acesso.
         </p>
         <div className="mt-4 flex flex-wrap items-end gap-3">
           <div className="flex-1 min-w-[240px]">
-            <label className="mb-1.5 block text-sm font-normal text-neutral-300">E-mail de acesso</label>
+            <label className="mb-1.5 block text-sm font-normal text-subtle">E-mail de acesso</label>
             <input
               type="email"
               value={acessoEmail}
               onChange={(e) => setAcessoEmail(e.target.value)}
               placeholder="cliente@empresa.com"
-              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
+              className="w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
             />
           </div>
           <button
@@ -233,8 +233,8 @@ export default function ClienteDetalhe() {
       <div className="mt-6 glass rounded-2xl p-6">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h2 className="text-base font-normal text-white">Briefing</h2>
-            <p className="mt-1 text-xs text-neutral-400">
+            <h2 className="text-base font-black tracking-tight text-foreground">Briefing</h2>
+            <p className="mt-1 text-xs text-muted">
               Tom de voz, referências e regras de marca usadas pelo time na criação de conteúdo
             </p>
           </div>
@@ -250,38 +250,38 @@ export default function ClienteDetalhe() {
 
         <form onSubmit={handleBriefingSubmit} className="mt-4 space-y-4">
           <div>
-            <label className="mb-1.5 block text-sm font-normal text-neutral-300">Tom de voz</label>
+            <label className="mb-1.5 block text-sm font-normal text-subtle">Tom de voz</label>
             <textarea
               rows={2}
               value={briefingForm.tom_de_voz}
               onChange={(e) =>
                 setBriefingForm((prev) => ({ ...prev, tom_de_voz: e.target.value }))
               }
-              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 resize-none"
+              className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 resize-none"
               placeholder="Ex: Descontraído, próximo, sem gírias..."
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-normal text-neutral-300">Referências</label>
+            <label className="mb-1.5 block text-sm font-normal text-subtle">Referências</label>
             <textarea
               rows={2}
               value={briefingForm.referencias}
               onChange={(e) =>
                 setBriefingForm((prev) => ({ ...prev, referencias: e.target.value }))
               }
-              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 resize-none"
+              className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 resize-none"
               placeholder="Links, perfis e materiais de referência"
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-normal text-neutral-300">Regras de marca</label>
+            <label className="mb-1.5 block text-sm font-normal text-subtle">Regras de marca</label>
             <textarea
               rows={2}
               value={briefingForm.regras_marca}
               onChange={(e) =>
                 setBriefingForm((prev) => ({ ...prev, regras_marca: e.target.value }))
               }
-              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 resize-none"
+              className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 resize-none"
               placeholder="Cores, logotipo, palavras proibidas..."
             />
           </div>
@@ -306,8 +306,8 @@ export default function ClienteDetalhe() {
 
       {/* Materiais do cliente */}
       <div className="mt-6 glass rounded-2xl p-6">
-        <h2 className="text-base font-normal text-white">Materiais</h2>
-        <p className="mt-1 text-xs text-neutral-400">
+        <h2 className="text-base font-black tracking-tight text-foreground">Materiais</h2>
+        <p className="mt-1 text-xs text-muted">
           Logo, fotos, PDFs e outros materiais enviados pelo cliente.
         </p>
         <div className="mt-4">
@@ -317,8 +317,8 @@ export default function ClienteDetalhe() {
 
       {/* Contratos */}
       <div className="mt-6 glass rounded-2xl p-6">
-        <h2 className="text-base font-normal text-white">Contratos</h2>
-        <p className="mt-1 text-xs text-neutral-400">
+        <h2 className="text-base font-black tracking-tight text-foreground">Contratos</h2>
+        <p className="mt-1 text-xs text-muted">
           Envie um contrato em PDF para o cliente assinar pelo Autentique. O status é atualizado automaticamente quando ele assinar.
         </p>
         <div className="mt-4">
@@ -333,8 +333,8 @@ export default function ClienteDetalhe() {
 
       {/* Cobranças (Asaas) */}
       <div className="mt-6 glass rounded-2xl p-6">
-        <h2 className="text-base font-normal text-white">Cobranças (Asaas)</h2>
-        <p className="mt-1 text-xs text-neutral-400">
+        <h2 className="text-base font-black tracking-tight text-foreground">Cobranças (Asaas)</h2>
+        <p className="mt-1 text-xs text-muted">
           Gere cobranças por PIX/boleto. Quando o cliente paga, o lançamento no Financeiro é marcado como pago automaticamente.
         </p>
         <div className="mt-4">
@@ -344,8 +344,8 @@ export default function ClienteDetalhe() {
 
       {/* Chat com o cliente */}
       <div className="mt-6 glass rounded-2xl p-6">
-        <h2 className="text-base font-normal text-white">Chat com o cliente</h2>
-        <p className="mt-1 text-xs text-neutral-400">Converse diretamente com o cliente sobre demandas e dúvidas</p>
+        <h2 className="text-base font-black tracking-tight text-foreground">Chat com o cliente</h2>
+        <p className="mt-1 text-xs text-muted">Converse diretamente com o cliente sobre demandas e dúvidas</p>
         <div className="mt-4 h-80">
           <ChatWindow clienteId={id} currentUser={profile} />
         </div>

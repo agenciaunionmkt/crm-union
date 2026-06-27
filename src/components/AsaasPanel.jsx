@@ -55,7 +55,7 @@ export default function AsaasPanel({ cliente }) {
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-sm font-normal text-white">Assinatura mensal</p>
-              <p className="text-xs text-neutral-400">
+              <p className="text-xs text-muted">
                 {cliente.asaas_subscription_id
                   ? 'Assinatura ativa — o Asaas gera a mensalidade todo mês automaticamente.'
                   : `Cobra ${formatBRL(cliente.valor_servico)} todo dia ${cliente.dia_vencimento || '—'}.`}
@@ -107,7 +107,7 @@ export default function AsaasPanel({ cliente }) {
             <a href={link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-emerald-300 underline">
               <ExternalLink className="w-3.5 h-3.5" /> Abrir fatura
             </a>
-            <button type="button" onClick={copiar} className="inline-flex items-center gap-1 rounded-md border border-white/15 px-2 py-1 text-xs text-neutral-200 hover:bg-white/5">
+            <button type="button" onClick={copiar} className="inline-flex items-center gap-1 rounded-md border border-white/15 px-2 py-1 text-xs text-subtle hover:bg-white/5">
               {copiado ? <><Check className="w-3 h-3 text-emerald-400" /> Copiado</> : <><Copy className="w-3 h-3" /> Copiar link</>}
             </button>
           </div>

@@ -116,10 +116,10 @@ export default function Financeiro() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-normal text-white">
+          <h1 className="text-2xl font-black tracking-tight text-foreground">
             Financeiro
           </h1>
-          <p className="mt-1 text-sm text-neutral-400">
+          <p className="mt-1 text-sm text-muted">
             Gerencie entradas, saídas e transações financeiras
           </p>
         </div>
@@ -139,22 +139,22 @@ export default function Financeiro() {
       {summary && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
           <div className="glass glass-hover rounded-2xl p-6">
-            <p className="text-xs uppercase tracking-widest text-neutral-500">Saldo (recebido − pago)</p>
-            <p className="text-2xl font-normal text-white">R$ {summary.saldo.toFixed(2)}</p>
+            <p className="text-xs uppercase tracking-widest text-muted">Saldo (recebido − pago)</p>
+            <p className="text-2xl font-black tracking-tight text-foreground">R$ {summary.saldo.toFixed(2)}</p>
           </div>
 
           <div className="glass glass-hover rounded-2xl p-6">
-            <p className="text-xs uppercase tracking-widest text-neutral-500">Recebido</p>
+            <p className="text-xs uppercase tracking-widest text-muted">Recebido</p>
             <p className="text-2xl font-normal text-emerald-400">R$ {summary.recebido.toFixed(2)}</p>
           </div>
 
           <div className="glass glass-hover rounded-2xl p-6">
-            <p className="text-xs uppercase tracking-widest text-neutral-500">A receber</p>
+            <p className="text-xs uppercase tracking-widest text-muted">A receber</p>
             <p className="text-2xl font-normal text-orange-400">R$ {summary.aReceber.toFixed(2)}</p>
           </div>
 
           <div className="glass glass-hover rounded-2xl p-6">
-            <p className="text-xs uppercase tracking-widest text-neutral-500">Saídas pagas</p>
+            <p className="text-xs uppercase tracking-widest text-muted">Saídas pagas</p>
             <p className="text-2xl font-normal text-red-400">R$ {summary.saidasPagas.toFixed(2)}</p>
           </div>
         </div>
@@ -197,7 +197,7 @@ export default function Financeiro() {
         <TableBody>
           {isLoading && (
             <TableRow>
-              <TableCell colSpan={7} className="text-center py-8 text-neutral-500">
+              <TableCell colSpan={7} className="text-center py-8 text-muted">
                 Carregando transações...
               </TableCell>
             </TableRow>
@@ -213,7 +213,7 @@ export default function Financeiro() {
 
           {!isLoading && filtered.length === 0 && (
             <TableRow>
-              <TableCell colSpan={7} className="text-center py-8 text-neutral-500 dark:text-neutral-400">
+              <TableCell colSpan={7} className="text-center py-8 text-muted dark:text-muted">
                 Nenhuma transação encontrada
               </TableCell>
             </TableRow>
@@ -258,7 +258,7 @@ export default function Financeiro() {
                       href={entry.link_pagamento}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-1.5 rounded text-neutral-500 hover:bg-white/5 hover:text-yellow-300 transition-colors"
+                      className="p-1.5 rounded text-muted hover:bg-white/5 hover:text-yellow-300 transition-colors"
                       title="Abrir fatura (PIX/boleto)"
                     >
                       <ExternalLink className="w-4 h-4" />
@@ -266,14 +266,14 @@ export default function Financeiro() {
                   )}
                   <button
                     onClick={() => handleEdit(entry)}
-                    className="p-1.5 rounded text-neutral-500 dark:text-neutral-400 hover:bg-neutral-200/50 dark:hover:bg-neutral-700/40 transition-colors"
+                    className="p-1.5 rounded text-muted dark:text-muted hover:bg-neutral-200/50 dark:hover:bg-neutral-700/40 transition-colors"
                     title="Editar transação"
                   >
                     <Edit className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => handleDelete(entry)}
-                    className="p-1.5 rounded text-neutral-500 dark:text-neutral-400 hover:bg-neutral-200/50 dark:hover:bg-neutral-700/40 transition-colors"
+                    className="p-1.5 rounded text-muted dark:text-muted hover:bg-neutral-200/50 dark:hover:bg-neutral-700/40 transition-colors"
                     title="Remover transação"
                   >
                     <Trash2 className="w-4 h-4" />

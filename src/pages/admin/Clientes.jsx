@@ -129,10 +129,10 @@ export default function Clientes() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-normal text-white">
+          <h1 className="text-2xl font-black tracking-tight text-foreground">
             Clientes
           </h1>
-          <p className="mt-1 text-sm text-neutral-400">
+          <p className="mt-1 text-sm text-muted">
             Gerencie seus clientes e suas informações de contato
           </p>
         </div>
@@ -169,7 +169,7 @@ export default function Clientes() {
         <TableBody>
           {isLoading && (
             <TableRow>
-              <TableCell colSpan={5} className="text-center py-8 text-neutral-500">
+              <TableCell colSpan={5} className="text-center py-8 text-muted">
                 Carregando clientes...
               </TableCell>
             </TableRow>
@@ -185,7 +185,7 @@ export default function Clientes() {
 
           {!isLoading && filtered.length === 0 && (
             <TableRow>
-              <TableCell colSpan={5} className="text-center py-8 text-neutral-500 dark:text-neutral-400">
+              <TableCell colSpan={5} className="text-center py-8 text-muted dark:text-muted">
                 Nenhum cliente encontrado
               </TableCell>
             </TableRow>
@@ -196,16 +196,16 @@ export default function Clientes() {
               <TableCell>
                 <Link
                   to={`/admin/clientes/${client.id}`}
-                  className="font-bold text-neutral-900 dark:text-white hover:text-neutral-800 dark:hover:text-neutral-100 transition-colors"
+                  className="font-bold text-foreground hover:text-neutral-800 hover:text-foreground transition-colors"
                 >
                   {client.nome}
                 </Link>
               </TableCell>
               <TableCell>
                 {client.segmento ? (
-                  <span className="text-neutral-600 dark:text-neutral-400">{client.segmento}</span>
+                  <span className="text-muted dark:text-muted">{client.segmento}</span>
                 ) : (
-                  <span className="text-neutral-400">—</span>
+                  <span className="text-muted">—</span>
                 )}
               </TableCell>
               <TableCell>
@@ -214,7 +214,7 @@ export default function Clientes() {
                 </Badge>
               </TableCell>
               <TableCell>
-                <span className="text-sm text-neutral-600 dark:text-neutral-400">
+                <span className="text-sm text-muted dark:text-muted">
                   {client.contato_email || client.contato_telefone || '—'}
                 </span>
               </TableCell>
@@ -222,14 +222,14 @@ export default function Clientes() {
                 <div className="flex items-center justify-end gap-3">
                   <Link
                     to={`/admin/clientes/${client.id}`}
-                    className="p-1.5 rounded text-neutral-500 dark:text-neutral-400 hover:bg-neutral-200/50 dark:hover:bg-neutral-700/40 transition-colors"
+                    className="p-1.5 rounded text-muted dark:text-muted hover:bg-neutral-200/50 dark:hover:bg-neutral-700/40 transition-colors"
                     title="Ver cliente"
                   >
                     <Eye className="w-4 h-4" />
                   </Link>
                   <button
                     onClick={() => handleDelete(client)}
-                    className="p-1.5 rounded text-neutral-500 dark:text-neutral-400 hover:bg-neutral-200/50 dark:hover:bg-neutral-700/40 transition-colors"
+                    className="p-1.5 rounded text-muted dark:text-muted hover:bg-neutral-200/50 dark:hover:bg-neutral-700/40 transition-colors"
                     title="Remover cliente"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -264,15 +264,15 @@ export default function Clientes() {
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-900/30 border border-red-700/50">
                 <AlertCircle className="h-5 w-5 text-red-400" />
               </div>
-              <h3 className="text-lg font-normal text-white">Remover cliente?</h3>
+              <h3 className="text-lg font-normal text-foreground">Remover cliente?</h3>
             </div>
-            <p className="mb-6 text-sm text-neutral-400">
-              Tem certeza que deseja remover <strong className="text-neutral-300">{deleteConfirm.nome}</strong>? Essa ação não pode ser desfeita.
+            <p className="mb-6 text-sm text-muted">
+              Tem certeza que deseja remover <strong className="text-subtle">{deleteConfirm.nome}</strong>? Essa ação não pode ser desfeita.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setDeleteConfirm(null)}
-                className="flex-1 px-4 py-2 bg-transparent border border-neutral-600 text-neutral-300 text-sm rounded-lg hover:bg-neutral-700/30 transition-colors"
+                className="flex-1 px-4 py-2 bg-transparent border border-neutral-600 text-subtle text-sm rounded-lg hover:bg-neutral-700/30 transition-colors"
               >
                 Cancelar
               </button>

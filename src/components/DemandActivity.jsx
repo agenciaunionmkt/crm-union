@@ -122,17 +122,17 @@ export default function DemandActivity({ demandId, mode = 'admin', currentUser, 
     <div className="space-y-6">
       {/* Comentários */}
       <div>
-        <h3 className="mb-4 text-sm font-normal text-neutral-300">
+        <h3 className="mb-4 text-sm font-normal text-subtle">
           {isAdmin ? 'Comentários' : 'Conversas com a agência'}
         </h3>
 
         {commentsQuery.isLoading && (
-          <p className="text-xs text-neutral-400">Carregando comentários...</p>
+          <p className="text-xs text-muted">Carregando comentários...</p>
         )}
 
         {!commentsQuery.isLoading && comments.length === 0 && (
           <div className="text-center py-6 border border-neutral-700/30 rounded-lg bg-neutral-800/20 mb-4">
-            <p className="text-xs text-neutral-400">Nenhum comentário ainda</p>
+            <p className="text-xs text-muted">Nenhum comentário ainda</p>
           </div>
         )}
 
@@ -149,7 +149,7 @@ export default function DemandActivity({ demandId, mode = 'admin', currentUser, 
               >
                 <div className="flex items-center justify-between text-xs mb-2">
                   <div className="flex items-center gap-2">
-                    <span className="font-normal text-neutral-200">
+                    <span className="font-normal text-subtle">
                       {comment.autor?.nome ?? 'Usuário'}
                     </span>
                     {isAdmin && comment.interno && (
@@ -159,13 +159,13 @@ export default function DemandActivity({ demandId, mode = 'admin', currentUser, 
                     )}
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-neutral-500">{formatDateTime(comment.created_at)}</span>
+                    <span className="text-muted">{formatDateTime(comment.created_at)}</span>
                     {isAdmin && (
                       <button
                         type="button"
                         onClick={() => deleteCommentMutation.mutate(comment.id)}
                         disabled={deleteCommentMutation.isPending}
-                        className="text-neutral-500 hover:text-red-400 transition-colors disabled:opacity-50"
+                        className="text-muted hover:text-red-400 transition-colors disabled:opacity-50"
                         title="Excluir comentário"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -173,7 +173,7 @@ export default function DemandActivity({ demandId, mode = 'admin', currentUser, 
                     )}
                   </div>
                 </div>
-                <p className="whitespace-pre-wrap text-neutral-300">{comment.mensagem}</p>
+                <p className="whitespace-pre-wrap text-subtle">{comment.mensagem}</p>
               </li>
             ))}
           </ul>
@@ -185,11 +185,11 @@ export default function DemandActivity({ demandId, mode = 'admin', currentUser, 
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder={isAdmin ? 'Escreva um comentário...' : 'Escreva uma mensagem para a agência...'}
-            className="w-full rounded-lg border border-neutral-700 bg-neutral-800/50 px-3 py-2 text-sm font-normal text-neutral-200 placeholder-neutral-500 focus:border-neutral-600 focus:outline-none resize-none"
+            className="w-full rounded-lg border border-neutral-700 bg-neutral-800/50 px-3 py-2 text-sm font-normal text-subtle placeholder-neutral-500 focus:border-neutral-600 focus:outline-none resize-none"
           />
           <div className="flex items-center justify-between">
             {isAdmin ? (
-              <label className="flex items-center gap-2 text-xs text-neutral-400 cursor-pointer">
+              <label className="flex items-center gap-2 text-xs text-muted cursor-pointer">
                 <input
                   type="checkbox"
                   checked={interno}

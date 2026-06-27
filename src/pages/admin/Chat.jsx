@@ -26,33 +26,33 @@ export default function AdminChat() {
 
   return (
     <div>
-      <h1 className="text-2xl font-normal text-white">Mensagens</h1>
-      <p className="mt-1 text-sm text-neutral-400">Conversas iniciadas pelos clientes</p>
+      <h1 className="text-2xl font-black tracking-tight text-foreground">Mensagens</h1>
+      <p className="mt-1 text-sm text-muted">Conversas iniciadas pelos clientes</p>
 
       <div className="mt-6 grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-4 h-[34rem]">
         {/* Lista de conversas */}
         <div className="glass rounded-2xl overflow-hidden flex flex-col">
-          <div className="px-4 py-3 border-b border-white/10 text-xs uppercase tracking-widest text-neutral-400">
+          <div className="px-4 py-3 border-b border-white/10 text-xs uppercase tracking-widest text-muted">
             Conversas
           </div>
           <div className="flex-1 overflow-y-auto">
-            {isLoading && <p className="p-4 text-sm text-neutral-400">Carregando...</p>}
+            {isLoading && <p className="p-4 text-sm text-muted">Carregando...</p>}
             {!isLoading && conversas.length === 0 && (
-              <p className="p-4 text-sm text-neutral-400">Nenhuma conversa ainda.</p>
+              <p className="p-4 text-sm text-muted">Nenhuma conversa ainda.</p>
             )}
             {conversas.map((c) => (
               <button
                 key={c.cliente_id}
                 onClick={() => setSelectedId(c.cliente_id)}
                 className={`w-full text-left px-4 py-3 border-b border-white/5 transition-colors ${
-                  current?.cliente_id === c.cliente_id ? 'union-active' : 'text-neutral-300 hover:bg-white/5'
+                  current?.cliente_id === c.cliente_id ? 'union-active' : 'text-subtle hover:bg-white/5'
                 }`}
               >
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-sm font-normal truncate">{c.nome}</p>
-                  <span className="text-[10px] text-neutral-500 flex-shrink-0">{formatWhen(c.ultimaData)}</span>
+                  <span className="text-[10px] text-muted flex-shrink-0">{formatWhen(c.ultimaData)}</span>
                 </div>
-                <p className="text-xs text-neutral-500 truncate">
+                <p className="text-xs text-muted truncate">
                   {c.ultimoAutorPapel === 'cliente' ? '' : 'Você: '}{c.ultimaMensagem}
                 </p>
               </button>
@@ -65,15 +65,15 @@ export default function AdminChat() {
           {current ? (
             <>
               <div className="mb-3 pb-3 border-b border-white/10">
-                <p className="text-sm font-normal text-white">{current.nome}</p>
-                <p className="text-xs text-neutral-500">{current.contato_email || 'sem e-mail'}</p>
+                <p className="text-sm font-black tracking-tight text-foreground">{current.nome}</p>
+                <p className="text-xs text-muted">{current.contato_email || 'sem e-mail'}</p>
               </div>
               <div className="flex-1 min-h-0">
                 <ChatWindow clienteId={current.cliente_id} currentUser={profile} />
               </div>
             </>
           ) : (
-            <div className="flex-1 flex items-center justify-center text-sm text-neutral-400">
+            <div className="flex-1 flex items-center justify-center text-sm text-muted">
               Quando um cliente enviar uma mensagem, a conversa aparece aqui.
             </div>
           )}

@@ -92,8 +92,8 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-normal text-neutral-300">Arquivo (PDF)</label>
-            <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-white/20 bg-white/5 px-4 py-3 text-sm text-neutral-300 hover:bg-white/10 transition-colors">
+            <label className="mb-1.5 block text-sm font-normal text-subtle">Arquivo (PDF)</label>
+            <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-white/20 bg-white/5 px-4 py-3 text-sm text-subtle hover:bg-white/10 transition-colors">
               <Upload className="w-4 h-4" />
               <span className="truncate">{file ? file.name : 'Selecionar PDF do contrato'}</span>
               <input
@@ -112,7 +112,7 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
               onChange={(e) => setSandbox(e.target.checked)}
               className="rounded border-white/20 bg-white/5 text-yellow-400 accent-yellow-400"
             />
-            <span className="text-xs text-neutral-400">
+            <span className="text-xs text-muted">
               Modo teste (sandbox) — não consome do plano, sem validade jurídica
             </span>
           </label>
@@ -133,10 +133,10 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
       )}
 
       <div className={isAdmin ? 'mt-6' : ''}>
-        {contractsQuery.isLoading && <p className="text-sm text-neutral-400">Carregando contratos...</p>}
+        {contractsQuery.isLoading && <p className="text-sm text-muted">Carregando contratos...</p>}
 
         {!contractsQuery.isLoading && contratos.length === 0 && (
-          <p className="text-sm text-neutral-400">
+          <p className="text-sm text-muted">
             {isAdmin ? 'Nenhum contrato enviado ainda.' : 'Você não tem contratos no momento.'}
           </p>
         )}
@@ -151,10 +151,10 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
               key={c.id}
               className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-4 py-3"
             >
-              <FileText className="w-5 h-5 flex-shrink-0 text-neutral-400" />
+              <FileText className="w-5 h-5 flex-shrink-0 text-muted" />
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-normal text-white">{c.titulo}</p>
-                <p className="text-xs text-neutral-500">
+                <p className="text-xs text-muted">
                   {c.signed_at ? `Assinado em ${formatDate(c.signed_at)}` : `Enviado em ${formatDate(c.created_at)}`}
                 </p>
               </div>
@@ -179,7 +179,7 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
                   href={c.arquivo_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 px-3 py-1.5 text-xs font-normal text-neutral-200 hover:bg-white/5 transition-colors"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 px-3 py-1.5 text-xs font-normal text-subtle hover:bg-white/5 transition-colors"
                 >
                   Ver PDF <ExternalLink className="w-3.5 h-3.5" />
                 </a>
@@ -205,7 +205,7 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
                   <button
                     type="button"
                     onClick={() => copiarLink(c)}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 px-3 py-1.5 text-xs font-normal text-neutral-200 hover:bg-white/5 transition-colors"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 px-3 py-1.5 text-xs font-normal text-subtle hover:bg-white/5 transition-colors"
                   >
                     {copiedId === c.id ? (
                       <>
@@ -222,7 +222,7 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
                     onClick={() => refreshMutation.mutate(c.id)}
                     disabled={refreshMutation.isPending && refreshMutation.variables === c.id}
                     title="Verificar se o cliente já assinou"
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 px-3 py-1.5 text-xs font-normal text-neutral-200 hover:bg-white/5 disabled:opacity-60 transition-colors"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 px-3 py-1.5 text-xs font-normal text-subtle hover:bg-white/5 disabled:opacity-60 transition-colors"
                   >
                     <RefreshCw
                       className={`w-3.5 h-3.5 ${refreshMutation.isPending && refreshMutation.variables === c.id ? 'animate-spin' : ''}`}
@@ -242,7 +242,7 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
                   }}
                   title="Remover do painel"
                   aria-label="Remover do painel"
-                  className="rounded-lg p-1.5 text-neutral-500 hover:bg-white/5 hover:text-red-400 transition-colors"
+                  className="rounded-lg p-1.5 text-muted hover:bg-white/5 hover:text-red-400 transition-colors"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>

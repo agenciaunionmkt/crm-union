@@ -19,10 +19,10 @@ function ApprovalCard({ approval, onReview, onOpen, submitting }) {
     <div className="glass rounded-2xl p-5">
       <div className="flex items-start justify-between gap-3">
         <button type="button" onClick={onOpen} className="text-left">
-          <p className="font-normal text-white hover:text-yellow-300 transition-colors">{approval.demand?.titulo}</p>
-          <p className="mt-1 text-xs text-neutral-400">Prazo: {formatDate(approval.demand?.prazo)}</p>
+          <p className="font-black tracking-tight text-foreground hover:text-yellow-300 transition-colors">{approval.demand?.titulo}</p>
+          <p className="mt-1 text-xs text-muted">Prazo: {formatDate(approval.demand?.prazo)}</p>
           {approval.demand?.descricao && (
-            <p className="mt-1 text-xs text-neutral-500 line-clamp-2 max-w-md">{approval.demand.descricao}</p>
+            <p className="mt-1 text-xs text-muted line-clamp-2 max-w-md">{approval.demand.descricao}</p>
           )}
           <span className="mt-1 inline-block text-[11px] text-yellow-300/80">Ver detalhes</span>
         </button>
@@ -54,7 +54,7 @@ function ApprovalCard({ approval, onReview, onOpen, submitting }) {
         {!showFeedback ? (
           <button
             onClick={() => setShowFeedback(true)}
-            className="rounded-lg border border-white/15 px-4 py-2 text-sm font-normal text-neutral-300 hover:bg-white/5 transition-colors"
+            className="rounded-lg border border-white/15 px-4 py-2 text-sm font-normal text-subtle hover:bg-white/5 transition-colors"
           >
             Pedir revisão
           </button>
@@ -62,7 +62,7 @@ function ApprovalCard({ approval, onReview, onOpen, submitting }) {
           <button
             disabled={submitting || !feedback.trim()}
             onClick={() => onReview(approval.id, 'revisao_solicitada', feedback)}
-            className="rounded-lg border border-white/15 px-4 py-2 text-sm font-normal text-neutral-300 hover:bg-white/5 disabled:opacity-60 transition-colors"
+            className="rounded-lg border border-white/15 px-4 py-2 text-sm font-normal text-subtle hover:bg-white/5 disabled:opacity-60 transition-colors"
           >
             Enviar revisão
           </button>
@@ -95,10 +95,10 @@ export default function Aprovacoes() {
 
   return (
     <div>
-      <h1 className="text-2xl font-normal text-white">Aprovar entregas</h1>
-      <p className="mt-1 text-sm text-neutral-400">Aprove ou peça revisão dos materiais entregues</p>
+      <h1 className="text-2xl font-black tracking-tight text-foreground">Aprovar entregas</h1>
+      <p className="mt-1 text-sm text-muted">Aprove ou peça revisão dos materiais entregues</p>
 
-      {approvalsQuery.isLoading && <p className="mt-6 text-sm text-neutral-400">Carregando...</p>}
+      {approvalsQuery.isLoading && <p className="mt-6 text-sm text-muted">Carregando...</p>}
       {approvalsQuery.error && (
         <p className="mt-6 text-sm text-red-400">Erro ao carregar aprovações: {approvalsQuery.error.message}</p>
       )}
@@ -107,7 +107,7 @@ export default function Aprovacoes() {
         <>
           <div className="mt-6 space-y-3">
             {pending.length === 0 && (
-              <p className="rounded-2xl border border-dashed border-white/15 p-6 text-sm text-neutral-400">
+              <p className="rounded-2xl border border-dashed border-white/15 p-6 text-sm text-muted">
                 Nenhuma entrega aguardando aprovação no momento.
               </p>
             )}
@@ -124,10 +124,10 @@ export default function Aprovacoes() {
 
           {reviewed.length > 0 && (
             <div className="mt-8">
-              <h2 className="text-sm font-normal uppercase tracking-widest text-neutral-400">Histórico de avaliações</h2>
+              <h2 className="text-sm font-normal uppercase tracking-widest text-muted">Histórico de avaliações</h2>
               <div className="mt-3 glass rounded-2xl overflow-hidden">
                 <table className="w-full text-left text-sm">
-                  <thead className="border-b border-white/10 bg-white/5 text-xs uppercase text-neutral-400">
+                  <thead className="border-b border-white/10 bg-white/5 text-xs uppercase text-muted">
                     <tr>
                       <th className="px-4 py-3 font-normal">Demanda</th>
                       <th className="px-4 py-3 font-normal">Resultado</th>
@@ -137,7 +137,7 @@ export default function Aprovacoes() {
                   <tbody>
                     {reviewed.map((approval) => (
                       <tr key={approval.id} className="border-b border-white/5 last:border-0">
-                        <td className="px-4 py-3 font-normal text-white">{approval.demand?.titulo}</td>
+                        <td className="px-4 py-3 font-black tracking-tight text-foreground">{approval.demand?.titulo}</td>
                         <td className="px-4 py-3">
                           <span
                             className={`inline-flex rounded-full px-2.5 py-1 text-xs font-normal ${
@@ -149,7 +149,7 @@ export default function Aprovacoes() {
                             {approval.status === 'aprovado' ? 'Aprovado' : 'Revisão solicitada'}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-neutral-400">{approval.feedback || '—'}</td>
+                        <td className="px-4 py-3 text-muted">{approval.feedback || '—'}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -164,8 +164,8 @@ export default function Aprovacoes() {
         {detalhe && (
           <div className="space-y-4">
             <div>
-              <p className="text-lg font-normal text-white">{detalhe.demand?.titulo}</p>
-              <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-neutral-400">
+              <p className="text-lg font-black tracking-tight text-foreground">{detalhe.demand?.titulo}</p>
+              <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-muted">
                 {detalhe.demand?.status && (
                   <span className={`inline-flex rounded-full px-2.5 py-1 ${demandStatusStyles[detalhe.demand.status]}`}>
                     {demandStatusLabels[detalhe.demand.status]}
@@ -175,8 +175,8 @@ export default function Aprovacoes() {
               </div>
             </div>
             <div>
-              <p className="mb-1 text-xs uppercase tracking-widest text-neutral-500">Descrição</p>
-              <p className="whitespace-pre-wrap text-sm text-neutral-200">
+              <p className="mb-1 text-xs uppercase tracking-widest text-muted">Descrição</p>
+              <p className="whitespace-pre-wrap text-sm text-subtle">
                 {detalhe.demand?.descricao || 'Sem descrição.'}
               </p>
             </div>

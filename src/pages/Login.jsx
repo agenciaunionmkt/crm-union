@@ -91,7 +91,7 @@ export default function Login() {
       <div className="w-full max-w-sm">
         <div className="mb-8 flex flex-col items-center text-center">
           <UnionLogo size="lg" variant="light" />
-          <p className="mt-3 text-sm text-neutral-400">Entre com sua conta para continuar</p>
+          <p className="mt-3 text-sm text-muted">Entre com sua conta para continuar</p>
         </div>
 
         <form
@@ -99,7 +99,7 @@ export default function Login() {
           className="rounded-xl border border-neutral-700/50 bg-neutral-900/50 backdrop-blur-xl p-6 shadow-lg"
         >
           <div className="mb-4">
-            <label htmlFor="email" className="mb-1.5 block text-sm font-normal text-neutral-300">
+            <label htmlFor="email" className="mb-1.5 block text-sm font-normal text-subtle">
               E-mail
             </label>
             <input
@@ -108,7 +108,7 @@ export default function Login() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border border-neutral-600 bg-transparent px-4 py-2.5 text-sm font-normal text-white placeholder-neutral-500 focus:border-neutral-500 focus:outline-none"
+              className="w-full rounded-lg border border-border-strong bg-transparent px-4 py-2.5 text-sm font-normal text-foreground placeholder:text-subtle focus:border-accent focus:outline-none"
               style={{
                 transition: 'background-color 5000s ease-in-out 0s',
               }}
@@ -118,7 +118,7 @@ export default function Login() {
           </div>
 
           <div className="mb-2">
-            <label htmlFor="password" className="mb-1.5 block text-sm font-normal text-neutral-300">
+            <label htmlFor="password" className="mb-1.5 block text-sm font-normal text-subtle">
               Senha
             </label>
             <div className="relative">
@@ -128,7 +128,7 @@ export default function Login() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-lg border border-neutral-600 bg-transparent px-4 py-2.5 pr-10 text-sm font-normal text-white placeholder-neutral-500 focus:border-neutral-500 focus:outline-none"
+                className="w-full rounded-lg border border-border-strong bg-transparent px-4 py-2.5 pr-10 text-sm font-normal text-foreground placeholder:text-subtle focus:border-accent focus:outline-none"
                 style={{
                   transition: 'background-color 5000s ease-in-out 0s',
                 }}
@@ -138,7 +138,7 @@ export default function Login() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-300 focus:outline-none"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-subtle focus:outline-none"
                 aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -147,7 +147,7 @@ export default function Login() {
           </div>
 
           <div className="mb-4 text-right">
-            <a href="/esqueci-senha" className="text-xs text-neutral-500 hover:text-neutral-400">
+            <a href="/esqueci-senha" className="text-xs text-muted hover:text-muted">
               Esqueci minha senha
             </a>
           </div>
@@ -166,7 +166,7 @@ export default function Login() {
 
           <div className="my-4 flex items-center gap-3">
             <div className="h-px flex-1 bg-neutral-700" />
-            <span className="text-xs text-neutral-500">ou</span>
+            <span className="text-xs text-muted">ou</span>
             <div className="h-px flex-1 bg-neutral-700" />
           </div>
 
@@ -174,7 +174,7 @@ export default function Login() {
             type="button"
             onClick={handleGoogleSignIn}
             disabled={googleLoading}
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-neutral-600 bg-neutral-800/50 px-4 py-2.5 text-sm font-normal text-neutral-300 hover:bg-neutral-700/50 disabled:opacity-60"
+            className="flex w-full items-center justify-center gap-2 rounded-lg border border-neutral-600 bg-neutral-800/50 px-4 py-2.5 text-sm font-normal text-subtle hover:bg-neutral-700/50 disabled:opacity-60"
           >
             <svg className="h-4 w-4" viewBox="0 0 48 48" aria-hidden="true">
               <path

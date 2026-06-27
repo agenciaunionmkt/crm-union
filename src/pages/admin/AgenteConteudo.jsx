@@ -177,14 +177,14 @@ export default function AgenteConteudo() {
     <div>
       <div className="flex items-center gap-2">
         <Wand2 className="w-5 h-5 text-yellow-400" />
-        <h1 className="text-2xl font-normal text-white">Agente de conteúdo</h1>
+        <h1 className="text-2xl font-black tracking-tight text-foreground">Agente de conteúdo</h1>
       </div>
-      <p className="mt-1 text-sm text-neutral-400">Gere o calendário de posts do mês e crie as demandas automaticamente</p>
+      <p className="mt-1 text-sm text-muted">Gere o calendário de posts do mês e crie as demandas automaticamente</p>
 
       {/* Pedido rápido por IA */}
       <div className="mt-6 glass rounded-2xl p-5">
-        <p className="text-sm font-normal text-white">Pedido rápido por IA</p>
-        <p className="mt-0.5 text-xs text-neutral-400">
+        <p className="text-sm font-black tracking-tight text-foreground">Pedido rápido por IA</p>
+        <p className="mt-0.5 text-xs text-muted">
           Descreva em linguagem natural e mencione o cliente. Ex: "post de promoção de dia das mães para o Depyl".
         </p>
         <div className="mt-3 flex gap-2">
@@ -194,7 +194,7 @@ export default function AgenteConteudo() {
             onChange={(e) => setPedido(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && gerarRascunho()}
             placeholder="Ex: gere um post de Black Friday para o cliente X na sexta"
-            className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
+            className="w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
           />
           <button
             onClick={gerarRascunho}
@@ -218,11 +218,11 @@ export default function AgenteConteudo() {
           <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.03] p-4 space-y-3">
             <div className="grid gap-3 sm:grid-cols-2">
               <div>
-                <label className="mb-1 block text-xs text-neutral-400">Cliente</label>
+                <label className="mb-1 block text-xs text-muted">Cliente</label>
                 <select
                   value={rascunho.cliente_id}
                   onChange={(e) => setRascunho((r) => ({ ...r, cliente_id: e.target.value }))}
-                  className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white focus:border-yellow-400/50 focus:outline-none"
+                  className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground focus:border-accent/50 focus:outline-none"
                 >
                   <option value="">Selecione...</option>
                   {clients.map((c) => (
@@ -231,7 +231,7 @@ export default function AgenteConteudo() {
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-xs text-neutral-400">Data</label>
+                <label className="mb-1 block text-xs text-muted">Data</label>
                 <DatePicker
                   value={rascunho.data}
                   onChange={(v) => setRascunho((r) => ({ ...r, data: v }))}
@@ -240,26 +240,26 @@ export default function AgenteConteudo() {
               </div>
             </div>
             <div>
-              <label className="mb-1 block text-xs text-neutral-400">Título</label>
+              <label className="mb-1 block text-xs text-muted">Título</label>
               <input
                 value={rascunho.titulo}
                 onChange={(e) => setRascunho((r) => ({ ...r, titulo: e.target.value }))}
-                className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white focus:border-yellow-400/50 focus:outline-none"
+                className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground focus:border-accent/50 focus:outline-none"
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs text-neutral-400">Descrição</label>
+              <label className="mb-1 block text-xs text-muted">Descrição</label>
               <textarea
                 rows={4}
                 value={rascunho.descricao}
                 onChange={(e) => setRascunho((r) => ({ ...r, descricao: e.target.value }))}
-                className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white focus:border-yellow-400/50 focus:outline-none resize-none"
+                className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground focus:border-accent/50 focus:outline-none resize-none"
               />
             </div>
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setRascunho(null)}
-                className="rounded-lg border border-white/15 px-4 py-2 text-sm font-normal text-neutral-300 hover:bg-white/5 transition-colors"
+                className="rounded-lg border border-white/15 px-4 py-2 text-sm font-normal text-subtle hover:bg-white/5 transition-colors"
               >
                 Descartar
               </button>
@@ -278,11 +278,11 @@ export default function AgenteConteudo() {
       {/* Controles */}
       <div className="mt-6 glass rounded-2xl p-5 grid gap-4 sm:grid-cols-[1fr_160px_120px_auto] items-end">
         <div>
-          <label className="mb-1.5 block text-xs text-neutral-400">Cliente</label>
+          <label className="mb-1.5 block text-xs text-muted">Cliente</label>
           <select
             value={clienteId}
             onChange={(e) => selecionarCliente(e.target.value)}
-            className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-yellow-400/50 focus:outline-none"
+            className="w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-foreground focus:border-accent/50 focus:outline-none"
           >
             <option value="">Selecione...</option>
             {clients.map((c) => (
@@ -293,23 +293,23 @@ export default function AgenteConteudo() {
           </select>
         </div>
         <div>
-          <label className="mb-1.5 block text-xs text-neutral-400">Mês</label>
+          <label className="mb-1.5 block text-xs text-muted">Mês</label>
           <input
             type="month"
             value={mes}
             onChange={(e) => setMes(e.target.value)}
-            className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-yellow-400/50 focus:outline-none [color-scheme:dark]"
+            className="w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-foreground focus:border-accent/50 focus:outline-none [color-scheme:dark]"
           />
         </div>
         <div>
-          <label className="mb-1.5 block text-xs text-neutral-400">Qtd. posts</label>
+          <label className="mb-1.5 block text-xs text-muted">Qtd. posts</label>
           <input
             type="number"
             min="1"
             max="31"
             value={quantidade}
             onChange={(e) => setQuantidade(parseInt(e.target.value, 10) || 1)}
-            className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-yellow-400/50 focus:outline-none"
+            className="w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-foreground focus:border-accent/50 focus:outline-none"
           />
         </div>
         <button
@@ -337,7 +337,7 @@ export default function AgenteConteudo() {
       {posts.length > 0 && (
         <div className="mt-6">
           <div className="mb-3 flex items-center justify-between">
-            <p className="text-sm text-neutral-400">{posts.length} posts gerados — revise e crie as demandas</p>
+            <p className="text-sm text-muted">{posts.length} posts gerados — revise e crie as demandas</p>
             <button
               onClick={criarDemandas}
               disabled={creating}
@@ -353,15 +353,15 @@ export default function AgenteConteudo() {
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
                       <span className="rounded-full bg-accent/15 px-2 py-0.5 text-[10px] uppercase text-accent">{p.tipo}</span>
-                      <span className="text-xs text-neutral-400">Dia {p.dia}</span>
+                      <span className="text-xs text-muted">Dia {p.dia}</span>
                     </div>
-                    <p className="mt-1 text-sm font-normal text-white">{p.titulo}</p>
-                    <p className="mt-1 whitespace-pre-wrap text-xs text-neutral-300">{p.legenda}</p>
-                    {p.hashtags && <p className="mt-1 text-xs text-neutral-500">{p.hashtags}</p>}
+                    <p className="mt-1 text-sm font-black tracking-tight text-foreground">{p.titulo}</p>
+                    <p className="mt-1 whitespace-pre-wrap text-xs text-subtle">{p.legenda}</p>
+                    {p.hashtags && <p className="mt-1 text-xs text-muted">{p.hashtags}</p>}
                   </div>
                   <button
                     onClick={() => removerPost(i)}
-                    className="flex-shrink-0 p-1.5 rounded text-neutral-400 hover:text-red-500 hover:bg-red-900/20 transition-colors"
+                    className="flex-shrink-0 p-1.5 rounded text-muted hover:text-red-500 hover:bg-red-900/20 transition-colors"
                     title="Remover"
                   >
                     <Trash2 className="w-4 h-4" />

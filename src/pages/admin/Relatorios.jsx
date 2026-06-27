@@ -83,8 +83,8 @@ export default function Relatorios() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-normal text-white">Relatórios</h1>
-        <p className="mt-1 text-sm text-neutral-400">Relatório mensal por cliente, com exportação em PDF</p>
+        <h1 className="text-2xl font-black tracking-tight text-foreground">Relatórios</h1>
+        <p className="mt-1 text-sm text-muted">Relatório mensal por cliente, com exportação em PDF</p>
       </div>
 
       <div className="mt-6 glass rounded-2xl p-5 flex flex-wrap items-end gap-4">
@@ -113,7 +113,7 @@ export default function Relatorios() {
           type="button"
           disabled={!report}
           onClick={() => generateMonthlyReportPdf(report)}
-          className="inline-flex items-center gap-2 rounded-lg border border-white/15 text-neutral-200 px-4 py-2.5 text-sm font-normal hover:bg-white/5 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+          className="inline-flex items-center gap-2 rounded-lg border border-white/15 text-subtle px-4 py-2.5 text-sm font-normal hover:bg-white/5 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
         >
           <Download className="w-4 h-4" />
           <span>Exportar PDF</span>
@@ -121,7 +121,7 @@ export default function Relatorios() {
       </div>
 
       {clienteId && reportQuery.isLoading && (
-        <p className="mt-6 text-sm text-neutral-400">Carregando...</p>
+        <p className="mt-6 text-sm text-muted">Carregando...</p>
       )}
 
       {clienteId && reportQuery.error && (
@@ -131,35 +131,35 @@ export default function Relatorios() {
       {report && (
         <div className="mt-6 space-y-6">
           <div className="glass rounded-2xl p-6">
-            <h2 className="text-base font-normal text-white">
+            <h2 className="text-base font-black tracking-tight text-foreground">
               {report.client.nome} — {format(report.periodo.referenceDate, "MMMM 'de' yyyy", { locale: ptBR })}
             </h2>
             {report.plano && (
-              <p className="mt-1 text-sm text-neutral-400">
+              <p className="mt-1 text-sm text-muted">
                 Plano: {report.plano.pacote} · {formatCurrency(report.plano.valor)}/mês
               </p>
             )}
 
             <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-5">
               <div className="rounded-lg bg-white/5 border border-white/10 p-3 text-center">
-                <p className="text-2xl font-normal text-white">{report.summary.total}</p>
-                <p className="text-xs text-neutral-400">Total</p>
+                <p className="text-2xl font-black tracking-tight text-foreground">{report.summary.total}</p>
+                <p className="text-xs text-muted">Total</p>
               </div>
               <div className="rounded-lg bg-white/5 border border-white/10 p-3 text-center">
-                <p className="text-2xl font-normal text-white">{report.summary.a_fazer}</p>
-                <p className="text-xs text-neutral-400">A fazer</p>
+                <p className="text-2xl font-black tracking-tight text-foreground">{report.summary.a_fazer}</p>
+                <p className="text-xs text-muted">A fazer</p>
               </div>
               <div className="rounded-lg bg-white/5 border border-white/10 p-3 text-center">
-                <p className="text-2xl font-normal text-white">{report.summary.em_andamento}</p>
-                <p className="text-xs text-neutral-400">Em andamento</p>
+                <p className="text-2xl font-black tracking-tight text-foreground">{report.summary.em_andamento}</p>
+                <p className="text-xs text-muted">Em andamento</p>
               </div>
               <div className="rounded-lg bg-white/5 border border-white/10 p-3 text-center">
-                <p className="text-2xl font-normal text-white">{report.summary.em_revisao}</p>
-                <p className="text-xs text-neutral-400">Em revisão</p>
+                <p className="text-2xl font-black tracking-tight text-foreground">{report.summary.em_revisao}</p>
+                <p className="text-xs text-muted">Em revisão</p>
               </div>
               <div className="rounded-lg bg-white/5 border border-white/10 p-3 text-center">
-                <p className="text-2xl font-normal text-white">{report.summary.entregue}</p>
-                <p className="text-xs text-neutral-400">Entregues</p>
+                <p className="text-2xl font-black tracking-tight text-foreground">{report.summary.entregue}</p>
+                <p className="text-xs text-muted">Entregues</p>
               </div>
             </div>
           </div>
@@ -167,7 +167,7 @@ export default function Relatorios() {
           {/* Resumo executivo com IA */}
           <div className="glass rounded-2xl p-6">
             <div className="flex items-center justify-between gap-3">
-              <h3 className="text-base font-normal text-white">Resumo executivo</h3>
+              <h3 className="text-base font-black tracking-tight text-foreground">Resumo executivo</h3>
               <button
                 onClick={gerarResumo}
                 disabled={aiLoading}
@@ -177,23 +177,23 @@ export default function Relatorios() {
               </button>
             </div>
             {aiResumo ? (
-              <p className="mt-3 whitespace-pre-wrap text-sm text-neutral-200">{aiResumo}</p>
+              <p className="mt-3 whitespace-pre-wrap text-sm text-subtle">{aiResumo}</p>
             ) : (
-              <p className="mt-3 text-xs text-neutral-500">
+              <p className="mt-3 text-xs text-muted">
                 Gere um resumo do mês em linguagem natural para apresentar ao cliente.
               </p>
             )}
           </div>
 
           <div>
-            <h3 className="text-base font-normal text-white">Demandas do período</h3>
+            <h3 className="text-base font-black tracking-tight text-foreground">Demandas do período</h3>
             <div className="mt-3 glass rounded-2xl overflow-hidden">
               {report.demands.length === 0 && (
-                <p className="p-6 text-sm text-neutral-400">Nenhuma demanda com prazo neste período.</p>
+                <p className="p-6 text-sm text-muted">Nenhuma demanda com prazo neste período.</p>
               )}
               {report.demands.length > 0 && (
                 <table className="w-full text-left text-sm">
-                  <thead className="border-b border-white/10 bg-white/5 text-xs uppercase text-neutral-400">
+                  <thead className="border-b border-white/10 bg-white/5 text-xs uppercase text-muted">
                     <tr>
                       <th className="px-4 py-3 font-normal">Título</th>
                       <th className="px-4 py-3 font-normal">Tags</th>
@@ -205,13 +205,13 @@ export default function Relatorios() {
                   <tbody>
                     {report.demands.map((demand) => (
                       <tr key={demand.id} className="border-b border-white/5 last:border-0">
-                        <td className="px-4 py-3 font-normal text-white">{demand.titulo}</td>
+                        <td className="px-4 py-3 font-black tracking-tight text-foreground">{demand.titulo}</td>
                         <td className="px-4 py-3">
                           <div className="flex flex-wrap gap-1">
                             {(demand.tags ?? []).map((tag) => (
                               <span
                                 key={tag.id}
-                                className="rounded-full px-2 py-0.5 text-[10px] font-medium text-white"
+                                className="rounded-full px-2 py-0.5 text-[10px] font-medium text-foreground"
                                 style={{ backgroundColor: tag.cor }}
                               >
                                 {tag.nome}
@@ -220,8 +220,8 @@ export default function Relatorios() {
                             {(demand.tags ?? []).length === 0 && '—'}
                           </div>
                         </td>
-                        <td className="px-4 py-3 text-neutral-300">{demand.responsavel?.nome ?? '—'}</td>
-                        <td className="px-4 py-3 text-neutral-300">{formatDate(demand.prazo)}</td>
+                        <td className="px-4 py-3 text-subtle">{demand.responsavel?.nome ?? '—'}</td>
+                        <td className="px-4 py-3 text-subtle">{formatDate(demand.prazo)}</td>
                         <td className="px-4 py-3">
                           <span
                             className={`rounded-full px-2 py-1 text-xs font-medium ${demandStatusStyles[demand.status]}`}
@@ -238,14 +238,14 @@ export default function Relatorios() {
           </div>
 
           <div>
-            <h3 className="text-base font-normal text-white">Aprovações revisadas no período</h3>
+            <h3 className="text-base font-black tracking-tight text-foreground">Aprovações revisadas no período</h3>
             <div className="mt-3 glass rounded-2xl overflow-hidden">
               {report.approvals.length === 0 && (
-                <p className="p-6 text-sm text-neutral-400">Nenhuma aprovação revisada neste período.</p>
+                <p className="p-6 text-sm text-muted">Nenhuma aprovação revisada neste período.</p>
               )}
               {report.approvals.length > 0 && (
                 <table className="w-full text-left text-sm">
-                  <thead className="border-b border-white/10 bg-white/5 text-xs uppercase text-neutral-400">
+                  <thead className="border-b border-white/10 bg-white/5 text-xs uppercase text-muted">
                     <tr>
                       <th className="px-4 py-3 font-normal">Demanda</th>
                       <th className="px-4 py-3 font-normal">Resultado</th>
@@ -256,7 +256,7 @@ export default function Relatorios() {
                   <tbody>
                     {report.approvals.map((approval) => (
                       <tr key={approval.id} className="border-b border-white/5 last:border-0">
-                        <td className="px-4 py-3 font-normal text-white">{approval.demand?.titulo ?? '—'}</td>
+                        <td className="px-4 py-3 font-black tracking-tight text-foreground">{approval.demand?.titulo ?? '—'}</td>
                         <td className="px-4 py-3">
                           <span
                             className={`rounded-full px-2 py-1 text-xs font-medium ${approvalStatusStyles[approval.status]}`}
@@ -264,8 +264,8 @@ export default function Relatorios() {
                             {approvalStatusLabels[approval.status]}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-neutral-300">{formatDateTime(approval.reviewed_at)}</td>
-                        <td className="px-4 py-3 text-neutral-300">{approval.feedback || '—'}</td>
+                        <td className="px-4 py-3 text-subtle">{formatDateTime(approval.reviewed_at)}</td>
+                        <td className="px-4 py-3 text-subtle">{approval.feedback || '—'}</td>
                       </tr>
                     ))}
                   </tbody>

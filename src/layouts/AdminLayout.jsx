@@ -249,11 +249,11 @@ export default function AdminLayout() {
         <div className="flex items-center justify-between px-5 py-4 border-b border-border">
           <div>
             <UnionLogo size="sm" variant="light" />
-            <p className="mt-2 text-xs font-normal text-neutral-400 uppercase tracking-widest opacity-70">
+            <p className="mt-2 text-xs font-normal text-muted uppercase tracking-widest opacity-70">
               Admin
             </p>
           </div>
-          <button onClick={() => setSidebarOpen(false)} className="lg:hidden p-1 text-neutral-400 hover:text-white">
+          <button onClick={() => setSidebarOpen(false)} className="lg:hidden p-1 text-muted hover:text-foreground">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -270,7 +270,7 @@ export default function AdminLayout() {
                 `flex items-center gap-3 rounded-lg px-3 py-2.5 text-xs font-normal transition-all duration-200 ${
                   isActive
                     ? 'union-active'
-                    : 'text-neutral-400 hover:bg-white/5 hover:text-white'
+                    : 'text-muted hover:bg-white/5 hover:text-foreground'
                 }`
               }
             >
@@ -288,7 +288,7 @@ export default function AdminLayout() {
 
         {/* Footer */}
         <div className="px-3 py-3 border-t border-border">
-          <p className="text-xs text-neutral-600">v1.0</p>
+          <p className="text-xs text-muted">v1.0</p>
         </div>
       </aside>
 
@@ -300,12 +300,12 @@ export default function AdminLayout() {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="lg:hidden p-2 -ml-2 rounded-md text-neutral-300 hover:bg-white/10"
+                className="lg:hidden p-2 -ml-2 rounded-md text-subtle hover:bg-white/10"
                 aria-label="Abrir menu"
               >
                 <Menu className="w-5 h-5" />
               </button>
-              <p className="hidden sm:block text-xs font-normal text-neutral-500 dark:text-neutral-400 uppercase tracking-widest opacity-70">
+              <p className="hidden sm:block text-xs font-normal text-muted dark:text-muted uppercase tracking-widest opacity-70">
                 {new Date().toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'short' })}
               </p>
             </div>
@@ -314,10 +314,10 @@ export default function AdminLayout() {
 
               {/* User Info */}
               <div className="hidden sm:block text-right">
-                <p className="text-xs font-normal text-neutral-900 dark:text-white">
+                <p className="text-xs font-normal text-foreground">
                   {profile?.nome ?? 'Usuário'}
                 </p>
-                <p className="text-xs capitalize text-neutral-600 dark:text-neutral-400 opacity-70">
+                <p className="text-xs capitalize text-muted dark:text-muted opacity-70">
                   {profile?.papel ?? 'gestor'}
                 </p>
               </div>
@@ -339,7 +339,7 @@ export default function AdminLayout() {
               <div className="relative">
                 <button
                   onClick={abrirNotificacoes}
-                  className="relative rounded-md p-2 text-neutral-300 hover:bg-white/10 transition-colors"
+                  className="relative rounded-md p-2 text-subtle hover:bg-white/10 transition-colors"
                   title="Notificações"
                 >
                   <Bell className="w-4 h-4" />
@@ -353,10 +353,10 @@ export default function AdminLayout() {
                   <>
                     <div className="fixed inset-0 z-40" onClick={() => setShowNotif(false)} />
                     <div className="absolute right-0 z-50 mt-2 w-80 rounded-xl border border-border bg-surface p-2 shadow-2xl shadow-black/60">
-                      <p className="px-3 py-2 text-xs uppercase tracking-widest text-neutral-400">Notificações</p>
+                      <p className="px-3 py-2 text-xs uppercase tracking-widest text-muted">Notificações</p>
                       <div className="max-h-80 overflow-y-auto">
                         {notifications.length === 0 ? (
-                          <p className="px-3 py-6 text-center text-xs text-neutral-500">Nenhuma notificação.</p>
+                          <p className="px-3 py-6 text-center text-xs text-muted">Nenhuma notificação.</p>
                         ) : (
                           notifications.map((n) => (
                             <button
@@ -368,8 +368,8 @@ export default function AdminLayout() {
                               className="block w-full rounded-lg px-3 py-2 text-left hover:bg-white/5 transition-colors"
                             >
                               <p className="text-sm font-normal text-white">{n.titulo}</p>
-                              {n.mensagem && <p className="text-xs text-neutral-400 truncate">{n.mensagem}</p>}
-                              <p className="mt-0.5 text-[10px] text-neutral-500">
+                              {n.mensagem && <p className="text-xs text-muted truncate">{n.mensagem}</p>}
+                              <p className="mt-0.5 text-[10px] text-muted">
                                 {new Date(n.created_at).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
                               </p>
                             </button>
@@ -384,7 +384,7 @@ export default function AdminLayout() {
               {/* Settings */}
               <button
                 onClick={() => setShowSettings(true)}
-                className="rounded-md p-2 text-neutral-300 hover:bg-white/10 transition-colors"
+                className="rounded-md p-2 text-subtle hover:bg-white/10 transition-colors"
                 title="Configurações"
               >
                 <Settings className="w-4 h-4" />
@@ -393,7 +393,7 @@ export default function AdminLayout() {
               {/* Logout */}
               <button
                 onClick={signOut}
-                className="rounded-md px-3 py-1.5 text-xs font-normal text-neutral-600 dark:text-neutral-300 border border-neutral-400/50 dark:border-neutral-600 hover:bg-neutral-200/50 dark:hover:bg-neutral-700/40 transition-colors flex items-center gap-1.5"
+                className="rounded-md px-3 py-1.5 text-xs font-normal text-muted dark:text-subtle border border-neutral-400/50 dark:border-neutral-600 hover:bg-neutral-200/50 dark:hover:bg-neutral-700/40 transition-colors flex items-center gap-1.5"
               >
                 <LogOut className="w-3.5 h-3.5" />
                 <span>Sair</span>
@@ -418,14 +418,14 @@ export default function AdminLayout() {
                 onClick={() => setShowSettings(false)}
                 className="p-2 hover:bg-transparent rounded-lg transition-colors"
               >
-                <X className="w-5 h-5 text-neutral-400" />
+                <X className="w-5 h-5 text-muted" />
               </button>
             </div>
 
             <div className="space-y-6">
               {/* Profile Section */}
               <div className="space-y-4">
-                <p className="text-xs uppercase tracking-widest text-neutral-400">Perfil</p>
+                <p className="text-xs uppercase tracking-widest text-muted">Perfil</p>
 
                 {/* Avatar Upload */}
                 <div className="flex flex-col items-center gap-4">
@@ -437,7 +437,7 @@ export default function AdminLayout() {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <Users className="w-10 h-10 text-neutral-400" />
+                      <Users className="w-10 h-10 text-muted" />
                     )}
                   </div>
                   <input
@@ -451,7 +451,7 @@ export default function AdminLayout() {
                     <button
                       type="button"
                       onClick={handleAddPhoto}
-                      className="px-4 py-2 bg-transparent border border-neutral-600 text-neutral-300 text-sm rounded-lg hover:bg-neutral-700/30 transition-colors"
+                      className="px-4 py-2 bg-transparent border border-neutral-600 text-subtle text-sm rounded-lg hover:bg-neutral-700/30 transition-colors"
                     >
                       {userPhoto ? 'Trocar foto' : 'Adicionar foto'}
                     </button>
@@ -472,7 +472,7 @@ export default function AdminLayout() {
 
                 {/* Name Field */}
                 <div>
-                  <label className="text-xs text-neutral-400 mb-2 block">Nome completo</label>
+                  <label className="text-xs text-muted mb-2 block">Nome completo</label>
                   <input
                     type="text"
                     value={formData.nome}
@@ -484,7 +484,7 @@ export default function AdminLayout() {
 
                 {/* Email Field */}
                 <div>
-                  <label className="text-xs text-neutral-400 mb-2 block">Email</label>
+                  <label className="text-xs text-muted mb-2 block">Email</label>
                   <input
                     type="email"
                     value={formData.email}
@@ -496,7 +496,7 @@ export default function AdminLayout() {
 
                 {/* Role Field */}
                 <div>
-                  <label className="text-xs text-neutral-400 mb-2 block">Função</label>
+                  <label className="text-xs text-muted mb-2 block">Função</label>
                   <input
                     type="text"
                     defaultValue={profile?.papel ?? 'gestor'}
@@ -507,10 +507,10 @@ export default function AdminLayout() {
 
                 {/* Password Section */}
                 <div className="pt-4 border-t border-neutral-700">
-                  <p className="text-xs uppercase tracking-widest text-neutral-400 mb-4">Segurança</p>
+                  <p className="text-xs uppercase tracking-widest text-muted mb-4">Segurança</p>
 
                   <div>
-                    <label className="text-xs text-neutral-400 mb-2 block">Nova senha</label>
+                    <label className="text-xs text-muted mb-2 block">Nova senha</label>
                     <input
                       type="password"
                       value={passwords.new}
@@ -522,7 +522,7 @@ export default function AdminLayout() {
                   </div>
 
                   <div className="mt-3">
-                    <label className="text-xs text-neutral-400 mb-2 block">Confirmar senha</label>
+                    <label className="text-xs text-muted mb-2 block">Confirmar senha</label>
                     <input
                       type="password"
                       value={passwords.confirm}
@@ -561,7 +561,7 @@ export default function AdminLayout() {
                   type="button"
                   onClick={() => setShowSettings(false)}
                   disabled={saving}
-                  className="flex-1 px-4 py-2 bg-transparent border border-neutral-600 text-neutral-300 text-sm rounded-lg hover:bg-neutral-700/30 transition-colors disabled:opacity-50"
+                  className="flex-1 px-4 py-2 bg-transparent border border-neutral-600 text-subtle text-sm rounded-lg hover:bg-neutral-700/30 transition-colors disabled:opacity-50"
                 >
                   Cancelar
                 </button>

@@ -39,7 +39,7 @@ export default function ForgotPassword() {
       <div className="w-full max-w-sm">
         <button
           onClick={() => navigate('/login')}
-          className="mb-8 flex items-center gap-2 text-sm text-neutral-400 hover:text-neutral-300 transition-colors"
+          className="mb-8 flex items-center gap-2 text-sm text-muted hover:text-subtle transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Voltar
@@ -47,7 +47,7 @@ export default function ForgotPassword() {
 
         <div className="mb-8 flex flex-col items-center text-center">
           <UnionLogo size="lg" variant="light" />
-          <p className="mt-3 text-sm text-neutral-400">Acesso seguro por link</p>
+          <p className="mt-3 text-sm text-muted">Acesso seguro por link</p>
         </div>
 
         <form
@@ -56,13 +56,13 @@ export default function ForgotPassword() {
         >
           <div className="mb-6 flex items-start gap-3">
             <Mail className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-neutral-400">
+            <p className="text-sm text-muted">
               Digite seu e-mail e receba um link seguro para acessar sua conta.
             </p>
           </div>
 
           <div className="mb-4">
-            <label htmlFor="email" className="mb-1.5 block text-sm font-normal text-neutral-300">
+            <label htmlFor="email" className="mb-1.5 block text-sm font-normal text-subtle">
               E-mail
             </label>
             <input
@@ -71,7 +71,7 @@ export default function ForgotPassword() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border border-neutral-600 bg-transparent px-4 py-2.5 text-sm font-normal text-white placeholder-neutral-500 focus:border-neutral-500 focus:outline-none"
+              className="w-full rounded-lg border border-border-strong bg-transparent px-4 py-2.5 text-sm font-normal text-foreground placeholder:text-subtle focus:border-accent focus:outline-none"
               style={{ transition: 'background-color 5000s ease-in-out 0s' }}
               placeholder="voce@empresa.com"
               autoComplete="off"

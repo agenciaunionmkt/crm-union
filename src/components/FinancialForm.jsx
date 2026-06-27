@@ -134,7 +134,7 @@ export default function FinancialForm({ initialValues, clientes = [], onSubmit, 
       {/* Seletor de origem (apenas em novo lançamento e se houver clientes recorrentes) */}
       {!isEdit && recorrentes.length > 0 && (
         <div>
-          <label className="mb-1.5 block text-sm font-normal text-neutral-300">Origem do lançamento</label>
+          <label className="mb-1.5 block text-sm font-normal text-subtle">Origem do lançamento</label>
           <div className="grid grid-cols-2 gap-2">
             {[
               { v: 'recorrente', t: 'Cliente recorrente' },
@@ -147,7 +147,7 @@ export default function FinancialForm({ initialValues, clientes = [], onSubmit, 
                 className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
                   modo === opt.v
                     ? 'border-yellow-400/50 bg-yellow-400/15 text-yellow-300'
-                    : 'border-white/15 text-neutral-300 hover:bg-white/5'
+                    : 'border-white/15 text-subtle hover:bg-white/5'
                 }`}
               >
                 {opt.t}
@@ -176,7 +176,7 @@ export default function FinancialForm({ initialValues, clientes = [], onSubmit, 
 
           {clienteId && (
             <>
-              <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-neutral-300">
+              <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-subtle">
                 Lançamento: <span className="text-white">{form.nome}</span>
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -250,12 +250,12 @@ export default function FinancialForm({ initialValues, clientes = [], onSubmit, 
 
           <div>
             <div className="mb-1.5 flex items-center justify-between">
-              <label className="block text-sm font-normal text-neutral-300">Categoria</label>
+              <label className="block text-sm font-normal text-subtle">Categoria</label>
               <button
                 type="button"
                 onClick={suggestCategoryWithAI}
                 disabled={!form.nome}
-                className="text-xs font-normal text-yellow-300 hover:text-yellow-200 disabled:text-neutral-500"
+                className="text-xs font-normal text-yellow-300 hover:text-yellow-200 disabled:text-muted"
               >
                 Sugerir
               </button>
@@ -282,9 +282,9 @@ export default function FinancialForm({ initialValues, clientes = [], onSubmit, 
                 onChange={(e) => setForm((prev) => ({ ...prev, recorrente: e.target.checked }))}
                 className="rounded border-white/20 bg-white/5 text-yellow-400 accent-yellow-400"
               />
-              <span className="text-sm font-normal text-neutral-300">Lançamento recorrente</span>
+              <span className="text-sm font-normal text-subtle">Lançamento recorrente</span>
             </label>
-            <p className="mt-1 text-xs text-neutral-400">Marque se esta despesa/receita se repete periodicamente</p>
+            <p className="mt-1 text-xs text-muted">Marque se esta despesa/receita se repete periodicamente</p>
           </div>
 
           {form.recorrente && (
@@ -304,7 +304,7 @@ export default function FinancialForm({ initialValues, clientes = [], onSubmit, 
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-lg border border-white/15 px-4 py-2 text-sm font-normal text-neutral-300 hover:bg-white/5 transition-colors"
+          className="rounded-lg border border-white/15 px-4 py-2 text-sm font-normal text-subtle hover:bg-white/5 transition-colors"
         >
           Cancelar
         </button>
