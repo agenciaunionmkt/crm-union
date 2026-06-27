@@ -17,7 +17,7 @@ export default function ClientReunioes() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">Reuniões</h1>
+        <h1 className="text-2xl font-black tracking-tight text-foreground">Reuniões</h1>
         <p className="mt-1 text-sm text-muted">Suas reuniões agendadas com a agência</p>
       </div>
 
@@ -38,9 +38,13 @@ export default function ClientReunioes() {
                 {r.descricao && <p className="mt-1 text-xs text-muted">{r.descricao}</p>}
               </div>
               {r.link && (
-                <a href={r.link} target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3 py-2 text-xs font-semibold text-accent-foreground hover:opacity-90 transition-colors">
-                  <Video className="h-3.5 w-3.5" /> Entrar
+                <a
+                  href={r.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3 py-2 text-xs font-semibold text-accent-foreground hover:opacity-90 transition-colors"
+                >
+                  <Video className="h-3.5 w-3.5" /> Meet
                 </a>
               )}
             </div>
