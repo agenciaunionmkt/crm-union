@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Video, Trash2, Calendar } from 'lucide-react'
+import { Video, Trash2, Calendar, Plus } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { listClients } from '../../lib/api/clients'
 import { listReunioes, createReuniao, deleteReuniao } from '../../lib/api/reunioes'
 import Input from '../../components/ui/Input'
 import Select from '../../components/ui/Select'
 import Textarea from '../../components/ui/Textarea'
+import Modal from '../../components/ui/Modal'
 
 const DURACOES = [
   { value: '30', label: '30 min' },
@@ -43,9 +44,7 @@ function formatHora(value) {
   })
 }
 
-export default function Reunioes() {
-  const { profile } = useAuth()
-  const queryClient = useQueryClient()
+function ReuniaoForm({ clientes, onSave, isPending, onClose }) {
   const [titulo, setTitulo] = useState('')
   const [clienteId, setClienteId] = useState('')
   const [emailConvidado, setEmailConvidado] = useState('')
@@ -54,9 +53,6 @@ export default function Reunioes() {
   const [duracao, setDuracao] = useState('60')
   const [descricao, setDescricao] = useState('')
 
-  const { data: reunioes = [], isLoading } = useQuery({ queryKey: ['reunioes'], queryFn: listReunioes })
-  const { data: clientes = [] } = useQuery({ queryKey: ['clients'], queryFn: listClients })
-
   function handleClienteChange(e) {
     const id = e.target.value
     setClienteId(id)
@@ -64,29 +60,89 @@ export default function Reunioes() {
     setEmailConvidado(c?.contato_email ?? '')
   }
 
+  function handleSubmit(e) {
+    e.preventDefault()
+    if (!titulo.trim() || !data) return
+    const inicio = new Date(`${data}T${hora}:00`).toISOString()
+    const link = buildGcalUrl({ titulo, descricao: descricao || null, inicio, duracao_min: duracao, email: emailConvidado || null })
+    onSave({ cliente_id: clienteId || null, titulo, descricao: descricao || null, inicio, link })
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <Input
+          label="Título"
+          value={titulo}
+          onChange={(e) => setTitulo(e.target.value)}
+          placeholder="Ex: Alinhamento mensal"
+        />
+        <Select label="Cliente (opcional)" value={clienteId} onChange={handleClienteChange}>
+          <option value="">Reunião interna / sem cliente</option>
+          {clientes.map((c) => <option key={c.id} value={c.id}>{c.nome}</option>)}
+        </Select>
+        <Input
+          label="E-mail do convidado"
+          type="email"
+          value={emailConvidado}
+          onChange={(e) => setEmailConvidado(e.target.value)}
+          placeholder="email@cliente.com.br"
+        />
+        <div className="grid grid-cols-2 gap-3">
+          <Input
+            label="Data"
+            type="date"
+            value={data}
+            onChange={(e) => setData(e.target.value)}
+            className="[color-scheme:dark]"
+          />
+          <Select label="Hora" value={hora} onChange={(e) => setHora(e.target.value)}>
+            {HORARIOS.map((h) => <option key={h} value={h}>{h}</option>)}
+          </Select>
+        </div>
+        <Select label="Duração" value={duracao} onChange={(e) => setDuracao(e.target.value)}>
+          {DURACOES.map((d) => <option key={d.value} value={d.value}>{d.label}</option>)}
+        </Select>
+      </div>
+      <Textarea
+        label="Pauta (opcional)"
+        value={descricao}
+        onChange={(e) => setDescricao(e.target.value)}
+        placeholder="Tópicos da reunião..."
+      />
+      <div className="flex items-center justify-end gap-3 border-t border-border pt-4">
+        <button
+          type="button"
+          onClick={onClose}
+          className="rounded-lg border border-border px-4 py-2.5 text-sm text-muted hover:bg-white/5 transition-colors"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          disabled={isPending || !titulo.trim() || !data}
+          className="rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground hover:opacity-90 disabled:opacity-50 transition-colors"
+        >
+          {isPending ? 'Agendando...' : 'Agendar reunião'}
+        </button>
+      </div>
+    </form>
+  )
+}
+
+export default function Reunioes() {
+  const { profile } = useAuth()
+  const queryClient = useQueryClient()
+  const [showForm, setShowForm] = useState(false)
+
+  const { data: reunioes = [], isLoading } = useQuery({ queryKey: ['reunioes'], queryFn: listReunioes })
+  const { data: clientes = [] } = useQuery({ queryKey: ['clients'], queryFn: listClients })
+
   const createMutation = useMutation({
-    mutationFn: () => {
-      const inicio = new Date(`${data}T${hora}:00`).toISOString()
-      const link = buildGcalUrl({
-        titulo,
-        descricao: descricao || null,
-        inicio,
-        duracao_min: duracao,
-        email: emailConvidado || null,
-      })
-      return createReuniao({
-        cliente_id: clienteId || null,
-        titulo,
-        descricao: descricao || null,
-        inicio,
-        link,
-        criado_por: profile?.id ?? null,
-      })
-    },
+    mutationFn: (payload) => createReuniao({ ...payload, criado_por: profile?.id ?? null }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reunioes'] })
-      setTitulo(''); setClienteId(''); setEmailConvidado('')
-      setData(''); setHora('10:00'); setDuracao('60'); setDescricao('')
+      setShowForm(false)
     },
   })
 
@@ -94,12 +150,6 @@ export default function Reunioes() {
     mutationFn: deleteReuniao,
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['reunioes'] }),
   })
-
-  function handleSubmit(e) {
-    e.preventDefault()
-    if (!titulo.trim() || !data) return
-    createMutation.mutate()
-  }
 
   const agora = Date.now()
   const proximas = reunioes.filter((r) => new Date(r.inicio).getTime() >= agora - 60 * 60 * 1000)
@@ -141,84 +191,47 @@ export default function Reunioes() {
 
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="text-2xl font-black tracking-tight text-foreground">Reuniões</h1>
-        <p className="mt-1 text-sm text-muted">Agende calls — o link do Google Calendar (Meet) é gerado automaticamente</p>
+      <div className="mb-8 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-black tracking-tight text-foreground">Reuniões</h1>
+          <p className="mt-1 text-sm text-muted">Agende calls — o link do Google Calendar (Meet) é gerado automaticamente</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setShowForm(true)}
+          className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground hover:opacity-90 transition-colors active:scale-95"
+        >
+          <Plus className="h-4 w-4" />
+          Agendar reunião
+        </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="glass rounded-2xl p-6">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Input
-            label="Título"
-            value={titulo}
-            onChange={(e) => setTitulo(e.target.value)}
-            placeholder="Ex: Alinhamento mensal"
-          />
-          <Select label="Cliente (opcional)" value={clienteId} onChange={handleClienteChange}>
-            <option value="">Reunião interna / sem cliente</option>
-            {clientes.map((c) => <option key={c.id} value={c.id}>{c.nome}</option>)}
-          </Select>
-          <Input
-            label="E-mail do convidado"
-            type="email"
-            value={emailConvidado}
-            onChange={(e) => setEmailConvidado(e.target.value)}
-            placeholder="email@cliente.com.br"
-          />
-          <div className="grid grid-cols-2 gap-3">
-            <Input
-              label="Data"
-              type="date"
-              value={data}
-              onChange={(e) => setData(e.target.value)}
-              className="[color-scheme:dark]"
-            />
-            <Select label="Hora" value={hora} onChange={(e) => setHora(e.target.value)}>
-              {HORARIOS.map((h) => <option key={h} value={h}>{h}</option>)}
-            </Select>
-          </div>
-          <Select label="Duração" value={duracao} onChange={(e) => setDuracao(e.target.value)}>
-            {DURACOES.map((d) => <option key={d.value} value={d.value}>{d.label}</option>)}
-          </Select>
-        </div>
-        <div className="mt-4">
-          <Textarea
-            label="Pauta (opcional)"
-            value={descricao}
-            onChange={(e) => setDescricao(e.target.value)}
-            placeholder="Tópicos da reunião..."
-          />
-        </div>
-        <div className="mt-4 flex items-center gap-3">
-          <button
-            type="submit"
-            disabled={createMutation.isPending || !titulo.trim() || !data}
-            className="rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground hover:opacity-90 disabled:opacity-50 transition-colors"
-          >
-            {createMutation.isPending ? 'Agendando...' : 'Agendar reunião'}
-          </button>
-          {createMutation.error && <span className="text-xs text-danger">{createMutation.error.message}</span>}
-          {clienteId && <span className="text-xs text-muted">Aparecerá no portal do cliente.</span>}
-        </div>
-      </form>
-
-      <div className="mt-8">
+      <div className="space-y-2">
         <h2 className="text-sm font-medium uppercase tracking-widest text-subtle">Próximas</h2>
-        <div className="mt-3 space-y-2">
-          {isLoading && <p className="text-sm text-muted">Carregando...</p>}
-          {!isLoading && proximas.length === 0 && <p className="text-sm text-muted">Nenhuma reunião agendada.</p>}
-          {proximas.map((r) => <ReuniaoItem key={r.id} r={r} />)}
-        </div>
+        {isLoading && <p className="text-sm text-muted">Carregando...</p>}
+        {!isLoading && proximas.length === 0 && (
+          <p className="text-sm text-muted">Nenhuma reunião agendada.</p>
+        )}
+        {proximas.map((r) => <ReuniaoItem key={r.id} r={r} />)}
       </div>
 
       {passadas.length > 0 && (
-        <div className="mt-8">
+        <div className="mt-8 space-y-2">
           <h2 className="text-sm font-medium uppercase tracking-widest text-subtle">Anteriores</h2>
-          <div className="mt-3 space-y-2 opacity-60">
+          <div className="opacity-60">
             {passadas.slice(0, 10).map((r) => <ReuniaoItem key={r.id} r={r} />)}
           </div>
         </div>
       )}
+
+      <Modal open={showForm} title="Agendar reunião" onClose={() => setShowForm(false)} maxWidth="max-w-xl">
+        <ReuniaoForm
+          clientes={clientes}
+          onSave={(payload) => createMutation.mutate(payload)}
+          isPending={createMutation.isPending}
+          onClose={() => setShowForm(false)}
+        />
+      </Modal>
     </div>
   )
 }
