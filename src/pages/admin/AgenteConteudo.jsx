@@ -194,12 +194,12 @@ export default function AgenteConteudo() {
             onChange={(e) => setPedido(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && gerarRascunho()}
             placeholder="Ex: gere um post de Black Friday para o cliente X na sexta"
-            className="w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
+            className="w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-white placeholder-neutral-500 focus:border-accent/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
           />
           <button
             onClick={gerarRascunho}
             disabled={gerandoPedido || !pedido.trim()}
-            className="shrink-0 inline-flex items-center gap-1.5 rounded-lg border border-yellow-400/40 bg-yellow-400/10 px-4 py-2.5 text-sm font-normal text-yellow-300 hover:bg-yellow-400/20 disabled:opacity-60 transition-colors"
+            className="shrink-0 inline-flex items-center gap-1.5 rounded-lg border border-accent/40 bg-accent/10 px-4 py-2.5 text-sm font-normal text-accent hover:bg-accent/20 disabled:opacity-60 transition-colors"
           >
             {gerandoPedido ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />}
             Interpretar
@@ -266,7 +266,7 @@ export default function AgenteConteudo() {
               <button
                 onClick={criarDemandaPedido}
                 disabled={criandoPedido}
-                className="rounded-lg bg-yellow-400 px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-yellow-500 disabled:opacity-60 transition-colors"
+                className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
               >
                 {criandoPedido ? 'Criando...' : 'Criar demanda'}
               </button>
@@ -315,7 +315,7 @@ export default function AgenteConteudo() {
         <button
           onClick={gerar}
           disabled={loading || !clienteId}
-          className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-yellow-400 px-4 py-2.5 text-sm font-semibold text-gray-900 hover:bg-yellow-500 disabled:opacity-60 transition-colors"
+          className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
         >
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />}
           {loading ? 'Gerando...' : 'Gerar'}
@@ -341,7 +341,7 @@ export default function AgenteConteudo() {
             <button
               onClick={criarDemandas}
               disabled={creating}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-yellow-400 px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-yellow-500 disabled:opacity-60 transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
             >
               {creating ? 'Criando...' : 'Criar demandas no cronograma'}
             </button>

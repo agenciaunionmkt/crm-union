@@ -50,7 +50,7 @@ export default function DatePicker({ value, onChange, placeholder = 'Selecione a
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center justify-between rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-left text-white focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
+        className="flex w-full items-center justify-between rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-left text-white focus:border-accent/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
       >
         <span className={selected ? 'text-white' : 'text-muted'}>
           {selected ? format(selected, "dd 'de' MMMM 'de' yyyy", { locale: ptBR }) : placeholder}
@@ -106,9 +106,9 @@ export default function DatePicker({ value, onChange, placeholder = 'Selecione a
                   onClick={() => pick(day)}
                   className={`h-8 rounded-md text-xs transition-colors ${
                     isSel
-                      ? 'bg-yellow-400 text-gray-900 font-semibold'
+                      ? 'bg-accent text-accent-foreground font-semibold'
                       : isToday
-                        ? 'border border-yellow-400/40 text-yellow-300 hover:bg-white/10'
+                        ? 'border border-accent/40 text-accent hover:bg-white/10'
                         : inMonth
                           ? 'text-subtle hover:bg-white/10'
                           : 'text-muted hover:bg-white/5'
@@ -124,7 +124,7 @@ export default function DatePicker({ value, onChange, placeholder = 'Selecione a
             <button
               type="button"
               onClick={() => pick(new Date())}
-              className="rounded-md px-2 py-1 text-xs text-yellow-300 hover:bg-white/5 transition-colors"
+              className="rounded-md px-2 py-1 text-xs text-accent hover:bg-white/5 transition-colors"
             >
               Hoje
             </button>

@@ -128,7 +128,7 @@ export default function Financeiro() {
             setEditingId(null)
             setShowForm(true)
           }}
-          className="inline-flex items-center gap-2 rounded-lg bg-yellow-400 text-gray-900 px-4 py-2 text-xs font-semibold hover:bg-yellow-500 transition-colors"
+          className="inline-flex items-center gap-2 rounded-lg bg-accent text-accent-foreground px-4 py-2 text-xs font-semibold hover:opacity-90 transition-colors"
         >
           <span>+</span>
           <span>Nova Transação</span>
@@ -258,7 +258,7 @@ export default function Financeiro() {
                       href={entry.link_pagamento}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-1.5 rounded text-muted hover:bg-white/5 hover:text-yellow-300 transition-colors"
+                      className="p-1.5 rounded text-muted hover:bg-white/5 hover:text-accent transition-colors"
                       title="Abrir fatura (PIX/boleto)"
                     >
                       <ExternalLink className="w-4 h-4" />

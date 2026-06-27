@@ -99,7 +99,7 @@ export default function ForgotPassword() {
           <button
             type="submit"
             disabled={loading || success}
-            className="w-full rounded-lg bg-yellow-400 px-4 py-2.5 text-sm font-semibold text-gray-900 hover:bg-yellow-500 disabled:opacity-60 transition-all"
+            className="w-full rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-all"
           >
             {loading ? 'Enviando link...' : 'Enviar link de acesso'}
           </button>

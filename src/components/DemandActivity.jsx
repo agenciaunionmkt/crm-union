@@ -153,7 +153,7 @@ export default function DemandActivity({ demandId, mode = 'admin', currentUser, 
                       {comment.autor?.nome ?? 'Usuário'}
                     </span>
                     {isAdmin && comment.interno && (
-                      <span className="rounded-full bg-yellow-700/50 px-2 py-0.5 text-[10px] font-normal text-yellow-200">
+                      <span className="rounded-full bg-yellow-700/50 px-2 py-0.5 text-[10px] font-normal text-accent/80">
                         Interno
                       </span>
                     )}

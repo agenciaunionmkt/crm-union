@@ -142,7 +142,7 @@ export default function Assistente() {
           title="Buscar informações atuais na web"
           className={`ml-auto inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs transition-colors ${
             buscarWeb
-              ? 'border-yellow-400/40 bg-yellow-400/10 text-yellow-300'
+              ? 'border-accent/40 bg-accent/10 text-accent'
               : 'border-white/15 text-muted hover:bg-white/5'
           }`}
         >
@@ -177,7 +177,7 @@ export default function Assistente() {
                 <div
                   className={`rounded-2xl px-3.5 py-2.5 text-sm whitespace-pre-wrap ${
                     m.role === 'user'
-                      ? 'bg-yellow-400 text-gray-900 rounded-br-sm'
+                      ? 'bg-accent text-accent-foreground rounded-br-sm'
                       : 'bg-white/8 text-foreground border border-white/10 rounded-bl-sm'
                   }`}
                 >
@@ -193,7 +193,7 @@ export default function Assistente() {
                           href={f.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-[11px] text-muted hover:text-yellow-300 transition-colors truncate"
+                          className="inline-flex items-center gap-1 text-[11px] text-muted hover:text-accent transition-colors truncate"
                         >
                           <ExternalLink className="w-3 h-3 flex-shrink-0" />
                           <span className="truncate">[{fi + 1}] {f.title}</span>
@@ -213,7 +213,7 @@ export default function Assistente() {
                     </button>
                     <button
                       onClick={() => navigate('/admin/demandas', { state: { descricao: m.content } })}
-                      className="inline-flex items-center gap-1 text-[11px] text-muted hover:text-yellow-300 transition-colors"
+                      className="inline-flex items-center gap-1 text-[11px] text-muted hover:text-accent transition-colors"
                     >
                       <FilePlus className="w-3 h-3" /> Usar na demanda
                     </button>
@@ -241,12 +241,12 @@ export default function Assistente() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Descreva o conteúdo que você precisa..."
-            className="w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
+            className="w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-white placeholder-neutral-500 focus:border-accent/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
           />
           <button
             type="submit"
             disabled={loading || !input.trim()}
-            className="shrink-0 inline-flex items-center gap-1.5 rounded-lg bg-yellow-400 px-4 py-2.5 text-sm font-semibold text-gray-900 hover:bg-yellow-500 disabled:opacity-60 transition-colors"
+            className="shrink-0 inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
           >
             <Send className="w-4 h-4" /> Enviar
           </button>

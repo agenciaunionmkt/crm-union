@@ -9,7 +9,7 @@ const statusLabels = {
   vencido: 'Vencido',
 }
 const statusStyles = {
-  pendente: 'bg-yellow-400/15 text-yellow-300 border border-yellow-400/30',
+  pendente: 'bg-accent/15 text-accent border border-accent/30',
   pago: 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30',
   vencido: 'bg-red-500/15 text-red-300 border border-red-500/30',
 }
@@ -48,7 +48,7 @@ export default function ClientPagamentos() {
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="glass rounded-2xl p-5">
           <p className="text-xs uppercase tracking-widest text-muted">Em aberto</p>
-          <p className="text-2xl font-normal text-yellow-300">{formatBRL(aPagar)}</p>
+          <p className="text-2xl font-normal text-accent">{formatBRL(aPagar)}</p>
         </div>
         <div className="glass rounded-2xl p-5">
           <p className="text-xs uppercase tracking-widest text-muted">Total pago</p>
@@ -89,7 +89,7 @@ export default function ClientPagamentos() {
                         href={c.link_pagamento}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 rounded-lg bg-yellow-400 px-3 py-1.5 text-xs font-semibold text-gray-900 hover:bg-yellow-500 transition-colors"
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3 py-1.5 text-xs font-semibold text-gray-900 hover:opacity-90 transition-colors"
                       >
                         Pagar <ExternalLink className="w-3.5 h-3.5" />
                       </a>

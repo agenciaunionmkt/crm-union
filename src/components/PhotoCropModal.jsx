@@ -117,7 +117,7 @@ export default function PhotoCropModal({ src, onCancel, onApply }) {
           <button
             type="button"
             onClick={apply}
-            className="rounded-lg bg-yellow-400 px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-yellow-500 transition-colors"
+            className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-gray-900 hover:opacity-90 transition-colors"
           >
             Aplicar
           </button>

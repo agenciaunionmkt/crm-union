@@ -119,7 +119,7 @@ export default function DemandForm({
             type="button"
             onClick={generateDescriptionWithAI}
             disabled={loadingAI || !form.titulo}
-            className="text-xs font-normal text-yellow-300 hover:text-yellow-200 disabled:text-muted transition-colors"
+            className="text-xs font-normal text-accent hover:text-accent/80 disabled:text-muted transition-colors"
           >
             {loadingAI ? 'Gerando...' : 'Sugerir com IA'}
           </button>
@@ -175,7 +175,7 @@ export default function DemandForm({
             const activeTone = {
               a_fazer: 'bg-white/10 text-white border-white/30',
               em_andamento: 'bg-violet-500/20 text-violet-200 border-violet-500/50',
-              em_revisao: 'bg-yellow-400/20 text-yellow-200 border-yellow-400/50',
+              em_revisao: 'bg-accent/20 text-accent/80 border-accent/50',
               entregue: 'bg-blue-500/20 text-blue-200 border-blue-500/50',
               aprovado: 'bg-emerald-500/20 text-emerald-200 border-emerald-500/50',
               concluido: 'bg-green-500/30 text-green-100 border-green-500/60',

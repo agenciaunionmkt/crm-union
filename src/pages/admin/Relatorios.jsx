@@ -171,7 +171,7 @@ export default function Relatorios() {
               <button
                 onClick={gerarResumo}
                 disabled={aiLoading}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-yellow-400/40 bg-yellow-400/10 px-3 py-1.5 text-xs font-normal text-yellow-300 hover:bg-yellow-400/20 disabled:opacity-60 transition-colors"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-accent/40 bg-accent/10 px-3 py-1.5 text-xs font-normal text-accent hover:bg-accent/20 disabled:opacity-60 transition-colors"
               >
                 {aiLoading ? 'Gerando...' : 'Gerar com IA'}
               </button>

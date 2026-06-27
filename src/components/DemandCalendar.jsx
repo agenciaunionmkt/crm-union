@@ -55,9 +55,9 @@ export default function DemandCalendar({
   }
   function toneFor(demand) {
     if (isConcluido(demand)) return 'bg-green-500/25 text-green-200 border-green-500/50'
-    if (isDone(demand)) return 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40'
-    if (isAwaiting(demand)) return 'bg-blue-500/15 text-blue-300 border-blue-500/40'
-    if (isOverdue(demand)) return 'bg-red-500/15 text-red-300 border-red-500/40'
+    if (isDone(demand))      return 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+    if (isAwaiting(demand))  return 'bg-blue-500/15 text-blue-300 border-blue-500/30'
+    if (isOverdue(demand))   return 'bg-danger/15 text-danger border-danger/40'
     return 'bg-white/5 text-subtle border-white/10'
   }
   function iniciaisDe(demand) {
@@ -120,7 +120,7 @@ export default function DemandCalendar({
               >
                 <p
                   className={`mb-2 inline-flex h-6 w-6 items-center justify-center rounded-full text-xs font-normal ${
-                    isToday ? 'bg-yellow-400 text-gray-900 font-semibold' : 'text-muted'
+                    isToday ? 'bg-accent text-accent-foreground font-semibold' : 'text-muted'
                   }`}
                 >
                   {format(day, 'd')}

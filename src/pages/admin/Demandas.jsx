@@ -231,7 +231,7 @@ export default function Demandas() {
         </div>
         <button
           onClick={() => openNewDemand()}
-          className="inline-flex items-center gap-2 rounded-lg bg-yellow-400 text-gray-900 px-4 py-2 text-xs font-semibold hover:bg-yellow-500 transition-colors active:scale-95"
+          className="inline-flex items-center gap-2 rounded-lg bg-accent text-accent-foreground px-4 py-2 text-xs font-semibold hover:opacity-90 transition-colors active:scale-95"
         >
           <span>+</span>
           <span>Nova demanda</span>
@@ -271,7 +271,7 @@ export default function Demandas() {
                 }`}
               >
                 <span className="truncate">{c.nome}</span>
-                <span className="inline-flex h-5 min-w-5 flex-shrink-0 items-center justify-center rounded-full bg-yellow-400/15 px-1.5 text-[11px] font-semibold text-yellow-300">
+                <span className="inline-flex h-5 min-w-5 flex-shrink-0 items-center justify-center rounded-full bg-accent/15 px-1.5 text-[11px] font-semibold text-accent">
                   {countMap[c.id] || 0}
                 </span>
               </button>
@@ -374,7 +374,7 @@ export default function Demandas() {
               type="submit"
               form="demanda-form"
               disabled={saveMutation.isPending}
-              className="rounded-lg bg-yellow-400 px-4 py-2.5 text-sm font-semibold text-gray-900 hover:bg-yellow-500 disabled:opacity-60 transition-colors"
+              className="rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
             >
               {saveMutation.isPending ? 'Salvando...' : 'Salvar demanda'}
             </button>

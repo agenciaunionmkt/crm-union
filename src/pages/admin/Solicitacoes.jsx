@@ -121,7 +121,7 @@ export default function Solicitacoes() {
                       href={request.arquivo_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-2 inline-flex items-center gap-1.5 text-xs text-yellow-300 hover:text-yellow-200"
+                      className="mt-2 inline-flex items-center gap-1.5 text-xs text-accent hover:text-accent/80"
                     >
                       <ExternalLink className="w-3 h-3" />
                       {request.nome_arquivo || 'anexo'}
@@ -145,7 +145,7 @@ export default function Solicitacoes() {
                   </button>
                   <button
                     onClick={() => { setAiDraft(null); setConvertingRequest(request) }}
-                    className="rounded-lg border border-yellow-400/40 bg-yellow-400/10 px-3 py-1.5 text-xs font-normal text-yellow-300 hover:bg-yellow-400/20 transition-colors"
+                    className="rounded-lg border border-accent/40 bg-accent/10 px-3 py-1.5 text-xs font-normal text-accent hover:bg-accent/20 transition-colors"
                   >
                     Converter em demanda
                   </button>

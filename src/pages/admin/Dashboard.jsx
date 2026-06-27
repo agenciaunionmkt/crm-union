@@ -52,8 +52,8 @@ export default function AdminDashboard() {
       value: pendentesHoje.length,
       hint: `${feitasHoje.length} de ${demandasHoje.length} feitas`,
       icon: ListTodo,
-      tone: 'text-yellow-300',
-      bg: 'bg-yellow-400/10',
+      tone: 'text-accent',
+      bg: 'bg-accent/10',
     },
     {
       label: 'Aguardando aprovação',

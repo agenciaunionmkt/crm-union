@@ -5,7 +5,7 @@ import { listContracts, createContract, deleteContract, refreshContractLink } fr
 import Input from './ui/Input'
 
 const statusStyles = {
-  enviado: 'bg-yellow-400/15 text-yellow-300',
+  enviado: 'bg-accent/15 text-accent',
   assinado: 'bg-emerald-500/20 text-emerald-300',
   recusado: 'bg-red-500/20 text-red-300',
 }
@@ -121,7 +121,7 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
             <button
               type="submit"
               disabled={createMutation.isPending || !titulo.trim() || !signerEmail.trim() || !file}
-              className="rounded-lg bg-yellow-400 px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-yellow-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {createMutation.isPending ? 'Enviando...' : 'Enviar contrato'}
             </button>
@@ -169,7 +169,7 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
                   href={c.link_assinatura}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-yellow-400 px-3 py-1.5 text-xs font-semibold text-gray-900 hover:bg-yellow-500 transition-colors"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3 py-1.5 text-xs font-semibold text-gray-900 hover:opacity-90 transition-colors"
                 >
                   Assinar <ExternalLink className="w-3.5 h-3.5" />
                 </a>
@@ -191,7 +191,7 @@ export default function ContractsPanel({ clienteId, defaultEmail = '', currentUs
                   type="button"
                   onClick={() => refreshMutation.mutate(c.id)}
                   disabled={refreshMutation.isPending && refreshMutation.variables === c.id}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-yellow-400/40 bg-yellow-400/10 px-3 py-1.5 text-xs font-medium text-yellow-300 hover:bg-yellow-400/20 disabled:opacity-60 transition-colors"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-accent/40 bg-accent/10 px-3 py-1.5 text-xs font-medium text-accent hover:bg-accent/20 disabled:opacity-60 transition-colors"
                 >
                   <RefreshCw
                     className={`w-3.5 h-3.5 ${refreshMutation.isPending && refreshMutation.variables === c.id ? 'animate-spin' : ''}`}

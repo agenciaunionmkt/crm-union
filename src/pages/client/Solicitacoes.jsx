@@ -67,7 +67,7 @@ export default function ClientSolicitacoes() {
 
   const requests = requestsQuery.data ?? []
   const inputClass =
-    'w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20'
+    'w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-neutral-500 focus:border-accent/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20'
 
   return (
     <div>
@@ -75,7 +75,7 @@ export default function ClientSolicitacoes() {
       <p className="mt-1 text-sm text-muted">Envie um novo pedido para a agência</p>
 
       {semVinculo && (
-        <div className="mt-4 rounded-lg border border-yellow-400/30 bg-yellow-400/10 px-4 py-3 text-sm text-yellow-200">
+        <div className="mt-4 rounded-lg border border-accent/30 bg-accent/10 px-4 py-3 text-sm text-accent/80">
           Sua conta ainda não está vinculada a um cliente. Avise a agência para liberar o envio de solicitações.
         </div>
       )}
@@ -145,7 +145,7 @@ export default function ClientSolicitacoes() {
           <button
             type="submit"
             disabled={createMutation.isPending || uploading || semVinculo}
-            className="rounded-lg bg-yellow-400 px-4 py-2.5 text-sm font-semibold text-gray-900 hover:bg-yellow-500 disabled:opacity-60 transition-colors"
+            className="rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
           >
             {uploading ? 'Anexando...' : createMutation.isPending ? 'Enviando...' : 'Enviar solicitação'}
           </button>
@@ -187,7 +187,7 @@ export default function ClientSolicitacoes() {
                           href={request.arquivo_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="mt-1.5 inline-flex items-center gap-1.5 text-xs text-yellow-300 hover:text-yellow-200"
+                          className="mt-1.5 inline-flex items-center gap-1.5 text-xs text-accent hover:text-accent/80"
                         >
                           <ExternalLink className="w-3 h-3" />
                           {request.nome_arquivo || 'anexo'}

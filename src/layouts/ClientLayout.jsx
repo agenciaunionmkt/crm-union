@@ -65,7 +65,7 @@ export default function ClientLayout() {
   }
 
   const inputClass =
-    'w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20'
+    'w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-neutral-500 focus:border-accent/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20'
   const infoRow = (label, value) => (
     <div className="flex items-center justify-between border-b border-white/5 py-2">
       <span className="text-xs text-muted">{label}</span>
@@ -125,7 +125,7 @@ export default function ClientLayout() {
             </button>
             <button
               onClick={signOut}
-              className="text-xs font-normal text-muted hover:text-yellow-300 transition-colors"
+              className="text-xs font-normal text-muted hover:text-accent transition-colors"
             >
               Sair
             </button>
@@ -173,7 +173,7 @@ export default function ClientLayout() {
               <button
                 onClick={trocarSenha}
                 disabled={saving || !novaSenha}
-                className="rounded-lg bg-yellow-400 px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-yellow-500 disabled:opacity-60 transition-colors"
+                className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
               >
                 {saving ? 'Salvando...' : 'Alterar senha'}
               </button>

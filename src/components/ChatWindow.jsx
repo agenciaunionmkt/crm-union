@@ -129,7 +129,7 @@ export default function ChatWindow({ clienteId, currentUser }) {
               <div
                 className={`max-w-[78%] rounded-2xl px-3.5 py-2.5 text-sm ${
                   isMe
-                    ? 'bg-yellow-400 text-gray-900 rounded-br-sm'
+                    ? 'bg-accent text-accent-foreground rounded-br-sm'
                     : 'bg-white/8 text-foreground border border-white/10 rounded-bl-sm'
                 }`}
               >
@@ -148,7 +148,7 @@ export default function ChatWindow({ clienteId, currentUser }) {
                       href={msg.arquivo_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`inline-flex items-center gap-1.5 underline ${msg.mensagem ? 'mt-2' : ''} ${isMe ? 'text-gray-900' : 'text-yellow-300'}`}
+                      className={`inline-flex items-center gap-1.5 underline ${msg.mensagem ? 'mt-2' : ''} ${isMe ? 'text-gray-900' : 'text-accent'}`}
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
                       {msg.nome_arquivo || 'arquivo'}
@@ -192,12 +192,12 @@ export default function ChatWindow({ clienteId, currentUser }) {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Escreva uma mensagem..."
-          className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
+          className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-neutral-500 focus:border-accent/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
         />
         <button
           type="submit"
           disabled={sendMutation.isPending || !message.trim()}
-          className="shrink-0 rounded-lg bg-yellow-400 px-4 py-2.5 text-sm font-semibold text-gray-900 hover:bg-yellow-500 disabled:opacity-60 transition-colors"
+          className="shrink-0 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
         >
           Enviar
         </button>

@@ -181,7 +181,7 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
                     href={att.arquivo_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex min-w-0 items-center gap-2 text-sm text-neutral-700 dark:text-subtle hover:text-yellow-300 transition-colors"
+                    className="flex min-w-0 items-center gap-2 text-sm text-neutral-700 dark:text-subtle hover:text-accent transition-colors"
                   >
                     <ExternalLink className="w-3.5 h-3.5 flex-shrink-0" />
                     <span className="truncate">{att.nome_arquivo || 'arquivo'}</span>

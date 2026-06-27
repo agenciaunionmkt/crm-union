@@ -19,12 +19,12 @@ function ApprovalCard({ approval, onReview, onOpen, submitting }) {
     <div className="glass rounded-2xl p-5">
       <div className="flex items-start justify-between gap-3">
         <button type="button" onClick={onOpen} className="text-left">
-          <p className="font-black tracking-tight text-foreground hover:text-yellow-300 transition-colors">{approval.demand?.titulo}</p>
+          <p className="font-black tracking-tight text-foreground hover:text-accent transition-colors">{approval.demand?.titulo}</p>
           <p className="mt-1 text-xs text-muted">Prazo: {formatDate(approval.demand?.prazo)}</p>
           {approval.demand?.descricao && (
             <p className="mt-1 text-xs text-muted line-clamp-2 max-w-md">{approval.demand.descricao}</p>
           )}
-          <span className="mt-1 inline-block text-[11px] text-yellow-300/80">Ver detalhes</span>
+          <span className="mt-1 inline-block text-[11px] text-accent/80">Ver detalhes</span>
         </button>
         {approval.demand?.status && (
           <span className={`inline-flex flex-shrink-0 rounded-full px-2.5 py-1 text-xs font-normal ${demandStatusStyles[approval.demand.status]}`}>
@@ -39,7 +39,7 @@ function ApprovalCard({ approval, onReview, onOpen, submitting }) {
           onChange={(e) => setFeedback(e.target.value)}
           rows={2}
           placeholder="Descreva o que precisa ser ajustado..."
-          className="mt-3 w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 resize-none"
+          className="mt-3 w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder-neutral-500 focus:border-accent/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 resize-none"
         />
       )}
 
@@ -47,7 +47,7 @@ function ApprovalCard({ approval, onReview, onOpen, submitting }) {
         <button
           disabled={submitting}
           onClick={() => onReview(approval.id, 'aprovado', null)}
-          className="rounded-lg bg-yellow-400 px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-yellow-500 disabled:opacity-60 transition-colors"
+          className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
         >
           Aprovar
         </button>
@@ -143,7 +143,7 @@ export default function Aprovacoes() {
                             className={`inline-flex rounded-full px-2.5 py-1 text-xs font-normal ${
                               approval.status === 'aprovado'
                                 ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
-                                : 'bg-yellow-400/15 text-yellow-300 border border-yellow-400/30'
+                                : 'bg-accent/15 text-accent border border-accent/30'
                             }`}
                           >
                             {approval.status === 'aprovado' ? 'Aprovado' : 'Revisão solicitada'}

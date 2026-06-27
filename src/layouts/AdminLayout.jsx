@@ -344,7 +344,7 @@ export default function AdminLayout() {
                 >
                   <Bell className="w-4 h-4" />
                   {unreadNotif > 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-yellow-400 px-1 text-[9px] font-semibold text-gray-900">
+                    <span className="absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[9px] font-semibold text-gray-900">
                       {unreadNotif}
                     </span>
                   )}
@@ -569,7 +569,7 @@ export default function AdminLayout() {
                   type="button"
                   onClick={handleSaveProfile}
                   disabled={saving}
-                  className="flex-1 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-gray-900 text-sm font-semibold rounded-lg transition-colors disabled:opacity-50"
+                  className="flex-1 px-4 py-2 bg-yellow-400 hover:opacity-90 text-gray-900 text-sm font-semibold rounded-lg transition-colors disabled:opacity-50"
                 >
                   {saving ? 'Salvando...' : 'Salvar perfil'}
                 </button>

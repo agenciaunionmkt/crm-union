@@ -209,14 +209,14 @@ export default function ClienteDetalhe() {
               value={acessoEmail}
               onChange={(e) => setAcessoEmail(e.target.value)}
               placeholder="cliente@empresa.com"
-              className="w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
+              className="w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-white placeholder-neutral-500 focus:border-accent/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
             />
           </div>
           <button
             type="button"
             onClick={() => inviteMutation.mutate()}
             disabled={inviteMutation.isPending || !acessoEmail.trim()}
-            className="rounded-lg bg-yellow-400 px-4 py-2.5 text-sm font-semibold text-gray-900 hover:bg-yellow-500 disabled:opacity-60 transition-colors"
+            className="rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
           >
             {inviteMutation.isPending ? 'Enviando...' : 'Enviar acesso'}
           </button>
@@ -242,7 +242,7 @@ export default function ClienteDetalhe() {
             type="button"
             onClick={gerarBriefingIA}
             disabled={briefingIA}
-            className="shrink-0 inline-flex items-center gap-1.5 rounded-lg border border-yellow-400/40 bg-yellow-400/10 px-3 py-1.5 text-xs font-normal text-yellow-300 hover:bg-yellow-400/20 disabled:opacity-60 transition-colors"
+            className="shrink-0 inline-flex items-center gap-1.5 rounded-lg border border-accent/40 bg-accent/10 px-3 py-1.5 text-xs font-normal text-accent hover:bg-accent/20 disabled:opacity-60 transition-colors"
           >
             {briefingIA ? 'Gerando...' : 'Sugerir com IA'}
           </button>
@@ -257,7 +257,7 @@ export default function ClienteDetalhe() {
               onChange={(e) =>
                 setBriefingForm((prev) => ({ ...prev, tom_de_voz: e.target.value }))
               }
-              className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 resize-none"
+              className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-white placeholder-neutral-500 focus:border-accent/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 resize-none"
               placeholder="Ex: Descontraído, próximo, sem gírias..."
             />
           </div>
@@ -269,7 +269,7 @@ export default function ClienteDetalhe() {
               onChange={(e) =>
                 setBriefingForm((prev) => ({ ...prev, referencias: e.target.value }))
               }
-              className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 resize-none"
+              className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-white placeholder-neutral-500 focus:border-accent/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 resize-none"
               placeholder="Links, perfis e materiais de referência"
             />
           </div>
@@ -281,7 +281,7 @@ export default function ClienteDetalhe() {
               onChange={(e) =>
                 setBriefingForm((prev) => ({ ...prev, regras_marca: e.target.value }))
               }
-              className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-white placeholder-neutral-500 focus:border-yellow-400/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 resize-none"
+              className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-white placeholder-neutral-500 focus:border-accent/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 resize-none"
               placeholder="Cores, logotipo, palavras proibidas..."
             />
           </div>
@@ -290,7 +290,7 @@ export default function ClienteDetalhe() {
             <button
               type="submit"
               disabled={briefingMutation.isPending}
-              className="rounded-lg bg-yellow-400 px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-yellow-500 disabled:opacity-60 transition-colors"
+              className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-gray-900 hover:opacity-90 disabled:opacity-60 transition-colors"
             >
               {briefingMutation.isPending ? 'Salvando...' : 'Salvar briefing'}
             </button>

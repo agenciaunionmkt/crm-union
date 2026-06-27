@@ -138,7 +138,7 @@ export default function Clientes() {
         </div>
         <button
           onClick={() => setShowForm(true)}
-          className="inline-flex items-center gap-2 rounded-lg bg-yellow-400 text-gray-900 px-4 py-2 text-xs font-semibold hover:bg-yellow-500 transition-colors"
+          className="inline-flex items-center gap-2 rounded-lg bg-accent text-accent-foreground px-4 py-2 text-xs font-semibold hover:opacity-90 transition-colors"
         >
           <span>+</span>
           <span>Novo cliente</span>

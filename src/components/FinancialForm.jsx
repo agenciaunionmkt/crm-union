@@ -146,7 +146,7 @@ export default function FinancialForm({ initialValues, clientes = [], onSubmit, 
                 onClick={() => trocarModo(opt.v)}
                 className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
                   modo === opt.v
-                    ? 'border-yellow-400/50 bg-yellow-400/15 text-yellow-300'
+                    ? 'border-accent/50 bg-accent/15 text-accent'
                     : 'border-white/15 text-subtle hover:bg-white/5'
                 }`}
               >
@@ -255,7 +255,7 @@ export default function FinancialForm({ initialValues, clientes = [], onSubmit, 
                 type="button"
                 onClick={suggestCategoryWithAI}
                 disabled={!form.nome}
-                className="text-xs font-normal text-yellow-300 hover:text-yellow-200 disabled:text-muted"
+                className="text-xs font-normal text-accent hover:text-accent/80 disabled:text-muted"
               >
                 Sugerir
               </button>
@@ -311,7 +311,7 @@ export default function FinancialForm({ initialValues, clientes = [], onSubmit, 
         <button
           type="submit"
           disabled={submitting || (modo === 'recorrente' && !clienteId)}
-          className="rounded-lg bg-yellow-400 px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-yellow-500 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-gray-900 hover:opacity-90 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {submitting ? 'Salvando...' : 'Salvar'}
         </button>
