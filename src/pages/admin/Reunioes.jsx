@@ -8,6 +8,7 @@ import Input from '../../components/ui/Input'
 import Select from '../../components/ui/Select'
 import Textarea from '../../components/ui/Textarea'
 import Modal from '../../components/ui/Modal'
+import DateSelect from '../../components/ui/DateSelect'
 
 const DURACOES = [
   { value: '30', label: '30 min' },
@@ -88,18 +89,10 @@ function ReuniaoForm({ clientes, onSave, isPending, onClose }) {
           onChange={(e) => setEmailConvidado(e.target.value)}
           placeholder="email@cliente.com.br"
         />
-        <div className="grid grid-cols-2 gap-3">
-          <Input
-            label="Data"
-            type="date"
-            value={data}
-            onChange={(e) => setData(e.target.value)}
-            className="[color-scheme:dark]"
-          />
-          <Select label="Hora" value={hora} onChange={(e) => setHora(e.target.value)}>
-            {HORARIOS.map((h) => <option key={h} value={h}>{h}</option>)}
-          </Select>
-        </div>
+        <DateSelect label="Data" value={data} onChange={setData} />
+        <Select label="Hora" value={hora} onChange={(e) => setHora(e.target.value)}>
+          {HORARIOS.map((h) => <option key={h} value={h}>{h}</option>)}
+        </Select>
         <Select label="Duração" value={duracao} onChange={(e) => setDuracao(e.target.value)}>
           {DURACOES.map((d) => <option key={d.value} value={d.value}>{d.label}</option>)}
         </Select>
