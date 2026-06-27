@@ -48,6 +48,7 @@ export default function Comentarios() {
           <Link
             key={c.id}
             to="/admin/demandas"
+            state={{ openDemandId: c.demand_id }}
             className="block rounded-xl border border-border bg-surface px-4 py-3 hover:border-border-strong transition-colors"
           >
             <div className="flex items-start gap-3">

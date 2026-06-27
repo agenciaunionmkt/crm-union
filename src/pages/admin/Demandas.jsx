@@ -51,6 +51,19 @@ export default function Demandas() {
   }, [location.state, location.pathname, navigate])
 
   const demandsQuery = useQuery({ queryKey: ['demands'], queryFn: () => listDemands() })
+
+  // Abre direto a demanda comentada (vindo da caixa de Comentários)
+  useEffect(() => {
+    const id = location.state?.openDemandId
+    if (id && demandsQuery.data) {
+      const alvo = demandsQuery.data.find((d) => d.id === id)
+      if (alvo) {
+        openEditDemand(alvo)
+        navigate(location.pathname, { replace: true })
+      }
+    }
+  }, [location.state, location.pathname, navigate, demandsQuery.data])
+
   const clientsQuery = useQuery({ queryKey: ['clients'], queryFn: listClients })
   const teamQuery = useQuery({ queryKey: ['team-users'], queryFn: listTeamUsers })
   const commentsFeedQuery = useQuery({ queryKey: ['comments-feed'], queryFn: () => listCommentsFeed(), refetchInterval: 30000 })
