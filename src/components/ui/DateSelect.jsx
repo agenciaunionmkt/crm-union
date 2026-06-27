@@ -13,13 +13,11 @@ export default function DateSelect({ label, value, onChange }) {
   const [y, m, d] = value ? value.split('-') : ['', '', '']
 
   function update(field, val) {
-    const next = {
-      y: field === 'y' ? val : (y || String(anoAtual)),
-      m: field === 'm' ? val : (m || '01'),
-      d: field === 'd' ? val : (d || '01'),
-    }
-    if (next.y && next.m && next.d) {
-      onChange(`${next.y}-${next.m}-${next.d}`)
+    const newY = field === 'y' ? val : y
+    const newM = field === 'm' ? val : m
+    const newD = field === 'd' ? val : d
+    if (newY && newM && newD) {
+      onChange(`${newY}-${newM}-${newD}`)
     } else {
       onChange('')
     }
