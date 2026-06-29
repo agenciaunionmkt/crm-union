@@ -173,6 +173,7 @@ export default function Leads() {
       )}
 
       <LeadModal
+        key={modal?.lead?.id ?? 'new'}
         open={!!modal}
         lead={modal?.lead}
         onClose={() => setModal(null)}

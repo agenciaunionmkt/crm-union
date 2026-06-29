@@ -289,10 +289,10 @@ export default function AdminLayout() {
             <div key={si}>
               {si > 0 && (
                 <div className="my-2 flex items-center gap-2 px-2">
-                  <div className="h-px flex-1 bg-white/[0.06]" />
-                  <span className="text-[9px] font-medium uppercase tracking-[0.15em] text-white/20">
+                  <span className="text-[9px] font-medium uppercase tracking-[0.15em] text-white/20 flex-shrink-0">
                     {section.group}
                   </span>
+                  <div className="h-px flex-1 bg-white/[0.06]" />
                 </div>
               )}
               {section.items.map((link) => (
