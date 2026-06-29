@@ -21,6 +21,7 @@ const Relatorios = lazy(() => import('./pages/admin/Relatorios'))
 const Financeiro = lazy(() => import('./pages/admin/Financeiro'))
 const Reunioes = lazy(() => import('./pages/admin/Reunioes'))
 const Comentarios = lazy(() => import('./pages/admin/Comentarios'))
+const Leads = lazy(() => import('./pages/admin/Leads'))
 const ClientDemandas = lazy(() => import('./pages/client/Demandas'))
 const ClientCalendario = lazy(() => import('./pages/client/Calendario'))
 const ClientSolicitacoes = lazy(() => import('./pages/client/Solicitacoes'))
@@ -64,6 +65,7 @@ function App() {
             <Route path="financeiro" element={<Financeiro />} />
             <Route path="reunioes" element={<Reunioes />} />
             <Route path="comentarios" element={<Comentarios />} />
+            <Route path="leads" element={<Leads />} />
           </Route>
         </Route>
 
