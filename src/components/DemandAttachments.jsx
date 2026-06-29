@@ -310,11 +310,13 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
         </div>
       )}
 
-      <ImageLightbox
-        images={imagens.map((a) => ({ url: a.arquivo_url, nome: a.nome_arquivo }))}
-        index={lightboxIndex}
-        onClose={() => setLightboxIndex(null)}
-      />
+      {lightboxIndex !== null && (
+        <ImageLightbox
+          images={imagens.map((a) => ({ url: a.arquivo_url, nome: a.nome_arquivo }))}
+          index={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+        />
+      )}
     </div>
   )
 }
