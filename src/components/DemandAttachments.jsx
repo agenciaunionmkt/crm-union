@@ -19,7 +19,6 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
   const pendingRef = useRef(null)
   const replaceRefs = useRef({})
   const [pending, setPending] = useState([])
-  const [lightbox, setLightbox] = useState(null)
   const [lightboxIndex, setLightboxIndex] = useState(null)
   const [draggingId, setDraggingId] = useState(null)
   const [dragOverId, setDragOverId] = useState(null)

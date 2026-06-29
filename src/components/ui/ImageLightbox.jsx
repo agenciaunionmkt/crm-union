@@ -6,7 +6,7 @@ import { X, Download, ChevronLeft, ChevronRight } from 'lucide-react'
 // 2. Single (retrocompat): url + nome
 export default function ImageLightbox({ images, index: initialIndex, url, nome, onClose }) {
   const imgs = images?.length ? images : url ? [{ url, nome }] : []
-  const [idx, setIdx] = useState(initialIndex ?? 0)
+  const [idx, setIdx] = useState(initialIndex != null ? initialIndex : 0)
 
   // Sincroniza quando o índice inicial muda (novo lightbox aberto)
   useEffect(() => {
