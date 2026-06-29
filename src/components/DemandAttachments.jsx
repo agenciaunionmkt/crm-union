@@ -20,6 +20,7 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
   const replaceRefs = useRef({})
   const [pending, setPending] = useState([])
   const [lightbox, setLightbox] = useState(null)
+  const [lightboxIndex, setLightboxIndex] = useState(null)
   const [draggingId, setDraggingId] = useState(null)
   const [dragOverId, setDragOverId] = useState(null)
   const [localOrder, setLocalOrder] = useState(null)
@@ -225,7 +226,7 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
                   >
                     <button
                       type="button"
-                      onClick={() => !draggingId && setLightbox(att)}
+                      onClick={() => !draggingId && setLightboxIndex(imagens.indexOf(att))}
                       title={att.nome_arquivo}
                       className="h-full w-full"
                     >
@@ -310,9 +311,9 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
       )}
 
       <ImageLightbox
-        url={lightbox?.arquivo_url}
-        nome={lightbox?.nome_arquivo}
-        onClose={() => setLightbox(null)}
+        images={imagens.map((a) => ({ url: a.arquivo_url, nome: a.nome_arquivo }))}
+        index={lightboxIndex}
+        onClose={() => setLightboxIndex(null)}
       />
     </div>
   )
