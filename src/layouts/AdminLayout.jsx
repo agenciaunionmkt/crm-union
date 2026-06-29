@@ -12,19 +12,43 @@ import UnionLogo from '../components/UnionLogo'
 import PhotoCropModal from '../components/PhotoCropModal'
 import MeetingAlarm from '../components/MeetingAlarm'
 
-const links = [
-  { to: '/admin', label: 'Dashboard', Icon: LayoutDashboard, end: true },
-  { to: '/admin/clientes', label: 'Clientes', Icon: Users },
-  { to: '/admin/demandas', label: 'Demandas', Icon: ListTodo },
-  { to: '/admin/mensagens', label: 'Mensagens', Icon: MessageSquare },
-  { to: '/admin/assistente', label: 'Assistente IA', Icon: Sparkles },
-  { to: '/admin/agente-conteudo', label: 'Agente de conteúdo', Icon: Wand2 },
-  { to: '/admin/solicitacoes', label: 'Solicitações', Icon: Mail },
-  { to: '/admin/comentarios', label: 'Comentários', Icon: MessageCircle },
-  { to: '/admin/leads', label: 'Pipeline', Icon: Kanban },
-  { to: '/admin/reunioes', label: 'Reuniões', Icon: CalendarClock },
-  { to: '/admin/relatorios', label: 'Relatórios', Icon: TrendingUp },
-  { to: '/admin/financeiro', label: 'Financeiro', Icon: DollarSign },
+const NAV = [
+  {
+    items: [
+      { to: '/admin', label: 'Dashboard', Icon: LayoutDashboard, end: true },
+    ],
+  },
+  {
+    group: 'Operação',
+    items: [
+      { to: '/admin/clientes',    label: 'Clientes',     Icon: Users },
+      { to: '/admin/demandas',    label: 'Demandas',     Icon: ListTodo },
+      { to: '/admin/solicitacoes',label: 'Solicitações', Icon: Mail },
+      { to: '/admin/comentarios', label: 'Comentários',  Icon: MessageCircle },
+      { to: '/admin/mensagens',   label: 'Mensagens',    Icon: MessageSquare },
+    ],
+  },
+  {
+    group: 'Vendas',
+    items: [
+      { to: '/admin/leads',    label: 'Pipeline', Icon: Kanban },
+      { to: '/admin/reunioes', label: 'Reuniões', Icon: CalendarClock },
+    ],
+  },
+  {
+    group: 'Inteligência',
+    items: [
+      { to: '/admin/assistente',      label: 'Assistente IA',      Icon: Sparkles },
+      { to: '/admin/agente-conteudo', label: 'Agente de conteúdo', Icon: Wand2 },
+    ],
+  },
+  {
+    group: 'Gestão',
+    items: [
+      { to: '/admin/relatorios', label: 'Relatórios', Icon: TrendingUp },
+      { to: '/admin/financeiro', label: 'Financeiro',  Icon: DollarSign },
+    ],
+  },
 ]
 
 export default function AdminLayout() {
@@ -260,30 +284,42 @@ export default function AdminLayout() {
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 space-y-1 px-3 py-4 overflow-y-auto">
-          {links.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              end={link.end}
-              onClick={() => setSidebarOpen(false)}
-              className={({ isActive }) =>
-                `flex items-center gap-3 rounded-lg px-3 py-2.5 text-xs font-normal transition-all duration-200 ${
-                  isActive
-                    ? 'union-active'
-                    : 'text-muted hover:bg-white/5 hover:text-foreground'
-                }`
-              }
-            >
-              <link.Icon className="w-4 h-4" strokeWidth={2} />
-              <span className="text-xs">{link.label}</span>
-              {link.to === '/admin/mensagens' && unreadChat && (
-                <span className="ml-auto h-2 w-2 rounded-full bg-accent shadow-[0_0_8px_rgba(250,204,21,0.7)]" />
+        <nav className="flex-1 px-3 py-4 overflow-y-auto space-y-0.5">
+          {NAV.map((section, si) => (
+            <div key={si}>
+              {si > 0 && (
+                <div className="my-2 flex items-center gap-2 px-2">
+                  <div className="h-px flex-1 bg-white/[0.06]" />
+                  <span className="text-[9px] font-medium uppercase tracking-[0.15em] text-white/20">
+                    {section.group}
+                  </span>
+                </div>
               )}
-              {link.to === '/admin/comentarios' && unreadComentarios && (
-                <span className="ml-auto h-2 w-2 rounded-full bg-accent shadow-[0_0_8px_rgba(250,204,21,0.7)]" />
-              )}
-            </NavLink>
+              {section.items.map((link) => (
+                <NavLink
+                  key={link.to}
+                  to={link.to}
+                  end={link.end}
+                  onClick={() => setSidebarOpen(false)}
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 rounded-lg px-3 py-2.5 text-xs font-normal transition-all duration-200 ${
+                      isActive
+                        ? 'union-active'
+                        : 'text-muted hover:bg-white/5 hover:text-foreground'
+                    }`
+                  }
+                >
+                  <link.Icon className="w-4 h-4" strokeWidth={2} />
+                  <span className="text-xs">{link.label}</span>
+                  {link.to === '/admin/mensagens' && unreadChat && (
+                    <span className="ml-auto h-2 w-2 rounded-full bg-accent shadow-[0_0_8px_rgba(250,204,21,0.7)]" />
+                  )}
+                  {link.to === '/admin/comentarios' && unreadComentarios && (
+                    <span className="ml-auto h-2 w-2 rounded-full bg-accent shadow-[0_0_8px_rgba(250,204,21,0.7)]" />
+                  )}
+                </NavLink>
+              ))}
+            </div>
           ))}
         </nav>
 
