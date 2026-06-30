@@ -53,16 +53,25 @@ export default function Financeiro() {
     queryFn: listClients,
   })
 
+  // Query sem filtros: usada pelo painel e pelo dedup de recorrentes
+  const { data: allEntries } = useQuery({
+    queryKey: ['financial-all'],
+    queryFn: () => listFinancialEntries(),
+  })
+
   const ensuredRef = useRef(false)
   useEffect(() => {
-    if (!clientes || !entries || ensuredRef.current) return
+    if (!clientes || !allEntries || ensuredRef.current) return
     ensuredRef.current = true
-    const recorrentes = clientes.filter((c) => c.tipo_cliente === 'recorrente' && c.valor_servico)
-    ensureMonthlyRecurring(recorrentes, entries).then((created) => {
-      if (created) queryClient.invalidateQueries({ queryKey: ['financial'] })
+    const recorrentesClients = clientes.filter((c) => c.tipo_cliente === 'recorrente' && c.valor_servico)
+    ensureMonthlyRecurring(recorrentesClients, allEntries).then((created) => {
+      if (created) {
+        queryClient.invalidateQueries({ queryKey: ['financial'] })
+        queryClient.invalidateQueries({ queryKey: ['financial-all'] })
+      }
     })
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clientes, entries])
+  }, [clientes, allEntries])
 
   const createMutation = useMutation({
     mutationFn: createFinancialEntry,
@@ -104,18 +113,22 @@ export default function Financeiro() {
     e.nome.toLowerCase().includes(search.toLowerCase())
   )
 
-  // Painel de recorrentes: última cobrança por cliente
-  const recorrentesMap = {}
-  for (const e of (entries ?? [])) {
-    if (!e.recorrente || e.tipo !== 'entrada') continue
-    const key = e.cliente_id ?? e.nome
-    if (!recorrentesMap[key] || e.vencimento > recorrentesMap[key].vencimento) {
-      recorrentesMap[key] = e
-    }
-  }
-  const recorrentes = Object.values(recorrentesMap).sort((a, b) =>
-    a.nome.localeCompare(b.nome)
-  )
+  // Painel: uma entrada por cliente recorrente — baseado na lista de clientes (sem duplicatas)
+  const anoMesAtual = (() => {
+    const h = new Date()
+    return `${h.getFullYear()}-${String(h.getMonth() + 1).padStart(2, '0')}`
+  })()
+  const recorrentes = (clientes ?? [])
+    .filter((c) => c.tipo_cliente === 'recorrente')
+    .map((c) => {
+      const doMes = (allEntries ?? []).filter(
+        (e) => e.cliente_id === c.id && e.tipo === 'entrada' && e.vencimento?.startsWith(anoMesAtual)
+      )
+      if (!doMes.length) return null
+      return doMes.find((e) => e.status === 'pago') ?? doMes.reduce((a, b) => (a.id > b.id ? a : b))
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.nome.localeCompare(b.nome))
   const rPago     = recorrentes.filter((e) => e.status === 'pago').length
   const rPendente = recorrentes.filter((e) => e.status === 'pendente').length
   const rVencido  = recorrentes.filter((e) => e.status === 'vencido').length

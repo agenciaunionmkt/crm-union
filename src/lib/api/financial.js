@@ -70,15 +70,23 @@ export async function ensureMonthlyRecurring(recurringClients, existingEntries) 
   const hoje = new Date()
   const anoMes = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}`
 
-  // Dedup por cliente_id: qualquer entrada deste mês já conta (independente de recorrente flag)
-  const jaExistem = new Set(
-    (existingEntries ?? [])
-      .filter((e) => e.tipo === 'entrada' && e.cliente_id && e.vencimento?.startsWith(anoMes))
-      .map((e) => e.cliente_id)
+  const doMes = (existingEntries ?? []).filter(
+    (e) => e.tipo === 'entrada' && e.vencimento?.startsWith(anoMes)
   )
 
+  // Dedup por cliente_id
+  const porId = new Set(doMes.filter((e) => e.cliente_id).map((e) => e.cliente_id))
+
+  // Dedup por nome normalizado (captura entradas antigas sem cliente_id)
+  const porNome = new Set(doMes.map((e) => e.nome?.toLowerCase().trim()))
+
   const novos = recurringClients
-    .filter((c) => c.valor_servico && !jaExistem.has(c.id))
+    .filter((c) => {
+      if (!c.valor_servico) return false
+      if (porId.has(c.id)) return false
+      if (porNome.has(`mensalidade - ${c.nome}`.toLowerCase().trim())) return false
+      return true
+    })
     .map((c) => {
       const dia = c.dia_vencimento || 10
       const ultimoDia = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0).getDate()
