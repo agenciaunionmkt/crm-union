@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { CheckCircle2, Circle, Edit, Trash2, ExternalLink } from 'lucide-react'
 import {
@@ -53,15 +53,16 @@ export default function Financeiro() {
     queryFn: listClients,
   })
 
-  // Auto-cria lançamentos do mês para clientes recorrentes
+  const ensuredRef = useRef(false)
   useEffect(() => {
-    if (!clientes || !entries) return
+    if (!clientes || !entries || ensuredRef.current) return
+    ensuredRef.current = true
     const recorrentes = clientes.filter((c) => c.tipo_cliente === 'recorrente' && c.valor_servico)
-    ensureMonthlyRecurring(recorrentes).then(() => {
-      if (recorrentes.length) queryClient.invalidateQueries({ queryKey: ['financial'] })
+    ensureMonthlyRecurring(recorrentes, entries).then((created) => {
+      if (created) queryClient.invalidateQueries({ queryKey: ['financial'] })
     })
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clientes])
+  }, [clientes, entries])
 
   const createMutation = useMutation({
     mutationFn: createFinancialEntry,

@@ -62,24 +62,20 @@ export async function deleteFinancialEntry(id) {
   if (error) throw error
 }
 
-// Garante que todos os clientes recorrentes têm lançamento no mês atual
-export async function ensureMonthlyRecurring(recurringClients) {
-  if (!recurringClients?.length) return
+// Garante lançamentos do mês atual para clientes recorrentes.
+// Recebe as entries já carregadas para deduplicar sem query extra.
+export async function ensureMonthlyRecurring(recurringClients, existingEntries) {
+  if (!recurringClients?.length) return false
 
   const hoje = new Date()
   const anoMes = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}`
-  const mesInicio = `${anoMes}-01`
-  const mesFim   = `${anoMes}-31`
 
-  const { data: existentes } = await supabase
-    .from('financial_entries')
-    .select('cliente_id')
-    .eq('recorrente', true)
-    .eq('tipo', 'entrada')
-    .gte('vencimento', mesInicio)
-    .lte('vencimento', mesFim)
-
-  const jaExistem = new Set((existentes ?? []).map((e) => e.cliente_id))
+  // Dedup por cliente_id: qualquer entrada deste mês já conta (independente de recorrente flag)
+  const jaExistem = new Set(
+    (existingEntries ?? [])
+      .filter((e) => e.tipo === 'entrada' && e.cliente_id && e.vencimento?.startsWith(anoMes))
+      .map((e) => e.cliente_id)
+  )
 
   const novos = recurringClients
     .filter((c) => c.valor_servico && !jaExistem.has(c.id))
@@ -103,7 +99,9 @@ export async function ensureMonthlyRecurring(recurringClients) {
 
   if (novos.length) {
     await supabase.from('financial_entries').insert(novos)
+    return true
   }
+  return false
 }
 
 // Alterna status de um lançamento entre pago e pendente

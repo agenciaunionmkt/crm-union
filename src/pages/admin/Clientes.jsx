@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Eye, Trash2, AlertCircle, CheckCircle, RotateCcw } from 'lucide-react'
+import { Eye, Trash2, AlertCircle, CheckCircle, RotateCcw, Archive } from 'lucide-react'
 import { useTheme } from '../../context/ThemeContext'
 import { supabase } from '../../lib/supabaseClient'
-import { createClient, deleteClient, listClients, listInactiveClients, restoreClient } from '../../lib/api/clients'
+import { createClient, deleteClient, listClients, listInactiveClients, restoreClient, archiveClient } from '../../lib/api/clients'
 import { inviteClientUser } from '../../lib/api/users'
 import Modal from '../../components/ui/Modal'
 import ClientForm from '../../components/ClientForm'
@@ -114,6 +114,16 @@ export default function Clientes() {
       queryClient.invalidateQueries({ queryKey: ['clients'] })
       queryClient.invalidateQueries({ queryKey: ['clients-inativos'] })
       setSuccessMessage('Cliente reativado!')
+      setTimeout(() => setSuccessMessage(''), 3000)
+    },
+  })
+
+  const archiveMutation = useMutation({
+    mutationFn: (id) => archiveClient(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['clients'] })
+      queryClient.invalidateQueries({ queryKey: ['clients-inativos'] })
+      setSuccessMessage('Cliente movido para ex-clientes.')
       setTimeout(() => setSuccessMessage(''), 3000)
     },
   })
@@ -313,6 +323,19 @@ export default function Clientes() {
                   >
                     <Eye className="w-4 h-4" />
                   </Link>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (window.confirm(`Mover "${client.nome}" para ex-clientes?`)) {
+                        archiveMutation.mutate(client.id)
+                      }
+                    }}
+                    disabled={archiveMutation.isPending}
+                    className="p-1.5 rounded text-muted hover:text-amber-400 transition-colors disabled:opacity-50"
+                    title="Mover para ex-clientes"
+                  >
+                    <Archive className="w-4 h-4" />
+                  </button>
                   <button
                     onClick={() => handleDelete(client)}
                     className="p-1.5 rounded text-muted transition-colors"
