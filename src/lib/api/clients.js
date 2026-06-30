@@ -4,8 +4,42 @@ export async function listClients() {
   const { data, error } = await supabase
     .from('clients')
     .select('*')
+    .neq('ativo', false)
     .order('nome', { ascending: true })
 
+  if (error) throw error
+  return data
+}
+
+export async function listInactiveClients() {
+  const { data, error } = await supabase
+    .from('clients')
+    .select('*')
+    .eq('ativo', false)
+    .order('data_saida', { ascending: false })
+
+  if (error) throw error
+  return data
+}
+
+export async function archiveClient(id, motivo) {
+  const { data, error } = await supabase
+    .from('clients')
+    .update({ ativo: false, motivo_saida: motivo || null, data_saida: new Date().toISOString().split('T')[0] })
+    .eq('id', id)
+    .select()
+    .single()
+  if (error) throw error
+  return data
+}
+
+export async function restoreClient(id) {
+  const { data, error } = await supabase
+    .from('clients')
+    .update({ ativo: true, motivo_saida: null, data_saida: null })
+    .eq('id', id)
+    .select()
+    .single()
   if (error) throw error
   return data
 }

@@ -11,6 +11,7 @@ import {
   updateClient,
   updatePlan,
   upsertBriefing,
+  archiveClient,
 } from '../../lib/api/clients'
 import { inviteClientUser } from '../../lib/api/users'
 import Modal from '../../components/Modal'
@@ -108,6 +109,18 @@ export default function ClienteDetalhe() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['plans', id] }),
   })
 
+  const [motivoSaida, setMotivoSaida] = useState('')
+  const [showArchiveConfirm, setShowArchiveConfirm] = useState(false)
+
+  const archiveMutation = useMutation({
+    mutationFn: () => archiveClient(id, motivoSaida),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['clients'] })
+      queryClient.invalidateQueries({ queryKey: ['clients-inativos'] })
+      navigate('/admin/clientes')
+    },
+  })
+
   const [briefingIA, setBriefingIA] = useState(false)
 
   async function gerarBriefingIA() {
@@ -171,10 +184,58 @@ export default function ClienteDetalhe() {
         ← Voltar para clientes
       </Link>
 
-      <div className="mt-3">
-        <h1 className="text-2xl font-black tracking-tight text-foreground">{client.nome}</h1>
-        <p className="mt-1 text-sm text-muted">{client.segmento || 'Sem segmento definido'}</p>
+      <div className="mt-3 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-black tracking-tight text-foreground">{client.nome}</h1>
+          <p className="mt-1 text-sm text-muted">{client.segmento || 'Sem segmento definido'}</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setShowArchiveConfirm(true)}
+          className="flex-shrink-0 rounded-xl border border-border px-3 py-2 text-xs text-muted hover:border-danger/40 hover:text-danger hover:bg-danger/5 transition-colors"
+        >
+          Arquivar cliente
+        </button>
       </div>
+
+      {/* Modal de arquivamento */}
+      {showArchiveConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div className="w-full max-w-sm rounded-2xl border border-border bg-surface p-6 shadow-2xl">
+            <h3 className="font-semibold text-foreground">Arquivar cliente</h3>
+            <p className="mt-1 text-sm text-muted">
+              O cliente sairá da lista ativa e ficará em "Ex-clientes". O histórico é preservado.
+            </p>
+            <div className="mt-4">
+              <label className="mb-1.5 block text-xs text-muted">Motivo da saída (opcional)</label>
+              <input
+                type="text"
+                value={motivoSaida}
+                onChange={(e) => setMotivoSaida(e.target.value)}
+                placeholder="Ex: encerrou contrato, mudou de agência..."
+                className="w-full rounded-lg border border-border bg-white/5 px-3 py-2 text-sm text-foreground placeholder-neutral-500 focus:border-accent/50 focus:outline-none"
+              />
+            </div>
+            <div className="mt-4 flex gap-3">
+              <button
+                type="button"
+                onClick={() => setShowArchiveConfirm(false)}
+                className="flex-1 rounded-xl border border-border px-4 py-2 text-sm text-muted hover:bg-white/5"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={() => archiveMutation.mutate()}
+                disabled={archiveMutation.isPending}
+                className="flex-1 rounded-xl border border-danger/40 bg-danger/10 px-4 py-2 text-sm font-semibold text-danger hover:bg-danger/20 disabled:opacity-50 transition-colors"
+              >
+                {archiveMutation.isPending ? 'Arquivando...' : 'Confirmar'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Dados do cliente (edição inline) */}
       <div className="mt-6 glass rounded-2xl p-6">

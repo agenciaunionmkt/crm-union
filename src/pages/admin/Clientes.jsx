@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Eye, Trash2, AlertCircle, CheckCircle } from 'lucide-react'
+import { Eye, Trash2, AlertCircle, CheckCircle, RotateCcw } from 'lucide-react'
 import { useTheme } from '../../context/ThemeContext'
 import { supabase } from '../../lib/supabaseClient'
-import { createClient, deleteClient, listClients } from '../../lib/api/clients'
+import { createClient, deleteClient, listClients, listInactiveClients, restoreClient } from '../../lib/api/clients'
 import { inviteClientUser } from '../../lib/api/users'
 import Modal from '../../components/ui/Modal'
 import ClientForm from '../../components/ClientForm'
@@ -32,6 +32,7 @@ export default function Clientes() {
   const queryClient = useQueryClient()
   const { isDark } = useTheme()
   const [search, setSearch] = useState('')
+  const [aba, setAba] = useState('ativos')
   const [showForm, setShowForm] = useState(false)
   const [deleteConfirm, setDeleteConfirm] = useState(null)
   const [successMessage, setSuccessMessage] = useState('')
@@ -39,6 +40,11 @@ export default function Clientes() {
   const { data: clients, isLoading, error } = useQuery({
     queryKey: ['clients'],
     queryFn: listClients,
+  })
+
+  const { data: inativos = [] } = useQuery({
+    queryKey: ['clients-inativos'],
+    queryFn: listInactiveClients,
   })
 
   const createMutation = useMutation({
@@ -102,7 +108,21 @@ export default function Clientes() {
     }
   })
 
+  const restoreMutation = useMutation({
+    mutationFn: restoreClient,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['clients'] })
+      queryClient.invalidateQueries({ queryKey: ['clients-inativos'] })
+      setSuccessMessage('Cliente reativado!')
+      setTimeout(() => setSuccessMessage(''), 3000)
+    },
+  })
+
   const filtered = (clients ?? []).filter((c) =>
+    c.nome.toLowerCase().includes(search.toLowerCase())
+  )
+
+  const filteredInativos = inativos.filter((c) =>
     c.nome.toLowerCase().includes(search.toLowerCase())
   )
 
@@ -145,18 +165,84 @@ export default function Clientes() {
         </button>
       </div>
 
-      {/* Search */}
-      <div className="mb-6 max-w-sm">
-        <Input
-          type="text"
-          placeholder="Buscar clientes..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+      {/* Tabs + Search */}
+      <div className="mb-6 flex items-center gap-4">
+        <div className="flex rounded-lg border border-border p-0.5 bg-surface">
+          {[['ativos', 'Ativos'], ['inativos', 'Ex-clientes']].map(([val, label]) => (
+            <button
+              key={val}
+              type="button"
+              onClick={() => setAba(val)}
+              className={`rounded-md px-4 py-1.5 text-xs font-medium transition-colors ${
+                aba === val
+                  ? 'bg-white/10 text-foreground'
+                  : 'text-muted hover:text-foreground'
+              }`}
+            >
+              {label}
+              {val === 'inativos' && inativos.length > 0 && (
+                <span className="ml-1.5 rounded-full bg-white/10 px-1.5 py-0.5 text-[10px]">
+                  {inativos.length}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+        <div className="max-w-xs flex-1">
+          <Input
+            type="text"
+            placeholder="Buscar..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
       </div>
 
-      {/* Table */}
-      <Table>
+      {/* Tabela inativos */}
+      {aba === 'inativos' && (
+        <Table>
+          <TableHead>
+            <TableRow isHeader>
+              <TableHeader>Nome</TableHeader>
+              <TableHeader>Segmento</TableHeader>
+              <TableHeader>Saída</TableHeader>
+              <TableHeader>Motivo</TableHeader>
+              <TableHeader className="text-right">Ações</TableHeader>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {filteredInativos.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={5} className="text-center py-8 text-muted">
+                  Nenhum ex-cliente registrado
+                </TableCell>
+              </TableRow>
+            )}
+            {filteredInativos.map((c) => (
+              <TableRow key={c.id}>
+                <TableCell className="font-medium text-foreground">{c.nome}</TableCell>
+                <TableCell>{c.segmento || '—'}</TableCell>
+                <TableCell>{c.data_saida ? c.data_saida.split('-').reverse().join('/') : '—'}</TableCell>
+                <TableCell className="text-muted">{c.motivo_saida || '—'}</TableCell>
+                <TableCell className="text-right">
+                  <button
+                    type="button"
+                    onClick={() => restoreMutation.mutate(c.id)}
+                    disabled={restoreMutation.isPending}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-muted hover:text-foreground hover:bg-white/5 transition-colors"
+                    title="Reativar cliente"
+                  >
+                    <RotateCcw className="h-3.5 w-3.5" /> Reativar
+                  </button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
+
+      {/* Tabela ativos */}
+      {aba === 'ativos' && <Table>
         <TableHead>
           <TableRow isHeader>
             <TableHeader>Nome</TableHeader>
@@ -239,7 +325,7 @@ export default function Clientes() {
             </TableRow>
           ))}
         </TableBody>
-      </Table>
+      </Table>}
 
       {/* Modal - Novo Cliente */}
       <Modal open={showForm} title="Novo cliente" onClose={() => setShowForm(false)}>

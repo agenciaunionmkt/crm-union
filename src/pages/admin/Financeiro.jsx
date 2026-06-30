@@ -1,12 +1,14 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Edit, Trash2, ExternalLink } from 'lucide-react'
+import { CheckCircle2, Circle, Edit, Trash2, ExternalLink } from 'lucide-react'
 import {
   listFinancialEntries,
   createFinancialEntry,
   updateFinancialEntry,
   deleteFinancialEntry,
   getFinancialSummary,
+  ensureMonthlyRecurring,
+  toggleEntryPaid,
 } from '../../lib/api/financial'
 import { listClients } from '../../lib/api/clients'
 import Modal from '../../components/ui/Modal'
@@ -51,6 +53,16 @@ export default function Financeiro() {
     queryFn: listClients,
   })
 
+  // Auto-cria lançamentos do mês para clientes recorrentes
+  useEffect(() => {
+    if (!clientes || !entries) return
+    const recorrentes = clientes.filter((c) => c.tipo_cliente === 'recorrente' && c.valor_servico)
+    ensureMonthlyRecurring(recorrentes).then(() => {
+      if (recorrentes.length) queryClient.invalidateQueries({ queryKey: ['financial'] })
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clientes])
+
   const createMutation = useMutation({
     mutationFn: createFinancialEntry,
     onSuccess: () => {
@@ -68,6 +80,14 @@ export default function Financeiro() {
       queryClient.invalidateQueries({ queryKey: ['financial-summary'] })
       setShowForm(false)
       setEditingId(null)
+    },
+  })
+
+  const togglePaidMutation = useMutation({
+    mutationFn: toggleEntryPaid,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['financial'] })
+      queryClient.invalidateQueries({ queryKey: ['financial-summary'] })
     },
   })
 
@@ -179,47 +199,39 @@ export default function Financeiro() {
       {/* Painel de Recorrentes */}
       {recorrentes.length > 0 && (
         <div className="mb-8">
-          <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-foreground">Recorrentes</h2>
-            <div className="flex items-center gap-4 text-xs text-muted">
-              <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-emerald-400" />{rPago} {rPago === 1 ? 'pago' : 'pagos'}
-              </span>
-              {rPendente > 0 && (
-                <span className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-amber-400" />{rPendente} {rPendente === 1 ? 'pendente' : 'pendentes'}
-                </span>
-              )}
-              {rVencido > 0 && (
-                <span className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-danger" />{rVencido} {rVencido === 1 ? 'vencido' : 'vencidos'}
-                </span>
-              )}
-            </div>
+          <div className="mb-2 flex items-center justify-between">
+            <h2 className="text-xs font-semibold uppercase tracking-widest text-muted">
+              Mensalidades — {new Date().toLocaleString('pt-BR', { month: 'long', year: 'numeric' })}
+            </h2>
+            <span className="text-xs text-muted">
+              {rPago}/{recorrentes.length} pagos
+            </span>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
+          <div className="flex flex-wrap gap-2">
             {recorrentes.map((e) => {
-              const s =
-                e.status === 'pago'
-                  ? { dot: 'bg-emerald-400', border: 'border-emerald-500/25', label: 'Pago',     color: 'text-emerald-400' }
-                  : e.status === 'vencido'
-                  ? { dot: 'bg-danger',      border: 'border-danger/30',      label: 'Vencido',  color: 'text-danger' }
-                  : { dot: 'bg-amber-400',   border: 'border-amber-500/25',   label: 'Pendente', color: 'text-amber-400' }
+              const pago = e.status === 'pago'
+              const vencido = e.status === 'vencido'
               const nomeExibido = e.nome.replace(/^mensalidade\s*[-–]\s*/i, '')
               return (
                 <button
                   key={e.id}
                   type="button"
-                  onClick={() => handleEdit(e)}
-                  className={`flex items-center gap-3 rounded-xl border bg-surface px-3 py-3 text-left hover:bg-surface-2 transition-colors ${s.border}`}
+                  onClick={() => togglePaidMutation.mutate(e)}
+                  disabled={togglePaidMutation.isPending}
+                  title={pago ? 'Marcar como pendente' : 'Marcar como pago'}
+                  className={`inline-flex items-center gap-2 rounded-lg border px-3 py-1.5 text-sm transition-colors
+                    ${pago
+                      ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+                      : vencido
+                      ? 'border-danger/30 bg-danger/10 text-danger hover:bg-danger/15'
+                      : 'border-border bg-surface text-muted hover:bg-surface-2 hover:text-foreground'
+                    }`}
                 >
-                  <span className={`h-2 w-2 flex-shrink-0 rounded-full ${s.dot}`} />
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-foreground">{nomeExibido}</p>
-                    <p className={`text-xs ${s.color}`}>
-                      R$ {e.valor.toFixed(2)} · {s.label}
-                    </p>
-                  </div>
+                  {pago
+                    ? <CheckCircle2 className="h-3.5 w-3.5 flex-shrink-0" />
+                    : <Circle className="h-3.5 w-3.5 flex-shrink-0" />
+                  }
+                  {nomeExibido}
                 </button>
               )
             })}

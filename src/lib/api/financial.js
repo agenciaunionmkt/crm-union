@@ -62,6 +62,63 @@ export async function deleteFinancialEntry(id) {
   if (error) throw error
 }
 
+// Garante que todos os clientes recorrentes têm lançamento no mês atual
+export async function ensureMonthlyRecurring(recurringClients) {
+  if (!recurringClients?.length) return
+
+  const hoje = new Date()
+  const anoMes = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}`
+  const mesInicio = `${anoMes}-01`
+  const mesFim   = `${anoMes}-31`
+
+  const { data: existentes } = await supabase
+    .from('financial_entries')
+    .select('cliente_id')
+    .eq('recorrente', true)
+    .eq('tipo', 'entrada')
+    .gte('vencimento', mesInicio)
+    .lte('vencimento', mesFim)
+
+  const jaExistem = new Set((existentes ?? []).map((e) => e.cliente_id))
+
+  const novos = recurringClients
+    .filter((c) => c.valor_servico && !jaExistem.has(c.id))
+    .map((c) => {
+      const dia = c.dia_vencimento || 10
+      const ultimoDia = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0).getDate()
+      const diaFinal  = Math.min(dia, ultimoDia)
+      const vencimento = `${anoMes}-${String(diaFinal).padStart(2, '0')}`
+      return {
+        nome:       `Mensalidade - ${c.nome}`,
+        tipo:       'entrada',
+        categoria:  'servicos',
+        valor:      c.valor_servico,
+        status:     'pendente',
+        vencimento,
+        cliente_id: c.id,
+        recorrente: true,
+        frequencia: 'mensal',
+      }
+    })
+
+  if (novos.length) {
+    await supabase.from('financial_entries').insert(novos)
+  }
+}
+
+// Alterna status de um lançamento entre pago e pendente
+export async function toggleEntryPaid(entry) {
+  const novoStatus = entry.status === 'pago' ? 'pendente' : 'pago'
+  const { data, error } = await supabase
+    .from('financial_entries')
+    .update({ status: novoStatus })
+    .eq('id', entry.id)
+    .select()
+    .single()
+  if (error) throw error
+  return data
+}
+
 // Cobranças de um cliente (para o portal do cliente acompanhar)
 export async function listClientCharges(clienteId) {
   const { data, error } = await supabase
