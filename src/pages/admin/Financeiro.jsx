@@ -30,6 +30,10 @@ function formatDate(value) {
   return `${d}/${m}/${y}`
 }
 
+function formatBRL(value) {
+  return (value ?? 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}
+
 export default function Financeiro() {
   const queryClient = useQueryClient()
   const [search, setSearch] = useState('')
@@ -190,22 +194,22 @@ export default function Financeiro() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
           <div className="glass glass-hover rounded-2xl p-6">
             <p className="text-xs uppercase tracking-widest text-muted">Saldo (recebido − pago)</p>
-            <p className="text-2xl font-black tracking-tight text-foreground">R$ {summary.saldo.toFixed(2)}</p>
+            <p className="text-2xl font-black tracking-tight text-foreground">R$ {formatBRL(summary.saldo)}</p>
           </div>
 
           <div className="glass glass-hover rounded-2xl p-6">
             <p className="text-xs uppercase tracking-widest text-muted">Recebido</p>
-            <p className="text-2xl font-normal text-emerald-400">R$ {summary.recebido.toFixed(2)}</p>
+            <p className="text-2xl font-normal text-emerald-400">R$ {formatBRL(summary.recebido)}</p>
           </div>
 
           <div className="glass glass-hover rounded-2xl p-6">
             <p className="text-xs uppercase tracking-widest text-muted">A receber</p>
-            <p className="text-2xl font-normal text-orange-400">R$ {summary.aReceber.toFixed(2)}</p>
+            <p className="text-2xl font-normal text-orange-400">R$ {formatBRL(summary.aReceber)}</p>
           </div>
 
           <div className="glass glass-hover rounded-2xl p-6">
             <p className="text-xs uppercase tracking-widest text-muted">Saídas pagas</p>
-            <p className="text-2xl font-normal text-danger">R$ {summary.saidasPagas.toFixed(2)}</p>
+            <p className="text-2xl font-normal text-danger">R$ {formatBRL(summary.saidasPagas)}</p>
           </div>
         </div>
       )}
@@ -320,7 +324,7 @@ export default function Financeiro() {
               </TableCell>
               <TableCell>
                 <span className={entry.tipo === 'entrada' ? 'text-green-600 dark:text-success font-medium' : 'text-danger font-medium'}>
-                  {entry.tipo === 'entrada' ? '+' : '-'} R$ {entry.valor.toFixed(2)}
+                  {entry.tipo === 'entrada' ? '+' : '-'} R$ {formatBRL(entry.valor)}
                 </span>
               </TableCell>
               <TableCell>
