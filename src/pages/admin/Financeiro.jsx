@@ -83,6 +83,22 @@ export default function Financeiro() {
     e.nome.toLowerCase().includes(search.toLowerCase())
   )
 
+  // Painel de recorrentes: última cobrança por cliente
+  const recorrentesMap = {}
+  for (const e of (entries ?? [])) {
+    if (!e.recorrente || e.tipo !== 'entrada') continue
+    const key = e.cliente_id ?? e.nome
+    if (!recorrentesMap[key] || e.vencimento > recorrentesMap[key].vencimento) {
+      recorrentesMap[key] = e
+    }
+  }
+  const recorrentes = Object.values(recorrentesMap).sort((a, b) =>
+    a.nome.localeCompare(b.nome)
+  )
+  const rPago     = recorrentes.filter((e) => e.status === 'pago').length
+  const rPendente = recorrentes.filter((e) => e.status === 'pendente').length
+  const rVencido  = recorrentes.filter((e) => e.status === 'vencido').length
+
   function handleDelete(entry) {
     if (
       window.confirm(
@@ -156,6 +172,57 @@ export default function Financeiro() {
           <div className="glass glass-hover rounded-2xl p-6">
             <p className="text-xs uppercase tracking-widest text-muted">Saídas pagas</p>
             <p className="text-2xl font-normal text-danger">R$ {summary.saidasPagas.toFixed(2)}</p>
+          </div>
+        </div>
+      )}
+
+      {/* Painel de Recorrentes */}
+      {recorrentes.length > 0 && (
+        <div className="mb-8">
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-foreground">Recorrentes</h2>
+            <div className="flex items-center gap-4 text-xs text-muted">
+              <span className="flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-emerald-400" />{rPago} {rPago === 1 ? 'pago' : 'pagos'}
+              </span>
+              {rPendente > 0 && (
+                <span className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-amber-400" />{rPendente} {rPendente === 1 ? 'pendente' : 'pendentes'}
+                </span>
+              )}
+              {rVencido > 0 && (
+                <span className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-danger" />{rVencido} {rVencido === 1 ? 'vencido' : 'vencidos'}
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
+            {recorrentes.map((e) => {
+              const s =
+                e.status === 'pago'
+                  ? { dot: 'bg-emerald-400', border: 'border-emerald-500/25', label: 'Pago',     color: 'text-emerald-400' }
+                  : e.status === 'vencido'
+                  ? { dot: 'bg-danger',      border: 'border-danger/30',      label: 'Vencido',  color: 'text-danger' }
+                  : { dot: 'bg-amber-400',   border: 'border-amber-500/25',   label: 'Pendente', color: 'text-amber-400' }
+              const nomeExibido = e.nome.replace(/^mensalidade\s*[-–]\s*/i, '')
+              return (
+                <button
+                  key={e.id}
+                  type="button"
+                  onClick={() => handleEdit(e)}
+                  className={`flex items-center gap-3 rounded-xl border bg-surface px-3 py-3 text-left hover:bg-surface-2 transition-colors ${s.border}`}
+                >
+                  <span className={`h-2 w-2 flex-shrink-0 rounded-full ${s.dot}`} />
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-medium text-foreground">{nomeExibido}</p>
+                    <p className={`text-xs ${s.color}`}>
+                      R$ {e.valor.toFixed(2)} · {s.label}
+                    </p>
+                  </div>
+                </button>
+              )
+            })}
           </div>
         </div>
       )}
