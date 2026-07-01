@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { CheckCircle2, ChevronLeft, ChevronRight, Circle, Edit, Trash2, ExternalLink } from 'lucide-react'
+import { ArrowUpDown, ArrowUp, ArrowDown, CheckCircle2, ChevronLeft, ChevronRight, Circle, Edit, Trash2, ExternalLink } from 'lucide-react'
 import {
   listFinancialEntries,
   createFinancialEntry,
@@ -36,6 +36,17 @@ export default function Financeiro() {
   const [statusFilter, setStatusFilter] = useState('')
   const [showForm, setShowForm]       = useState(false)
   const [editingId, setEditingId]     = useState(null)
+  const [sortField, setSortField]     = useState('vencimento')
+  const [sortDir, setSortDir]         = useState('asc')
+
+  function handleSortByTipo() {
+    if (sortField === 'tipo') {
+      setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))
+    } else {
+      setSortField('tipo')
+      setSortDir('asc')
+    }
+  }
 
   // Navegação por mês
   const today = useMemo(() => new Date(), [])
@@ -95,8 +106,14 @@ export default function Financeiro() {
         if (search && !e.nome.toLowerCase().includes(search.toLowerCase())) return false
         return true
       })
-      .sort((a, b) => (a.vencimento ?? '').localeCompare(b.vencimento ?? ''))
-  }, [allEntries, selectedMonth, isCurrentMonth, tipoFilter, statusFilter, search])
+      .sort((a, b) => {
+        if (sortField === 'tipo') {
+          const cmp = a.tipo.localeCompare(b.tipo)
+          return sortDir === 'asc' ? cmp : -cmp
+        }
+        return (a.vencimento ?? '').localeCompare(b.vencimento ?? '')
+      })
+  }, [allEntries, selectedMonth, isCurrentMonth, tipoFilter, statusFilter, search, sortField, sortDir])
 
   // Resumo calculado das entradas filtradas do mês
   const summary = useMemo(() => {
@@ -306,7 +323,21 @@ export default function Financeiro() {
       <Table>
         <TableHead>
           <TableRow isHeader>
-            <TableHeader>Tipo</TableHeader>
+            <TableHeader>
+              <button
+                type="button"
+                onClick={handleSortByTipo}
+                className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
+                title="Ordenar por tipo"
+              >
+                Tipo
+                {sortField === 'tipo' ? (
+                  sortDir === 'asc' ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />
+                ) : (
+                  <ArrowUpDown className="h-3 w-3 opacity-40" />
+                )}
+              </button>
+            </TableHeader>
             <TableHeader>Nome</TableHeader>
             <TableHeader>Valor</TableHeader>
             <TableHeader>Vencimento</TableHeader>
