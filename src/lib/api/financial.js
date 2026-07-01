@@ -62,48 +62,75 @@ export async function deleteFinancialEntry(id) {
   if (error) throw error
 }
 
-// Garante lançamentos do mês atual para clientes recorrentes.
+// Garante lançamentos do mês atual para clientes recorrentes e para
+// lançamentos manuais recorrentes (entradas ou saídas avulsas, ex: aluguel).
 // Recebe as entries já carregadas para deduplicar sem query extra.
 export async function ensureMonthlyRecurring(recurringClients, existingEntries) {
-  if (!recurringClients?.length) return false
-
   const hoje = new Date()
   const anoMes = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}`
+  const ultimoDia = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0).getDate()
+  const doMes = (existingEntries ?? []).filter((e) => e.vencimento?.startsWith(anoMes))
 
-  const doMes = (existingEntries ?? []).filter(
-    (e) => e.tipo === 'entrada' && e.vencimento?.startsWith(anoMes)
-  )
+  const novos = []
 
-  // Dedup por cliente_id
-  const porId = new Set(doMes.filter((e) => e.cliente_id).map((e) => e.cliente_id))
+  // 1) Mensalidades de clientes recorrentes (entrada vinculada a cliente_id)
+  if (recurringClients?.length) {
+    const doMesEntrada = doMes.filter((e) => e.tipo === 'entrada')
+    const porId   = new Set(doMesEntrada.filter((e) => e.cliente_id).map((e) => e.cliente_id))
+    const porNome = new Set(doMesEntrada.map((e) => e.nome?.toLowerCase().trim()))
 
-  // Dedup por nome normalizado (captura entradas antigas sem cliente_id)
-  const porNome = new Set(doMes.map((e) => e.nome?.toLowerCase().trim()))
-
-  const novos = recurringClients
-    .filter((c) => {
-      if (!c.valor_servico) return false
-      if (porId.has(c.id)) return false
-      if (porNome.has(`mensalidade - ${c.nome}`.toLowerCase().trim())) return false
-      return true
-    })
-    .map((c) => {
+    for (const c of recurringClients) {
+      if (!c.valor_servico) continue
+      if (porId.has(c.id)) continue
+      if (porNome.has(`mensalidade - ${c.nome}`.toLowerCase().trim())) continue
       const dia = c.dia_vencimento || 10
-      const ultimoDia = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0).getDate()
-      const diaFinal  = Math.min(dia, ultimoDia)
-      const vencimento = `${anoMes}-${String(diaFinal).padStart(2, '0')}`
-      return {
+      const diaFinal = Math.min(dia, ultimoDia)
+      novos.push({
         nome:       `Mensalidade - ${c.nome}`,
         tipo:       'entrada',
         categoria:  'servicos',
         valor:      c.valor_servico,
         status:     'pendente',
-        vencimento,
+        vencimento: `${anoMes}-${String(diaFinal).padStart(2, '0')}`,
         cliente_id: c.id,
         recorrente: true,
         frequencia: 'mensal',
-      }
+      })
+    }
+  }
+
+  // 2) Lançamentos manuais recorrentes (entrada ou saída, sem cliente_id, frequência mensal):
+  // repete o último lançamento de cada grupo (tipo + nome) no mês atual, se ainda não existir.
+  const ultimoPorGrupo = new Map()
+  for (const e of (existingEntries ?? [])) {
+    if (!e.recorrente || e.cliente_id || e.frequencia !== 'mensal') continue
+    const chave = `${e.tipo}::${e.nome?.toLowerCase().trim()}`
+    const atual = ultimoPorGrupo.get(chave)
+    if (!atual || e.vencimento > atual.vencimento) ultimoPorGrupo.set(chave, e)
+  }
+
+  const chavesDoMes = new Set(doMes.map((e) => `${e.tipo}::${e.nome?.toLowerCase().trim()}`))
+
+  for (const [chave, ultimo] of ultimoPorGrupo) {
+    if (chavesDoMes.has(chave)) continue
+    if (ultimo.vencimento?.startsWith(anoMes)) continue
+
+    const diaOriginal = parseInt(ultimo.vencimento?.split('-')[2] ?? '10', 10)
+    const diaFinal = Math.min(diaOriginal || 10, ultimoDia)
+
+    novos.push({
+      nome:            ultimo.nome,
+      tipo:            ultimo.tipo,
+      categoria:       ultimo.categoria,
+      valor:           ultimo.valor,
+      status:          'pendente',
+      vencimento:      `${anoMes}-${String(diaFinal).padStart(2, '0')}`,
+      forma_pagamento: ultimo.forma_pagamento,
+      cliente_id:      null,
+      recorrente:      true,
+      frequencia:      'mensal',
     })
+  }
 
   if (novos.length) {
     await supabase.from('financial_entries').insert(novos)
