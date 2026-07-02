@@ -92,7 +92,7 @@ export default function ClientCalendario() {
     enabled: !!detalhe?.id,
   })
 
-  const imagens = anexos.filter(isImagem)
+  const imagens = anexos.filter((a) => !a.interno).filter(isImagem)
 
   return (
     <div>

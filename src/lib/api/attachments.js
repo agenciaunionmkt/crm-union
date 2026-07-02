@@ -22,7 +22,7 @@ export async function listAttachments(demandId) {
   return data
 }
 
-export async function uploadAttachment(demandId, file, userId) {
+export async function uploadAttachment(demandId, file, userId, { interno = false } = {}) {
   const safeName = file.name.replace(/[^\w.\-]+/g, '_')
   const path = `${demandId}/${crypto.randomUUID()}-${safeName}`
 
@@ -38,6 +38,7 @@ export async function uploadAttachment(demandId, file, userId) {
     arquivo_url: pub.publicUrl,
     nome_arquivo: file.name,
     enviado_por: userId ?? null,
+    interno,
   }
 
   // Tenta incluir `ordem`; se a coluna não existir ainda ignora silenciosamente
@@ -86,6 +87,18 @@ export async function replaceAttachment(attachment, newFile) {
     .from('attachments')
     .update({ arquivo_url: pub.publicUrl, nome_arquivo: newFile.name })
     .eq('id', attachment.id)
+    .select()
+    .single()
+  if (error) throw error
+  return data
+}
+
+// Move o anexo entre "criativos" (interno=false) e "referências internas" (interno=true)
+export async function setAttachmentInterno(id, interno) {
+  const { data, error } = await supabase
+    .from('attachments')
+    .update({ interno })
+    .eq('id', id)
     .select()
     .single()
   if (error) throw error

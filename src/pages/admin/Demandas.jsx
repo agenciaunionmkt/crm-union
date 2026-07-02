@@ -83,9 +83,9 @@ export default function Demandas() {
       if (id) return await updateDemand(id, payload, tagIds)
       const created = await createDemand(payload, tagIds)
       // Envia os anexos selecionados antes de salvar
-      for (const file of pendingFiles) {
+      for (const p of pendingFiles) {
         try {
-          await uploadAttachment(created.id, file, profile?.id)
+          await uploadAttachment(created.id, p.file, profile?.id, { interno: p.interno })
         } catch (e) {
           console.warn('Falha ao enviar anexo:', e)
         }

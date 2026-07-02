@@ -101,7 +101,8 @@ export default function DemandActivity({ demandId, mode = 'admin', currentUser, 
   }
 
   const comments = commentsQuery.data ?? []
-  const attachments = attachmentsQuery.data ?? []
+  // Cliente nunca vê anexos internos (RLS também bloqueia no banco)
+  const attachments = (attachmentsQuery.data ?? []).filter((a) => isAdmin || !a.interno)
 
   const handleDragOver = (e) => {
     e.preventDefault()
