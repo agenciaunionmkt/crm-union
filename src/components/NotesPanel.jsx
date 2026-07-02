@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Pencil, Plus, Trash2 } from 'lucide-react'
+import { ChevronDown, Pencil, Plus, Trash2 } from 'lucide-react'
 import {
   listClientNotes,
   createClientNote,
@@ -22,6 +22,7 @@ export default function NotesPanel({ clienteId }) {
   const [editing, setEditing] = useState(null) // null | 'new' | note
   const [titulo, setTitulo] = useState('')
   const [conteudo, setConteudo] = useState('')
+  const [openId, setOpenId] = useState(null)
 
   const { data: notes, isLoading, error } = useQuery({
     queryKey: ['client-notes', clienteId],
@@ -147,41 +148,53 @@ export default function NotesPanel({ clienteId }) {
             Nenhuma anotação ainda. Clique em "Nova anotação" para registrar a primeira.
           </p>
         )}
-        {(notes ?? []).map((note) => (
-          <div key={note.id} className="rounded-2xl border border-border bg-surface p-4">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <h3 className="font-semibold text-foreground">{note.titulo}</h3>
-                <p className="mt-0.5 text-[11px] text-muted">
-                  Atualizado em {formatDateTime(note.updated_at)}
-                </p>
-              </div>
-              <div className="flex flex-shrink-0 items-center gap-2">
+        {(notes ?? []).map((note) => {
+          const open = openId === note.id
+          return (
+            <div key={note.id} className="rounded-2xl border border-border bg-surface">
+              <div className="flex items-center justify-between gap-3 p-4">
                 <button
                   type="button"
-                  onClick={() => openEdit(note)}
-                  className="p-1.5 rounded text-muted hover:text-foreground transition-colors"
-                  title="Editar"
+                  onClick={() => setOpenId(open ? null : note.id)}
+                  className="flex flex-1 items-center gap-3 text-left"
                 >
-                  <Pencil className="h-4 w-4" />
+                  <ChevronDown
+                    className={`h-4 w-4 flex-shrink-0 text-muted transition-transform ${open ? '' : '-rotate-90'}`}
+                  />
+                  <div>
+                    <h3 className="font-semibold text-foreground">{note.titulo}</h3>
+                    <p className="mt-0.5 text-[11px] text-muted">
+                      Atualizado em {formatDateTime(note.updated_at)}
+                    </p>
+                  </div>
                 </button>
-                <button
-                  type="button"
-                  onClick={() => handleDelete(note)}
-                  className="p-1.5 rounded text-muted hover:text-danger transition-colors"
-                  title="Remover"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
+                <div className="flex flex-shrink-0 items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => openEdit(note)}
+                    className="p-1.5 rounded text-muted hover:text-foreground transition-colors"
+                    title="Editar"
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(note)}
+                    className="p-1.5 rounded text-muted hover:text-danger transition-colors"
+                    title="Remover"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
+              {open && note.conteudo && (
+                <pre className="whitespace-pre-wrap border-t border-border px-4 py-3 font-sans text-sm text-subtle">
+                  {note.conteudo}
+                </pre>
+              )}
             </div>
-            {note.conteudo && (
-              <pre className="mt-3 whitespace-pre-wrap font-sans text-sm text-subtle">
-                {note.conteudo}
-              </pre>
-            )}
-          </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   )
