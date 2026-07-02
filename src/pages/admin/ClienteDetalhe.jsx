@@ -21,6 +21,7 @@ import ChatWindow from '../../components/ChatWindow'
 import ContractsPanel from '../../components/ContractsPanel'
 import AsaasPanel from '../../components/AsaasPanel'
 import MateriaisPanel from '../../components/MateriaisPanel'
+import NotesPanel from '../../components/NotesPanel'
 
 function formatCurrency(value) {
   if (value === null || value === undefined) return '—'
@@ -39,6 +40,7 @@ export default function ClienteDetalhe() {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
 
+  const [aba, setAba] = useState('geral')
   const [showPlanForm, setShowPlanForm] = useState(false)
   const [editingPlan, setEditingPlan] = useState(null)
   const [acessoEmail, setAcessoEmail] = useState('')
@@ -237,6 +239,34 @@ export default function ClienteDetalhe() {
         </div>
       )}
 
+      {/* Abas */}
+      <div className="mt-6 flex rounded-lg border border-border p-0.5 bg-surface w-fit">
+        {[['geral', 'Visão geral'], ['anotacoes', 'Anotações']].map(([val, label]) => (
+          <button
+            key={val}
+            type="button"
+            onClick={() => setAba(val)}
+            className={`rounded-md px-4 py-1.5 text-xs font-medium transition-colors ${
+              aba === val
+                ? 'bg-white/10 text-foreground'
+                : 'text-muted hover:text-foreground'
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {/* Aba: Anotações / fichas técnicas */}
+      {aba === 'anotacoes' && (
+        <div className="mt-6 glass rounded-2xl p-6">
+          <h2 className="mb-4 text-base font-black tracking-tight text-foreground">Anotações</h2>
+          <NotesPanel clienteId={id} />
+        </div>
+      )}
+
+      {aba === 'geral' && (
+      <>
       {/* Dados do cliente (edição inline) */}
       <div className="mt-6 glass rounded-2xl p-6">
         <div className="mb-4 flex items-center justify-between gap-3">
@@ -411,6 +441,8 @@ export default function ClienteDetalhe() {
           <ChatWindow clienteId={id} currentUser={profile} />
         </div>
       </div>
+      </>
+      )}
 
     </div>
   )
