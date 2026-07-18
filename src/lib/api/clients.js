@@ -23,13 +23,26 @@ export async function listInactiveClients() {
 }
 
 export async function archiveClient(id, motivo) {
+  const hoje = new Date().toISOString().split('T')[0]
   const { data, error } = await supabase
     .from('clients')
-    .update({ ativo: false, motivo_saida: motivo || null, data_saida: new Date().toISOString().split('T')[0] })
+    .update({ ativo: false, motivo_saida: motivo || null, data_saida: hoje })
     .eq('id', id)
     .select()
     .single()
   if (error) throw error
+
+  // Cobranças futuras ainda não vencidas somem; pendências já vencidas
+  // permanecem (dívida real) e podem ser excluídas manualmente.
+  const { error: delError } = await supabase
+    .from('financial_entries')
+    .delete()
+    .eq('cliente_id', id)
+    .eq('tipo', 'entrada')
+    .eq('status', 'pendente')
+    .gt('vencimento', hoje)
+  if (delError) throw delError
+
   return data
 }
 

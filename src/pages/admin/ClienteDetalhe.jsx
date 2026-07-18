@@ -119,6 +119,7 @@ export default function ClienteDetalhe() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['clients'] })
       queryClient.invalidateQueries({ queryKey: ['clients-inativos'] })
+      queryClient.invalidateQueries({ queryKey: ['financial-all'] })
       navigate('/admin/clientes')
     },
   })

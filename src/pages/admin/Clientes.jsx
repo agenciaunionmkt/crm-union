@@ -123,6 +123,7 @@ export default function Clientes() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['clients'] })
       queryClient.invalidateQueries({ queryKey: ['clients-inativos'] })
+      queryClient.invalidateQueries({ queryKey: ['financial-all'] })
       setSuccessMessage('Cliente movido para ex-clientes.')
       setTimeout(() => setSuccessMessage(''), 3000)
     },
