@@ -167,15 +167,7 @@ export default function ClientForm({ initialValues, onSubmit, onCancel, submitti
         )}
 
         {form.plano === 'personalizado' && (
-          <div className="mt-4 space-y-4 rounded-lg border border-white/10 bg-white/5 p-4">
-            <Input
-              label="Posts por mês"
-              type="number"
-              min="1"
-              value={form.posts_personalizado ?? ''}
-              onChange={handleChange('posts_personalizado')}
-              placeholder="Ex: 16"
-            />
+          <div className="mt-4 rounded-lg border border-white/10 bg-white/5 p-4">
             <Textarea
               label="O que esse pacote tem de diferente"
               value={form.plano_descricao ?? ''}
