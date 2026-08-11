@@ -416,6 +416,7 @@ export default function ClienteDetalhe() {
         <div className="mt-4">
           <ContractsPanel
             clienteId={id}
+            cliente={client}
             defaultEmail={client.contato_email ?? ''}
             currentUser={profile}
             mode="admin"
