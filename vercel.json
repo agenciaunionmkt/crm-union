@@ -1,5 +1,11 @@
 {
   "rewrites": [
     { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ],
+  "functions": {
+    "api/limpar-arquivos.js": { "maxDuration": 60 }
+  },
+  "crons": [
+    { "path": "/api/limpar-arquivos", "schedule": "0 6 * * *" }
   ]
 }
