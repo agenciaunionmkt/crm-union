@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { X, Download, ChevronLeft, ChevronRight } from 'lucide-react'
+import { isVideo } from '../../lib/midia'
 
 // Suporta dois modos:
 // 1. Multi-imagem: images=[{url, nome}] + index=N  (navegação prev/next)
@@ -94,14 +95,26 @@ export default function ImageLightbox({ images, index: initialIndex, url, nome, 
         </button>
       </div>
 
-      {/* Imagem */}
-      <img
-        key={current.url}
-        src={current.url}
-        alt={current.nome || 'Imagem'}
-        className="max-h-[88vh] max-w-full rounded-lg object-contain"
-        onClick={(e) => e.stopPropagation()}
-      />
+      {/* Mídia: vídeo com player ou imagem */}
+      {isVideo({ nome_arquivo: current.nome, arquivo_url: current.url }) ? (
+        <video
+          key={current.url}
+          src={current.url}
+          controls
+          autoPlay
+          playsInline
+          className="max-h-[88vh] max-w-full rounded-lg bg-black"
+          onClick={(e) => e.stopPropagation()}
+        />
+      ) : (
+        <img
+          key={current.url}
+          src={current.url}
+          alt={current.nome || 'Imagem'}
+          className="max-h-[88vh] max-w-full rounded-lg object-contain"
+          onClick={(e) => e.stopPropagation()}
+        />
+      )}
 
       {/* Nome do arquivo */}
       {current.nome && (

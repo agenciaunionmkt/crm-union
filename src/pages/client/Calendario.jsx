@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { CheckCircle2 } from 'lucide-react'
+import { CheckCircle2, Play } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { listDemandsByClient, updateDemandStatus, updateDemand } from '../../lib/api/demands'
 import { listAttachments } from '../../lib/api/attachments'
@@ -11,15 +11,12 @@ import DemandActivity from '../../components/DemandActivity'
 import ImageLightbox from '../../components/ui/ImageLightbox'
 import Modal from '../../components/Modal'
 import { demandStatusLabels, demandStatusStyles } from '../../lib/status'
+import { isMidia, isVideo } from '../../lib/midia'
 
 function formatDate(value) {
   if (!value) return '—'
   const [y, m, d] = value.split('-')
   return `${d}/${m}/${y}`
-}
-
-function isImagem(att) {
-  return /\.(png|jpe?g|gif|webp|avif|bmp|svg)$/i.test(att.nome_arquivo || att.arquivo_url || '')
 }
 
 export default function ClientCalendario() {
@@ -92,7 +89,7 @@ export default function ClientCalendario() {
     enabled: !!detalhe?.id,
   })
 
-  const imagens = anexos.filter((a) => !a.interno).filter(isImagem)
+  const midias = anexos.filter((a) => !a.interno).filter(isMidia)
 
   return (
     <div>
@@ -156,24 +153,41 @@ export default function ClientCalendario() {
             {/* Conteúdo (imagens em miniatura, clique para ampliar) */}
             <div>
               <p className="mb-2 text-xs uppercase tracking-widest text-muted">Conteúdo</p>
-              {imagens.length === 0 ? (
+              {midias.length === 0 ? (
                 <p className="text-sm text-muted">Conteúdo ainda não disponível.</p>
               ) : (
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                  {imagens.map((img) => (
+                  {midias.map((item) => (
                     <button
-                      key={img.id}
+                      key={item.id}
                       type="button"
-                      onClick={() => setExpandImg(img)}
-                      className="group relative aspect-square overflow-hidden rounded-lg border border-white/10 bg-white/5"
-                      title="Clique para ampliar"
+                      onClick={() => setExpandImg(item)}
+                      className="group relative aspect-square overflow-hidden rounded-lg border border-white/10 bg-black"
+                      title={isVideo(item) ? 'Clique para assistir' : 'Clique para ampliar'}
                     >
-                      <img
-                        src={img.arquivo_url}
-                        alt={img.nome_arquivo || 'Conteúdo'}
-                        loading="lazy"
-                        className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105"
-                      />
+                      {isVideo(item) ? (
+                        <>
+                          <video
+                            src={item.arquivo_url}
+                            preload="metadata"
+                            muted
+                            playsInline
+                            className="h-full w-full object-cover"
+                          />
+                          <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-black/55 group-hover:bg-black/70 transition-colors">
+                              <Play className="h-5 w-5 translate-x-0.5 text-white" fill="currentColor" />
+                            </span>
+                          </span>
+                        </>
+                      ) : (
+                        <img
+                          src={item.arquivo_url}
+                          alt={item.nome_arquivo || 'Conteúdo'}
+                          loading="lazy"
+                          className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105"
+                        />
+                      )}
                     </button>
                   ))}
                 </div>

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Paperclip, Trash2, Loader2, ExternalLink, RefreshCw, GripVertical, EyeOff, Eye, Lock } from 'lucide-react'
+import { Paperclip, Trash2, Loader2, ExternalLink, RefreshCw, GripVertical, EyeOff, Eye, Lock, Play } from 'lucide-react'
 import {
   listAttachments,
   uploadAttachment,
@@ -10,10 +10,7 @@ import {
   updateAttachmentOrders,
 } from '../lib/api/attachments'
 import ImageLightbox from './ui/ImageLightbox'
-
-function isImagem(att) {
-  return /\.(png|jpe?g|gif|webp|avif|bmp|svg)$/i.test(att.nome_arquivo || att.arquivo_url || '')
-}
+import { isImagem, isVideo, isMidia } from '../lib/midia'
 
 export default function DemandAttachments({ demandId, currentUser, onPendingChange }) {
   const fileRef = useRef(null)
@@ -50,9 +47,11 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
     .map((id) => criativos.find((a) => a.id === id))
     .filter(Boolean)
     .filter(isImagem)
-  const outrosCriativos = criativos.filter((a) => !isImagem(a))
+  const videosCriativos = criativos.filter(isVideo)
+  const outrosCriativos = criativos.filter((a) => !isMidia(a))
   const imagensInternas = internas.filter(isImagem)
-  const outrosInternas  = internas.filter((a) => !isImagem(a))
+  const videosInternas  = internas.filter(isVideo)
+  const outrosInternas  = internas.filter((a) => !isMidia(a))
 
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ['attachments', demandId] })
 
@@ -214,6 +213,57 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
           ref={(el) => { replaceRefs.current[att.id] = el }}
           onChange={(e) => handleReplace(att, e)}
         />
+      </div>
+    )
+  }
+
+  function renderVideo(att, lista, { interno = false }) {
+    return (
+      <div
+        key={att.id}
+        className={`group relative aspect-square overflow-hidden rounded-lg border bg-black transition-all
+          ${interno ? 'border-dashed border-white/20' : 'border-white/10'}`}
+      >
+        <button
+          type="button"
+          onClick={() => abrirLightbox(lista, att)}
+          title={att.nome_arquivo}
+          className="h-full w-full"
+        >
+          <video
+            src={att.arquivo_url}
+            preload="metadata"
+            muted
+            playsInline
+            className="h-full w-full object-cover"
+          />
+          <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-black/55 group-hover:bg-black/70 transition-colors">
+              <Play className="h-5 w-5 translate-x-0.5 text-white" fill="currentColor" />
+            </span>
+          </span>
+        </button>
+
+        <div className="absolute right-1 top-1 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button
+            type="button"
+            onClick={() => internoMutation.mutate({ att, interno: !interno })}
+            disabled={internoMutation.isPending}
+            className="rounded-md bg-black/60 p-1 text-subtle hover:text-accent transition-colors disabled:opacity-60"
+            title={interno ? 'Mover para criativos (cliente passa a ver)' : 'Mover para referências internas (cliente deixa de ver)'}
+          >
+            {interno ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+          </button>
+          <button
+            type="button"
+            onClick={() => deleteMutation.mutate(att)}
+            disabled={deleteMutation.isPending}
+            className="rounded-md bg-black/60 p-1 text-subtle hover:text-danger transition-colors disabled:opacity-60"
+            title="Remover"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+          </button>
+        </div>
       </div>
     )
   }
@@ -397,6 +447,11 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
                 </div>
               </>
             )}
+            {videosCriativos.length > 0 && (
+              <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+                {videosCriativos.map((att) => renderVideo(att, videosCriativos, { interno: false }))}
+              </div>
+            )}
             {outrosCriativos.length > 0 && (
               <ul className="space-y-2">
                 {outrosCriativos.map((att) => renderArquivo(att, { interno: false }))}
@@ -440,6 +495,11 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
                 {imagensInternas.map((att) =>
                   renderImagem(att, imagensInternas, { draggable: false, interno: true })
                 )}
+              </div>
+            )}
+            {videosInternas.length > 0 && (
+              <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+                {videosInternas.map((att) => renderVideo(att, videosInternas, { interno: true }))}
               </div>
             )}
             {outrosInternas.length > 0 && (
