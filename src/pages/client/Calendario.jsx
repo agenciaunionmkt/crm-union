@@ -168,7 +168,7 @@ export default function ClientCalendario() {
                       {isVideo(item) ? (
                         <>
                           <video
-                            src={item.arquivo_url}
+                            src={`${item.arquivo_url}#t=0.1`}
                             preload="metadata"
                             muted
                             playsInline

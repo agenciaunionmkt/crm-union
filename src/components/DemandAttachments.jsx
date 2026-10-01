@@ -231,7 +231,7 @@ export default function DemandAttachments({ demandId, currentUser, onPendingChan
           className="h-full w-full"
         >
           <video
-            src={att.arquivo_url}
+            src={`${att.arquivo_url}#t=0.1`}
             preload="metadata"
             muted
             playsInline
